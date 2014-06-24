@@ -1,0 +1,17 @@
+<div class="section-scrapbook" {% if section.background is not empty %}style="height:{{ section.height }}"{% endif %}>
+	{% if section.background is not empty %}
+		<img src="{{ section.background }}" width="940"/>
+	{% endif %}
+	{% for image in section.images %}
+		<img class="scrap" src="{{ image.image }}" style="top:{{ image.y }};left:{{ image.x }}" {% if image.width > 0 %}width="{{ image.width }}"{% endif %}>
+	{% endfor %}
+	{% for text in section.texts %}
+		<div class="scrap" data-field="{{ text.id }}_scrapbook_text" style="top:{{ text.y }};left:{{ text.x }};{% if text.width > 0 %}width:{{ text.width }}{% endif %}">{{ text.content|raw }}</div>
+	{% endfor %}
+	{% if section.title is not empty or section.content is not empty %}
+		<div class="caption" style="top:{{ section.contentY }};left:{{ section.contentX }}">
+			{% if section.title is not empty %}<h2 itemprop="name">{{ section.title }}</h2>{% endif %}
+			{% if section.content is not empty %}<p>{{ section.content }}</p>{% endif %}
+		</div>
+	{% endif %}
+</div>

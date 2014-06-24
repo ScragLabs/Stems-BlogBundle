@@ -1,0 +1,47 @@
+<h4>Scrapbook Section</h4>
+<button class="full-size btn btn-small btn-primary" data-id="{{ link.id }}"><i class="fa fa-external-link"></i> View Full Size</button>
+<button class="remove-section btn btn-small btn-danger" data-id="{{ link.id }}"><i class="fa fa-times"></i> Remove</button>
+<input type="hidden" name="sections[]" value="{{ link.id }}">
+<div class="section-scrapbook">
+	<div class="canvas-preview">
+		<div>
+			{# Background #}
+			{% if section.background is not empty %}
+				<img src="{{ section.background }}" width="940"/>
+			{% endif %}
+			
+			{# Images #}
+			{% for image in section.images %}
+				<img class="scrap" data-field="{{ image.id }}_scrapbook_image" src="{{ image.image }}" style="top:{{ image.y }};left:{{ image.x }}" {% if image.width > 0 %}width="{{ image.width }}"{% endif %}>
+			{% endfor %}
+
+			{# Texts #}
+			{% for text in section.texts %}
+				<div class="scrap" data-field="{{ text.id }}_scrapbook_text" style="top:{{ text.y }};left:{{ text.x }};{% if text.width > 0 %}width:{{ text.width }}{% endif %}">{{ text.content|raw }}</div>
+			{% endfor %}
+
+			{# Caption #}
+			{% if section.title is not empty or section.content is not empty %}
+				<div class="caption" style="top:{{ section.contentY }};left:{{ section.contentX }}">
+					{% if section.title is not empty %}<h2>{{ section.title }}</h2>{% endif %}
+					{% if section.content is not empty %}<p>{{ section.content }}</p>{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="selected-scrap-editor">
+		{% for imageForm in imageForms %}
+			{{ imageForm|raw }}
+		{% endfor %}
+	</div>
+	<div class="scrapbook-editor">
+		{{ form_row(form.title) }}
+		{{ form_row(form.content) }}
+		<label>Caption Positioning</label>
+		X: {{ form_row(form.contentX) }}
+		Y: {{ form_row(form.contentY) }}
+		{{ form_row(form.height) }}
+		{{ form_row(form.background) }}
+	</div>
+	<br class="clear">
+</div>

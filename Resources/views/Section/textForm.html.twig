@@ -1,0 +1,6 @@
+<h4>Text Section</h4>
+<button class="remove-section btn btn-small btn-danger" data-id="{{ link.id }}"><i class="fa fa-times"></i> Remove</button>
+<input type="hidden" name="sections[]" value="{{ link.id }}">
+<div class="section-text">
+	{{ form_row(form.content) }}
+</div>

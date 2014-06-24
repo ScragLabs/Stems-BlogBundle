@@ -1,0 +1,10 @@
+<div class="article" itemscope itemtype="http://schema.org/Article">
+	{% if post.content is not empty %}
+		{{ post.content|raw }}
+	{% endif %}
+	{% for section in sections %}
+		<div class="section" itemprop="articleBody">
+			{{ section|raw }}
+		</div>
+	{% endfor %}
+</div>

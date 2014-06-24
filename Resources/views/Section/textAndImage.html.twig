@@ -1,0 +1,38 @@
+<div class="section-text-and-image">
+	{% if section.wrap %}
+		{{ section.content|raw }}
+		{% if section.image is not empty %}
+			<div class="image" style="float:{{ section.position }};background:url('{{ section.image }}') center center no-repeat;background-size: contain;" title="{{ section.caption }}">
+				{% if section.link is not empty %}<a href="{{ section.link }}" target="_blank"></a>{% endif %}
+				{% if section.caption is not empty %}<p>{{ section.caption }}</p>{% endif %}
+			</div>
+		{% endif %}
+		<br class="clear">
+	{% else %}
+		<div class="column">
+			{% if section.position == 'right' %}
+				{{ section.content|raw }}
+			{% else %}
+				{% if section.image is not empty %}
+					<div class="image" style="background:url('{{ section.image }}') center center no-repeat;background-size: contain;" title="{{ section.caption }}">
+						{% if section.link is not empty %}<a href="{{ section.link }}" target="_blank"></a>{% endif %}
+						{% if section.caption is not empty %}<p>{{ section.caption }}</p>{% endif %}
+					</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class="column">
+			{% if section.position == 'left' %}
+				{{ section.content|raw }}
+			{% else %}
+				{% if section.image is not empty %}
+					<div class="image" style="background:url('{{ section.image }}') center center no-repeat;background-size: contain;" title="{{ section.caption }}">
+						{% if section.link is not empty %}<a href="{{ section.link }}" target="_blank"></a>{% endif %}
+						{% if section.caption is not empty %}<p>{{ section.caption }}</p>{% endif %}
+					</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		<br class="clear">
+	{% endif %}
+</div>

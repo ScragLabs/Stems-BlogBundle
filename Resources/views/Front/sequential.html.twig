@@ -1,0 +1,24 @@
+{% extends 'StemsPageBundle:Layout:' ~ page.layout.slug ~ '.html.twig' %}
+
+{% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
+
+{% block breadcrumbs %}<a href="/magazine">Magazine</a>{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% block dynamic %}
+	{% for post in posts.records %}
+		<div class="article" itemscope itemtype="http://schema.org/Article">
+			{% if post.content is not empty %}
+				{{ post.content|raw }}
+			{% endif %}
+			{% set count = loop.index - 1 %}
+			{% for section in postSections[count] %}
+				<div class="section" itemprop="articleBody">
+					{{ section|raw }}
+				</div>
+			{% endfor %}
+		</div>
+	{% endfor %}
+	<div class="load-more-articles" data-offset="3"></div>
+{% endblock %}

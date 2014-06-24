@@ -1,0 +1,36 @@
+<div class="section-magazine">
+	<div class="column">
+		{% if section.positionA == 'bottom' %}{{ section.contentA|raw }}{% endif %}
+		{% if section.imageA is not empty %}
+			<div class="image">
+				{% if section.linkA is not empty %}<a href="{{ section.linkA }}" target="_blank"></a>{% endif %}
+				{% if section.captionA is not empty %}<p>{{ section.captionA }}</p>{% endif %}
+				<img src="{{ section.imageA }}" alt="{{ section.captionA }}" width="310" />
+			</div>
+		{% endif %}
+		{% if section.positionA == 'top' %}{{ section.contentA|raw }}{% endif %}
+	</div>
+	<div class="column">
+		{% if section.positionB == 'bottom' %}{{ section.contentB|raw }}{% endif %}
+		{% if section.imageB is not empty %}
+			<div class="image">
+				{% if section.linkB is not empty %}<a href="{{ section.linkB }}" target="_blank"></a>{% endif %}
+				{% if section.captionB is not empty %}<p>{{ section.captionB }}</p>{% endif %}
+				<img src="{{ section.imageB }}" alt="{{ section.captionB }}" width="310" />
+			</div>
+		{% endif %}
+		{% if section.positionB == 'top' %}{{ section.contentB|raw }}{% endif %}
+	</div>
+	{# <div class="column">
+		{% if section.positionC == 'bottom' %}{{ section.contentC|raw }}{% endif %}
+		{% if section.imageC is not empty %}
+			<div class="image">
+				{% if section.linkC is not empty %}<a href="{{ section.linkC }}" target="_blank"></a>{% endif %}
+				{% if section.captionC is not empty %}<p>{{ section.captionC }}</p>{% endif %}
+				<img src="{{ section.imageC }}" alt="{{ section.captionC }}" width="280" />
+			</div>
+		{% endif %}
+		{% if section.positionC == 'top' %}{{ section.contentC|raw }}{% endif %}
+	</div> #}
+	<br class="clear">
+</div>

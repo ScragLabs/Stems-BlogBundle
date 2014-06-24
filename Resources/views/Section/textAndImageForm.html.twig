@@ -1,0 +1,35 @@
+<h4>Text &amp; Image Section</h4>
+<button class="remove-section btn btn-small btn-danger" data-id="{{ link.id }}"><i class="fa fa-times"></i> Remove</button>
+<input type="hidden" name="sections[]" value="{{ link.id }}">
+<div class="section-text-and-image">
+	{% if section.position == 'right' %}
+		<div class="column column-text">
+			{{ form_row(form.content) }}
+		</div>
+		<div class="column column-image">
+			<div class="image-preview">
+				
+			</div>
+			{{ form_row(form.image) }}
+			{{ form_row(form.position) }}
+			{{ form_row(form.caption) }}
+			{{ form_row(form.link) }}
+			{{ form_row(form.wrap) }}
+		</div>
+	{% else %}
+		<div class="column column-image">
+			<div class="image-preview">
+				
+			</div>
+			{{ form_row(form.image) }}
+			{{ form_row(form.position) }}
+			{{ form_row(form.caption) }}
+			{{ form_row(form.link) }}
+			{{ form_row(form.wrap) }}
+		</div>
+		<div class="column column-text">
+			{{ form_row(form.content) }}
+		</div>
+	{% endif %}
+	<br class="clear">
+</div>

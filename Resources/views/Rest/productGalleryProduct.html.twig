@@ -1,0 +1,10 @@
+<li class="product">
+	<img src="{{ product.thumbnail }}" width="{{ 128 * product.ratio }}" height="200" />
+	<div class="caption">
+		<h6>{{ product.heading }}</h6>
+		<p>{{ product.caption }}</p>
+	</div>
+	<button class="show-link btn btn-small" title="Open Link"><i class="fa fa-link"></i></button>
+	<button class="remove-productgalleryproduct btn btn-small btn-danger" title="Remove From Gallery" data-id="{{ product.id }}"><i class="fa fa-times"></i></button>
+	<input type="hidden" name="{{ link.id }}_section_productgallery_type[products][]" value="{{ product.id }}">
+</li>

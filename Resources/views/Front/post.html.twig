@@ -1,0 +1,20 @@
+{% extends 'StemsPageBundle:Layout:' ~ page.layout.slug ~ '.html.twig' %}
+
+{% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
+
+{% block breadcrumbs %}<a href="{{ path('stems_front_blog_list') }}">Magazine</a> › <a href="{{ path('stems_front_blog_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
+
+{% block title %}{% endblock %}
+
+{% block dynamic %}
+	<div class="article" itemscope itemtype="http://schema.org/Article">
+		{% if post.content is not empty %}
+			{{ post.content|raw }}
+		{% endif %}
+		{% for section in sections %}
+			<div class="section" itemprop="articleBody">
+				{{ section|raw }}
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}

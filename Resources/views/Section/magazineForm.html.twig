@@ -1,0 +1,27 @@
+<h4>Magazine Section</h4>
+<button class="remove-section btn btn-small btn-danger" data-id="{{ link.id }}"><i class="fa fa-times"></i> Remove</button>
+<input type="hidden" name="sections[]" value="{{ link.id }}">
+<div class="section-magazine">
+	<div class="column">
+		{{ form_row(form.contentA) }}
+		{{ form_row(form.imageA) }}
+		{{ form_row(form.positionA) }}
+		{{ form_row(form.captionA) }}
+		{{ form_row(form.linkA) }}
+	</div>
+	<div class="column">
+		{{ form_row(form.contentB) }}
+		{{ form_row(form.imageB) }}
+		{{ form_row(form.positionB) }}
+		{{ form_row(form.captionB) }}
+		{{ form_row(form.linkB) }}
+	</div>
+{# 	<div class="column">
+		{{ form_row(form.contentC) }}
+		{{ form_row(form.imageC) }}
+		{{ form_row(form.positionC) }}
+		{{ form_row(form.captionC) }}
+		{{ form_row(form.linkC) }}
+	</div> #}
+	<br class="clear">
+</div>

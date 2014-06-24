@@ -1,0 +1,27 @@
+{% extends 'StemsPageBundle:Layout:' ~ page.layout.slug ~ '.html.twig' %}
+
+{% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
+
+{% block breadcrumbs %}<a href="/blog">Magazine</a>{% endblock %}
+
+{% block dynamic %}
+	{% for post in posts.records %}
+		<div class="article" itemscope itemtype="http://schema.org/Article">
+			<div class="social">
+				<a href="http://www.pinterest.com/ThreadAndMirror"><i class="fa fa-pinterest"></i></a>
+				<a href="http://instagram.com/ThreadAndMirror"><i class="fa fa-instagram"></i></a>
+				<a href="http://www.twitter.com/ThreadAndMirror"><i class="fa fa-twitter"></i></a>
+				<a href="http://www.facebook.com/ThreadAndMirror"><i class="fa fa-facebook"></i></a>
+				<p>Share:</p>
+			</div><!--social-->
+			{% if post.content is not empty %}
+				{{ post.content|raw }}
+			{% endif %}
+			{% for post.section in post.sections %}
+				<div class="section" itemprop="articleBody">
+					{{ section|raw }}
+				</div>
+			{% endfor %}
+		</div>
+	{% endfor %}
+{% endblock %}

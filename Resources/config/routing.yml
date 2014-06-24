@@ -1,0 +1,65 @@
+# Admin routes
+
+stems_admin_blog_overview:
+    pattern:  /admin/blog
+    defaults: { _controller: StemsBlogBundle:Admin:index }
+
+stems_admin_blog_create:
+    pattern:  /admin/blog/create
+    defaults: { _controller: StemsBlogBundle:Admin:create }
+
+stems_admin_blog_edit:
+    pattern:  /admin/blog/{id}/edit
+    defaults: { _controller: StemsBlogBundle:Admin:edit }
+
+stems_admin_blog_delete:
+    pattern:  /admin/blog/{id}/delete
+    defaults: { _controller: StemsBlogBundle:Admin:delete }
+
+stems_admin_blog_publish:
+    pattern:  /admin/blog/{id}/publish
+    defaults: { _controller: StemsBlogBundle:Admin:publish }
+
+# Front-end routes
+
+stems_front_blog_sequential:
+    pattern:  /magazine
+    defaults: { _controller: StemsBlogBundle:Front:sequential }
+
+stems_front_blog_list:
+    pattern:  /magazine/archive
+    defaults: { _controller: StemsBlogBundle:Front:list }
+
+stems_front_blog_rss:
+    pattern:  /magazine/rss
+    defaults: { _controller: StemsBlogBundle:Front:rss }
+
+stems_front_blog_rss_xml:
+    pattern:  /magazine/rss.xml
+    defaults: { _controller: StemsBlogBundle:Front:rss }
+
+stems_front_blog_preview:
+    pattern:  /magazine/preview/{slug}
+    defaults: { _controller: StemsBlogBundle:Front:preview }
+
+stems_front_blog_post:
+    pattern:  /magazine/{slug}
+    defaults: { _controller: StemsBlogBundle:Front:post }
+
+# REST routes
+
+stems_rest_blog_get_more_posts:
+    pattern:  /rest/get-more-posts/{offset}
+    defaults: { _controller: StemsBlogBundle:Rest:getMorePosts }
+
+stems_rest_blog_add_section_type:
+    pattern:  /admin/blog/rest/add-section-type/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:addSectionType }
+
+stems_rest_blog_remove_section:
+    pattern:  /admin/blog/rest/remove-section/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:removeSection }
+
+stems_rest_blog_add_productgalleryproduct:
+    pattern:  /admin/blog/rest/add-product-gallery-product/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:addProductGalleryProduct }
