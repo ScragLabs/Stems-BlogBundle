@@ -1,4 +1,4 @@
-<div class="section-product-gallery gallery-layout-{{ section.style }} {% if section.products|length > 8 %}smaller{% endif %}" data-max-images="{{ section.products|length }}">
+<div class="section-product-gallery gallery-layout-{{ section.style }}" data-max-images="{{ section.products|length }}">
 	
 	{# Carousel Layout #}
 	{% if section.style == 'carousel' %}
@@ -40,7 +40,7 @@
 
 	{# Radial Layout #}
 	{% elseif section.style == 'radial' %}
-		<div class="container">
+		<div class="container {% if section.products|length > 8 %}smaller{% endif %}">
 			<div class="top-images">
 				{% if section.products|length >= 1 %}
 					<div class="product">
