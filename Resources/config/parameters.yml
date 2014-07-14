@@ -1,0 +1,3 @@
+parameters:
+	blog:
+		template_sections: ['BlogHeader','Magazine']
