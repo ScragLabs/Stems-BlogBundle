@@ -13,7 +13,8 @@ use Stems\CoreBundle\Controller\BaseAdminController,
 use Stems\BlogBundle\Form\AdminPostType;
 
 // Entities
-use Stems\BlogBundle\Entity\Post;
+use Stems\BlogBundle\Entity\Post,
+	Stems\BlogBundle\Entity\Section;
 
 // Exceptions
 use Doctrine\ORM\NoResultException;
@@ -63,18 +64,54 @@ class AdminController extends BaseAdminController
 	}
 
 	/**
-	 * Create a post
+	 * Create a post, using a template if defined
 	 */
-	public function createAction()
+	public function createAction(Request $request)
 	{
-		// create a new post and persist it to the db
 		$em = $this->getDoctrine()->getEntityManager();
-		
+
+		// create a new post for persisting, so we already have an id for adding sections etc.
 		$post = new Post();
+		$post->setAuthor($this->getUser()->getId());
 		$em->persist($post);
+		
+		// if a title was posted then use it
+		$request->get('title') and $post->setTitle($request->get('title'));
 		$em->flush();
 
-		// redirect to the edit page for the new entity
+		// add the blog template sections as defined in the config
+		$position = 1;
+
+		foreach ($this->container->getParameter('stems.blog.template_sections') as $sectionClass) {
+
+			// only add the section if it exists
+			$type = $em->getRepository('StemsBlogBundle:SectionType')->findOneByClass($sectionClass);
+	
+			if ($type) {
+
+				// create a new section of the specified type
+				$class = 'Stems\\BlogBundle\\Entity\\'.$type->getClass();
+				$section = new $class();
+				$em->persist($section);
+				$em->flush();
+
+				// create the section linkage
+				$link = new Section();
+				$link->setType($type);
+				$link->setPost($post);
+				$link->setPosition($position);
+				$link->setEntity($section->getId());
+
+				$em->persist($link);
+				$em->flush();
+				$position++;
+			}
+		}
+
+		// save all the things
+		$em->flush();
+
+		// redirect to the edit page for the new post
 		return $this->redirect($this->generateUrl('stems_admin_blog_edit', array('id' => $post->getId())));
 	}
 
@@ -116,7 +153,7 @@ class AdminController extends BaseAdminController
 				$post->setTitle(stripslashes($post->getTitle()));
 				$post->setExcerpt(stripslashes($post->getExcerpt()));
 				$post->setContent(stripslashes($post->getContent()));
-				$post->setAuthor($this->container->get('security.context')->getToken()->getUser()->getId());
+				$post->setAuthor($this->getUser()->getId());
 
 				// order the sections, attached to the page and save their values
 				$position = 1;

@@ -1,3 +1,2 @@
 parameters:
-	blog:
-		template_sections: ['BlogHeader','Magazine']
+    stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
