@@ -63,3 +63,13 @@ stems_rest_blog_remove_section:
 stems_rest_blog_add_productgalleryproduct:
     pattern:  /admin/blog/rest/add-product-gallery-product/{id}
     defaults: { _controller: StemsBlogBundle:Rest:addProductGalleryProduct }
+
+# Popup routes
+
+stems_popup_blog_add_productgalleryproduct:
+    pattern:  /admin/blog/popup/add-product-gallery-product
+    defaults: { _controller: StemsBlogBundle:Popup:addProductGalleryProduct }
+
+stems_popup_blog_edit_productgalleryproduct:
+    pattern:  /admin/blog/popup/edit-product-gallery-product
+    defaults: { _controller: StemsBlogBundle:Popup:editProductGalleryProduct }

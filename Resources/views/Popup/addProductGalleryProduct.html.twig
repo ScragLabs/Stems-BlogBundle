@@ -1,0 +1,20 @@
+{% extends 'StemsCoreBundle:Popup:default.html.twig' %}
+
+{% block title %}Add a New Product Manually{% endblock %}
+
+{% block classes %}{% endblock %}
+
+{% block content %}
+	<div class="two-column">
+		<div class="column">
+			{{ form_row(form.heading) }}
+			{{ form_row(form.caption) }}
+			{{ form_row(form.link) }}
+			{{ form_row(form.image) }}
+			{{ form_row(form.thumbnail) }}
+			{{ form_row(form.pid) }}
+		</div>
+		<div class="column">
+			<div class="popup-image-toggle-preview"></div>
+		</div>
+{% endblock %}

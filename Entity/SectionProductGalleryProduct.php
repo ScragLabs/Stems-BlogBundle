@@ -49,7 +49,7 @@ class SectionProductGalleryProduct
     /** 
      * @ORM\Column(type="text")
      */
-    protected $ratio;
+    protected $ratio = 1;
 
     /** 
      * @ORM\Column(type="integer", nullable=true)
