@@ -26,7 +26,7 @@ class SectionImageType extends AbstractType
 		$builder->add('position', 'choice', array(
 			'label'     		=> 'Image Position',
 			'empty_value' 		=> false,
-			'choices'			=> array('right' => 'Right', 'left' => 'Left'),
+			'choices'			=> array('center' => 'Center', 'right' => 'Right', 'left' => 'Left'),
 			'required'			=> false,
 			'error_bubbling' 	=> true,
 		));	

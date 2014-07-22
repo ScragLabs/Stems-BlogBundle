@@ -30,7 +30,7 @@ class SectionImage implements SectionInstanceInterface
 	/** 
 	 * @ORM\Column(type="text", nullable=true)
 	 */
-	protected $position = 'right';
+	protected $position = 'center';
 
 	/** 
 	 * @ORM\Column(type="text", nullable=true)
