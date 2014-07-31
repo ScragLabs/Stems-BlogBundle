@@ -2,53 +2,46 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller,
+use Stems\CoreBundle\Controller\BaseFrontController,
 	Symfony\Component\HttpFoundation\RedirectResponse,
 	Symfony\Component\HttpFoundation\Response,
 	Symfony\Component\HttpFoundation\Request;
 
-
-class FrontController extends Controller
+class FrontController extends BaseFrontController
 {
 	/**
 	 * Overview of the blog articles
-	 * @param $request Request
+	 *
+	 * @param  Request 		$request 	The request object
 	 */
 	public function listAction(Request $request)
 	{
 		// get all of the blog posts for the view
-		$em = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
 
 		// paginate the result
 		$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => 6));
 
-		// load the page object from the CMS
-		$page = $em->getRepository('StemsPageBundle:Page')->load('magazine');
-
-		return $this->render('StemsBlogBundle:Front:list.html.twig', array(
+		$this->render('StemsBlogBundle:Front:list.html.twig', array(
 			'posts' 		=> $data,
-			'page'			=> $page,
+			'page'			=> $this->page,
 		));
 	}
 
 	/**
 	 * Loads the blog articles sequentially
-	 * @param $request Request
+	 *
+	 * @param  Request 		$request 	The request object
 	 */
 	public function sequentialAction(Request $request)
 	{
 		// get all of the blog posts for the view
-		$em = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
 
 		// paginate the result
 		$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => 3));
 
-		// load the page object from the CMS
-		$page = $em->getRepository('StemsPageBundle:Page')->load('magazine');
-
-		// create a two level array containing the sections for each post
+		// gather render sections for each of the posts
 		$postSections = array();
 
 		foreach ($posts as &$post) {
@@ -66,27 +59,25 @@ class FrontController extends Controller
 		return $this->render('StemsBlogBundle:Front:sequential.html.twig', array(
 			'posts' 		=> $data,
 			'postSections' 	=> $postSections,
-			'page'			=> $page,
+			'page'			=> $this->page,
 		));
 	}
 
 	/**
 	 * Display a blog post
-	 * @param $slug string 		The slug of the requested blog post
+	 *
+	 * @param  $slug 	string 		The slug of the requested blog post
 	 */
 	public function postAction($slug)
 	{
 		// get the requested post
-		$em = $this->getDoctrine()->getManager();
-		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
+		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
 
-		// load the page object from the CMS
-		$page = $em->getRepository('StemsPageBundle:Page')->load('magazine/{post}', array(
-			'title' 			=> $post->getTitle(),
-			'windowTitle' 		=> $post->getTitle().' - '.$post->getExcerpt(),
-			'metaKeywords' 		=> $post->getMetaKeywords(),
-			'metaDescription' 	=> $post->getMetaDescription(),
-		));
+		// set the dynamic page values
+		$this->page->setTitle($post->getTitle());
+		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
+		$this->page->setmetaKeywords($post->getMetaKeywords());
+		$this->page->metaDescription($post->getMetaDescription());
 
 		// prerender the sections, as referencing twig within itself causes a circular reference
 		$sections = array();
@@ -96,7 +87,7 @@ class FrontController extends Controller
 		}
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
-			'page'		=> $page,
+			'page'		=> $this->page,
 			'post' 		=> $post,
 			'sections' 	=> $sections,
 		));
@@ -104,7 +95,8 @@ class FrontController extends Controller
 
 	/**
 	 * Preview a blog post that isn't published yet
-	 * @param $slug string 		The slug of the requested blog post
+	 *
+	 * @param  $slug 	string 		The slug of the requested blog post
 	 */
 	public function previewAction($slug)
 	{
@@ -114,17 +106,14 @@ class FrontController extends Controller
 		}
 
 		// get the requested post
-		$em = $this->getDoctrine()->getManager();
-		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
+		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
 
-		// load the page object from the CMS
-		$page = $em->getRepository('StemsPageBundle:Page')->load('magazine/{post}', array(
-			'title' 			=> $post->getTitle(),
-			'windowTitle' 		=> $post->getTitle(),
-			'metaKeywords' 		=> $post->getMetaKeywords(),
-			'metaDescription' 	=> $post->getMetaDescription(),
-			'disableAnalytics'	=> true,
-		));
+		// set the dynamic page values
+		$this->page->setTitle($post->getTitle());
+		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
+		$this->page->setmetaKeywords($post->getMetaKeywords());
+		$this->page->metaDescription($post->getMetaDescription());
+		$this->page->setDisableAnalytics(true);
 
 		// prerender the sections, as referencing twig within itself causes a circular reference
 		$sections = array();
@@ -134,7 +123,7 @@ class FrontController extends Controller
 		}
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
-			'page'		=> $page,
+			'page'		=> $this->page,
 			'post' 		=> $post,
 			'sections' 	=> $sections,
 		));
@@ -146,8 +135,7 @@ class FrontController extends Controller
 	public function rssAction()
 	{
 		// get all of the blog posts for the feed
-		$em = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
 
 		// doctype
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>';
