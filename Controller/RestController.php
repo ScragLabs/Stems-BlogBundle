@@ -127,7 +127,7 @@ class RestController extends Controller
 		// get the url from the query paramter and attempt to parse the product
 		$em = $this->getDoctrine()->getManager();
 
-		$product = $em->getRepository('StemsSaleSirenBundle:Product')->getProductFromUrl($request->get('url'));
+		$product = $em->getRepository('ThreadAndMirrorProductsBundle:Product')->getProductFromUrl($request->get('url'));
 
 		// get the section for the field id
 		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->findOneById($id);

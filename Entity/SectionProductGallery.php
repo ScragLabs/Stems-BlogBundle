@@ -95,7 +95,7 @@ class SectionProductGallery implements SectionInstanceInterface
             $position++;
 
             // link the actual product to the article for the 'featured in' block
-            $productEntity = $services->getManager()->getRepository('StemsSaleSirenBundle:Product')->find($product->getPid());
+            $productEntity = $services->getManager()->getRepository('ThreadAndMirrorProductsBundle:Product')->find($product->getPid());
             $productEntity->setFeature($link->getPost()->getId());
             $services->getManager()->persist($productEntity);
         }

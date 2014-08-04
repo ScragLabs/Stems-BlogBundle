@@ -1,6 +1,6 @@
 <?php
 
-namespace Stems\SaleSirenBundle\Tests\Controller;
+namespace ThreadAndMirror\ProductsBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

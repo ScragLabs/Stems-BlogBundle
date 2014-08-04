@@ -1,5 +1,5 @@
 parameters:
-#    ste_beatracker.example.class: Stems\SaleSirenBundle\Example
+#    ste_beatracker.example.class: ThreadAndMirror\ProductsBundle\Example
 
 services:
 #    ste_beatracker.example:
