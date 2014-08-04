@@ -76,8 +76,8 @@ class FrontController extends BaseFrontController
 		// set the dynamic page values
 		$this->page->setTitle($post->getTitle());
 		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
-		$this->page->setmetaKeywords($post->getMetaKeywords());
-		$this->page->metaDescription($post->getMetaDescription());
+		$this->page->setMetaKeywords($post->getMetaKeywords());
+		$this->page->setMetaDescription($post->getMetaDescription());
 
 		// prerender the sections, as referencing twig within itself causes a circular reference
 		$sections = array();
