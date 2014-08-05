@@ -2,20 +2,17 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\JsonResponse,
-	Symfony\Component\HttpFoundation\Request;
-
-use Stems\BlogBundle\Entity\Section,
+use Stems\CoreBundle\Controller\BaseRestController,
+	Stems\BlogBundle\Entity\Section,
 	Stems\BlogBundle\Entity\SectionProductGalleryProduct;
 
-
-class RestController extends Controller
+class RestController extends BaseRestController
 {
 	/**
 	 * Returns form html for the requested section type
-	 * @param $offset 	The amount of posts already loaded, and therefore the query offset
+	 *
+	 * @param  integer 	$offset 	The amount of posts already loaded, and therefore the query offset
+	 * @param  integer 	$chunk 		The maximum amount of posts to get
 	 */
 	public function getMorePostsAction($offset, $chunk=3)
 	{
@@ -41,21 +38,15 @@ class RestController extends Controller
 		}
 		
 		// let the ajax response know when there's no more additional posts to load
-		if (count($posts) < $chunk) {
-			$stopLoading = true;
-		} else {
-			$stopLoading = false;
-		}
+		count($posts) < $chunk and $this->setCallback('stopLoading');
 
-		return new JsonResponse(array(
-			'html'    		=> $html,
-			'stopLoading'	=> $stopLoading,
-		));
+		return $this->addHtml($html)->success()->sendResponse();
 	}
 
 	/**
 	 * Returns form html for the requested section type
-	 * @param $id 	Section type id
+	 *
+	 * @param  integer 	$id 	Section type id
 	 */
 	public function addSectionTypeAction($id)
 	{
@@ -81,15 +72,16 @@ class RestController extends Controller
 		$sectionHandler = $this->get('stems.blog.sections');
 		$html = $section->editor($sectionHandler, $link);
 
-		return new JsonResponse(array(
-			'html'    => $html,
-			'section' => $link->getId(),
-		));
+		// store the seciton id for use in the response handler
+		$meta = array('section' => $link->getId());
+
+		return $this->addHtml($html)->addMeta($meta)->success()->sendResponse();
 	}
 
 	/**
 	 * Removes the specified section and its linkage
-	 * @param $id 	Section id
+	 *
+	 * @param  integer 		$id 	Section id
 	 */
 	public function removeSectionAction($id)
 	{
@@ -104,23 +96,19 @@ class RestController extends Controller
 			$em->remove($link);
 			$em->flush();
 
-			return new JsonResponse(array(
-				'success'	=> true,
-				'message'	=> 'Section deleted.',
-			));
+			return $this->success('Section deleted.')->sendResponse();
 		}
 		catch (\Exception $e) 
 		{
-			return new JsonResponse(array(
-				'success'	=> false,
-				'message'	=> $e->message,
-			));
+			return $this->error($e->getMessage())->sendResponse();
 		}
 	}
 
 	/**
 	 * Adds a product to a product gallery section
-	 * @param $id 		The ID of the Product Gallery Section to add the image to
+	 *
+	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
+	 * @param  Request
 	 */
 	public function addProductGalleryProductAction($id, Request $request)
 	{
@@ -161,19 +149,9 @@ class RestController extends Controller
 				'link'		=> $link,
 			));
 
-			// success response
-			return new JsonResponse(array(
-				'success'   => true,
-				'html'		=> $html,
-				'message' 	=> 'The product was successfully loaded from the link.'
-			));
+			return $this->addHtml($html)->success('The product was successfully loaded from the link.')->sendResponse();
 		} else {
-			// error response
-			return new JsonResponse(array(
-				'success'   => false,
-				'html'		=> '',
-				'message' 	=> 'We could not load a product using that link.'
-			));
+			return $this->addHtml($html)->error('We could not load a product using that link.', true)->sendResponse();
 		}
 	}
 }
