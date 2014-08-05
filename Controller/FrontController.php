@@ -112,7 +112,7 @@ class FrontController extends BaseFrontController
 		$this->page->setTitle($post->getTitle());
 		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
 		$this->page->setmetaKeywords($post->getMetaKeywords());
-		$this->page->metaDescription($post->getMetaDescription());
+		$this->page->setMetaDescription($post->getMetaDescription());
 		$this->page->setDisableAnalytics(true);
 
 		// prerender the sections, as referencing twig within itself causes a circular reference
