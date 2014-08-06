@@ -64,6 +64,10 @@ stems_rest_blog_add_productgalleryproduct:
     pattern:  /admin/blog/rest/add-product-gallery-product/{id}
     defaults: { _controller: StemsBlogBundle:Rest:addProductGalleryProduct }
 
+stems_rest_blog_popup_add_productgalleryproduct:
+    pattern:  /admin/blog/rest/popup/add-product-gallery-product/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:popupAddProductGalleryProduct }
+
 # Popup routes
 
 stems_popup_blog_add_productgalleryproduct:

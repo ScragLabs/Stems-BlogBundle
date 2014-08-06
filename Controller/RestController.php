@@ -3,8 +3,10 @@
 namespace Stems\BlogBundle\Controller;
 
 use Stems\CoreBundle\Controller\BaseRestController,
+	Symfony\Component\HttpFoundation\Request,
 	Stems\BlogBundle\Entity\Section,
-	Stems\BlogBundle\Entity\SectionProductGalleryProduct;
+	Stems\BlogBundle\Entity\SectionProductGalleryProduct,
+	Stems\BlogBundle\Form\SectionProductGalleryProductType;
 
 class RestController extends BaseRestController
 {
@@ -153,5 +155,47 @@ class RestController extends BaseRestController
 		} else {
 			return $this->addHtml($html)->error('We could not load a product using that link.', true)->sendResponse();
 		}
+	}
+
+	/**
+	 * Build a popup to add a product to a product gallery section
+	 *
+	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
+	 * @param  Request
+	 */
+	public function popupAddProductGalleryProductAction($id, Request $request)
+	{
+		// get the url from the query paramter and attempt to parse the product
+		$em = $this->getDoctrine()->getManager();
+
+		// get the section for the field id
+		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->findOneById($id);
+
+		// create the product
+		$image = new SectionProductGalleryProduct();
+		$image->setHeading('New Product');
+		// $image->setCaption($product->getShop()->getName());
+		// $image->setUrl($product->getFrontendUrl());
+		$image->setThumbnail('/image-link');
+		$image->setImage('/image-link');
+		// $image->setRatio($product->getShop()->getImageRatio());
+		// $image->setPid($product->getId());
+
+		$em->persist($image);
+		$em->flush();
+
+		// build the form 
+		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
+
+		// get the associated section linkage to tag the fields with the right id
+		$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($section->getId());
+
+		// get the html for the new product gallery item and to add to the page
+		$html = $this->renderView('StemsBlogBundle:Popup:addProductGalleryProduct.html.twig', array(
+			'product'	=> $image,
+			'form'		=> $form->createView(),
+		));
+
+		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
 	}
 }

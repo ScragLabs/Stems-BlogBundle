@@ -22,8 +22,8 @@ class SectionProductGalleryProductType extends AbstractType
 			'error_bubbling' 	=> true,
 		));
 
-		$builder->add('link', 'text', array(
-			'label'     		=> 'Link',
+		$builder->add('url', 'text', array(
+			'label'     		=> 'Url',
 			'required'			=> false,
 			'error_bubbling' 	=> true,
 		));
