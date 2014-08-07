@@ -63,7 +63,7 @@ class SectionProductGalleryProduct
 
     /**
      * @ORM\ManyToOne(targetEntity="SectionProductGallery", inversedBy="images")
-     * @ORM\JoinColumn(name="sectionProductGallery_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="sectionProductGallery_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $sectionProductGallery;
 
