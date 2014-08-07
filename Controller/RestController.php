@@ -112,7 +112,7 @@ class RestController extends BaseRestController
 	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
 	 * @param  Request
 	 */
-	public function addProductGalleryProductAction($id, Request $request)
+	public function parseProductGalleryProductAction($id, Request $request)
 	{
 		// get the url from the query paramter and attempt to parse the product
 		$em = $this->getDoctrine()->getManager();
@@ -151,51 +151,61 @@ class RestController extends BaseRestController
 				'link'		=> $link,
 			));
 
-			return $this->addHtml($html)->success('The product was successfully loaded from the link.')->sendResponse();
+			// store the seciton id for use in the response handler
+			$this->addMeta(array('section' => $link->getId()));
+
+			return $this->addHtml($html)->success('The product was successfully updated.')->sendResponse();
 		} else {
-			return $this->addHtml($html)->error('We could not load a product using that link.', true)->sendResponse();
+			return $this->error('We could not load a product using that link.', true)->sendResponse();
 		}
 	}
 
 	/**
-	 * Build a popup to add a product to a product gallery section
+	 * Update a product gallery product, both generated and manually added
 	 *
-	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
+	 * @param  integer 		$id 	The ID of the Product Gallery Section to update
 	 * @param  Request
 	 */
-	public function popupAddProductGalleryProductAction($id, Request $request)
+	public function updateProductGalleryProductAction($id, Request $request)
 	{
-		// get the url from the query paramter and attempt to parse the product
-		$em = $this->getDoctrine()->getManager();
+		// get the url from the query parameter and attempt to parse the product
+		$em    = $this->getDoctrine()->getManager();
+		$image = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->find($id);
 
-		// get the section for the field id
-		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->findOneById($id);
+		$data = json_decode($request->getContent());
 
-		// create the product
-		$image = new SectionProductGalleryProduct();
-		$image->setHeading('New Product');
-		// $image->setCaption($product->getShop()->getName());
-		// $image->setUrl($product->getFrontendUrl());
-		$image->setThumbnail('/image-link');
-		$image->setImage('/image-link');
-		// $image->setRatio($product->getShop()->getImageRatio());
-		// $image->setPid($product->getId());
+		// if the product exists, then handle the request
+		if (is_object($image)) {
 
-		$em->persist($image);
-		$em->flush();
+			// update the product
+			$image->setHeading($request->request->get('section_productgalleryproduct_type')['heading']);
+			$image->setCaption($request->request->get('section_productgalleryproduct_type')['caption']);
+			$image->setUrl($request->request->get('section_productgalleryproduct_type')['url']);
+			$image->setThumbnail($request->request->get('section_productgalleryproduct_type')['thumbnail']);
+			$image->setImage($request->request->get('section_productgalleryproduct_type')['image']);
 
-		// build the form 
-		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
+			$em->persist($image);
+			$em->flush();
 
-		// get the associated section linkage to tag the fields with the right id
-		$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($section->getId());
+			// get the associated section linkage to tag the fields with the right id
+			$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($image->getSectionProductGallery()->getId());
 
-		// get the html for the new product gallery item and to add to the page
-		$html = $this->renderView('StemsBlogBundle:Popup:addProductGalleryProduct.html.twig', array(
-			'product'	=> $image,
-			'form'		=> $form->createView(),
-		));
+			// get the html for the product gallery item and to add to the page
+			$html = $this->renderView('StemsBlogBundle:Rest:productGalleryProduct.html.twig', array(
+				'product'	=> $image,
+				'section'	=> $image->getSectionProductGallery(),
+				'link'		=> $link,
+			));
 
-		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
+			// store the section and product id for use in the response handler
+			$this->addMeta(array(
+				'section' => $link->getId(),
+				'product' => $image->getId(),
+			));
+
+			return $this->addHtml($html)->setCallback('insertProductGalleryProduct')->success('The product was successfully updated.')->sendResponse();
+		} else {
+			return $this->addHtml($html)->error('There was a problem updating the product.', true)->sendResponse();
+		}
 	}
 }

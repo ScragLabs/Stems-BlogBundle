@@ -1,0 +1,25 @@
+{% extends 'StemsCoreBundle:Popup:default.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block classes %}{% endblock %}
+
+{% block content %}
+	<div class="two-column">
+		<div class="column">
+			<form action="/admin/blog/rest/update-product-gallery-product/{{ product.id }}">
+				{{ form_row(form.heading) }}
+				{{ form_row(form.caption) }}
+				{{ form_row(form.url) }}
+				{{ form_row(form.image) }}
+				{{ form_row(form.thumbnail) }}
+			</form>
+		</div>
+		<div class="column">
+			<div class="popup-image-preview"></div>
+		</div>
+		<br class="clear">
+	</div>
+	<button class="btn btn-success rest-post-popup">Save Product</button>
+	<br class="clear">
+{% endblock %}

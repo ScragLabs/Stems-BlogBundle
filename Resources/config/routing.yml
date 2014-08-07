@@ -60,20 +60,20 @@ stems_rest_blog_remove_section:
     pattern:  /admin/blog/rest/remove-section/{id}
     defaults: { _controller: StemsBlogBundle:Rest:removeSection }
 
-stems_rest_blog_add_productgalleryproduct:
-    pattern:  /admin/blog/rest/add-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:addProductGalleryProduct }
+stems_rest_blog_parse_productgalleryproduct:
+    pattern:  /admin/blog/rest/parse-product-gallery-product/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:parseProductGalleryProduct }
 
-stems_rest_blog_popup_add_productgalleryproduct:
-    pattern:  /admin/blog/rest/popup/add-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:popupAddProductGalleryProduct }
+stems_rest_blog_update_productgalleryproduct:
+    pattern:  /admin/blog/rest/update-product-gallery-product/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:updateProductGalleryProduct }
 
 # Popup routes
 
-stems_popup_blog_add_productgalleryproduct:
-    pattern:  /admin/blog/popup/add-product-gallery-product
+stems_rest_blog_popup_add_productgalleryproduct:
+    pattern:  /admin/blog/popup/add-product-gallery-product/{id}
     defaults: { _controller: StemsBlogBundle:Popup:addProductGalleryProduct }
 
-stems_popup_blog_edit_productgalleryproduct:
-    pattern:  /admin/blog/popup/edit-product-gallery-product
-    defaults: { _controller: StemsBlogBundle:Popup:editProductGalleryProduct }
+stems_rest_blog_popup_update_productgalleryproduct:
+    pattern:  /admin/blog/popup/update-product-gallery-product/{id}
+    defaults: { _controller: StemsBlogBundle:Popup:updateProductGalleryProduct }

@@ -2,59 +2,73 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\JsonResponse,
-	Symfony\Component\HttpFoundation\Request;
-
-use Stems\BlogBundle\Entity\Section,
-	Stems\BlogBundle\Entity\SectionProductGalleryProduct;
+use Stems\CoreBundle\Controller\BaseRestController,
+	Symfony\Component\HttpFoundation\Request,
+	Stems\BlogBundle\Entity\SectionProductGalleryProduct,
+	Stems\BlogBundle\Form\SectionProductGalleryProductType;
 
 
-class PopupController extends Controller
+class PopupController extends BaseRestController
 {
 	/**
-	 * Return a form for adding a Product Gallery Product manually
+	 * Build a popup to manually add a product to a product gallery section, created a skeleton entity in the first place.
+	 *
+	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
+	 * @param  Request
+	 * @return JsonResponse
 	 */
-	public function addProductGalleryProductAction(Request $request)
+	public function addProductGalleryProductAction($id, Request $request)
 	{
-		// get the Product Gallery Product and build the form
+		// get the section for the field id
 		$em      = $this->getDoctrine()->getManager();
-		$product = new SectionProductGalleryProduct();
-		$form    = $this->createForm(new SectionProductGalleryProductType(), $product);
+		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->find($id);
 
-		// render the html
+		// create the product
+		$image = new SectionProductGalleryProduct();
+		$image->setSectionProductGallery($section);
+		$image->setHeading('New Product');
+		$image->setThumbnail('image.jpg');
+		$image->setImage('image.jpg');
+
+		$em->persist($image);
+		$em->flush();
+
+		// build the form 
+		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
+
+		// get the html for the new product gallery item and to add to the page
 		$html = $this->renderView('StemsBlogBundle:Popup:addProductGalleryProduct.html.twig', array(
-			'product'	=> $product,
-			'form'		=> $form,
+			'product'	=> $image,
+			'title'		=> 'Add a New Product Manually',
+			'form'		=> $form->createView(),
 		));
 
-		// return the popup JSON
-		return new JsonResponse(array(
-			'html'		=> $html,
-		));
+		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
 	}
 
 	/**
-	 * Return a form for editing Product Gallery Products
-	 * @param $id 		The ID of the Product Gallery Product
+	 * Build a popup to edit a product gallery product
+	 *
+	 * @param  integer 		$id 	The ID of the Product Gallery Product
+	 * @param  Request
+	 * @return JsonResponse
 	 */
-	public function editProductGalleryProductAction($id, Request $request)
+	public function updateProductGalleryProductAction($id, Request $request)
 	{
-		// get the Product Gallery Product and build the form
-		$em      = $this->getDoctrine()->getManager();
-		$product = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->findOneById($id);
-		$form    = $this->createForm(new SectionProductGalleryProductType(), $product);
+		// get the url from the query parameter and attempt to parse the product
+		$em    = $this->getDoctrine()->getManager();
+		$image = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->find($id);
 
-		// render the html
-		$html = $this->renderView('StemsBlogBundle:Popup:editProductGalleryProduct.html.twig', array(
-			'product'	=> $product,
-			'form'		=> $form,
+		// build the form 
+		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
+
+		// get the html for the new product gallery item and to add to the page
+		$html = $this->renderView('StemsBlogBundle:Popup:updateProductGalleryProduct.html.twig', array(
+			'product'	=> $image,
+			'title'		=> 'Edit Product '.$image->getHeading(),
+			'form'		=> $form->createView(),
 		));
 
-		// return the popup JSON
-		return new JsonResponse(array(
-			'html'		=> $html,
-		));
+		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
 	}
 }
