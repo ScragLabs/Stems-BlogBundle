@@ -37,7 +37,7 @@ class PopupController extends BaseRestController
 		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
 
 		// get the html for the new product gallery item and to add to the page
-		$html = $this->renderView('StemsBlogBundle:Popup:addProductGalleryProduct.html.twig', array(
+		$html = $this->renderView('StemsBlogBundle:Popup:updateProductGalleryProduct.html.twig', array(
 			'product'	=> $image,
 			'title'		=> 'Add a New Product Manually',
 			'form'		=> $form->createView(),
