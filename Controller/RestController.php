@@ -15,6 +15,7 @@ class RestController extends BaseRestController
 	 *
 	 * @param  integer 	$offset 	The amount of posts already loaded, and therefore the query offset
 	 * @param  integer 	$chunk 		The maximum amount of posts to get
+	 * @return JsonResponse
 	 */
 	public function getMorePostsAction($offset, $chunk=3)
 	{
@@ -49,6 +50,7 @@ class RestController extends BaseRestController
 	 * Returns form html for the requested section type
 	 *
 	 * @param  integer 	$id 	Section type id
+	 * @return JsonResponse
 	 */
 	public function addSectionTypeAction($id)
 	{
@@ -84,6 +86,7 @@ class RestController extends BaseRestController
 	 * Removes the specified section and its linkage
 	 *
 	 * @param  integer 		$id 	Section id
+	 * @return JsonResponse
 	 */
 	public function removeSectionAction($id)
 	{
@@ -111,6 +114,7 @@ class RestController extends BaseRestController
 	 *
 	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
 	 * @param  Request
+	 * @return JsonResponse
 	 */
 	public function parseProductGalleryProductAction($id, Request $request)
 	{
@@ -165,6 +169,7 @@ class RestController extends BaseRestController
 	 *
 	 * @param  integer 		$id 	The ID of the Product Gallery Section to update
 	 * @param  Request
+	 * @return JsonResponse
 	 */
 	public function updateProductGalleryProductAction($id, Request $request)
 	{
