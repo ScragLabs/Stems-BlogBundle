@@ -1,11 +1,11 @@
 <?php
 namespace Stems\BlogBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Doctrine\ORM\Mapping as ORM;
-use Stems\SocialBundle\Service\Sharer;
+use Doctrine\Common\Collections\ArrayCollection,
+    Symfony\Component\Validator\Constraints as Assert,
+    Symfony\Component\HttpFoundation\File\UploadedFile,
+    Doctrine\ORM\Mapping as ORM,
+    Stems\SocialBundle\Service\Sharer;
 
 /** 
  * @ORM\Entity
@@ -17,11 +17,13 @@ class Post
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @
      */
     protected $id;
 
     /** 
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     protected $title;
 
@@ -42,6 +44,7 @@ class Post
 
     /** 
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     protected $slug;
 
@@ -51,7 +54,7 @@ class Post
     protected $image;
 
     /** 
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="integer")
      */
     protected $author;
 

@@ -2,9 +2,9 @@
 
 namespace Stems\BlogBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType,
+	Symfony\Component\Form\FormBuilderInterface,
+	Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AdminPostType extends AbstractType
 {
