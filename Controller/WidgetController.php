@@ -2,7 +2,6 @@
 
 namespace Stems\BlogBundle\Controller;
 
-// Symfony Components
 use Symfony\Bundle\FrameworkBundle\Controller\Controller,
 	Symfony\Component\HttpFoundation\RedirectResponse,
 	Symfony\Component\HttpFoundation\Response,
@@ -25,9 +24,7 @@ class WidgetController extends Controller
 	}
 
 	/**
-	 * Renders a (unpaginated) list of the most recent posts, defaulting to 4 if no limit is set
-	 *
-	 * @param  integer 	$limit 	A custom limit for the amount of posts the render
+	 * Renders a (unpaginated) list of the most recent posts, defaulting to 5 if no limit is set
 	 */
 	public function latestPostsSidebarAction($limit=4)
 	{
@@ -42,8 +39,6 @@ class WidgetController extends Controller
 
 	/**
 	 * Renders a specific blog post
-	 *
-	 * @param  integer 	$id 	The ID of the blog post
 	 */
 	public function featurePostAction($id)
 	{
@@ -58,8 +53,6 @@ class WidgetController extends Controller
 
 	/**
 	 * Renders a blog post that features a product
-	 *
-	 * @param  integer 	$id 	The ID of the blog post
 	 */
 	public function featuredInAction($id)
 	{
@@ -79,7 +72,7 @@ class WidgetController extends Controller
 	{
 		// get the latest blog post
 		$em = $this->getDoctrine()->getEntityManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published', 'hideFromWidgets' => false), array('created' => 'DESC'), 5);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'), 5);
 
 		return $this->render('StemsBlogBundle:Widget:homepageFeature.html.twig', array(
 			'posts' 	=> $posts,
