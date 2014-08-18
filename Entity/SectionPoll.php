@@ -27,7 +27,7 @@ class SectionPoll implements SectionInstanceInterface
     protected $content;
 
     /** 
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $poll;
 
@@ -62,6 +62,7 @@ class SectionPoll implements SectionInstanceInterface
         // Render the admin form html
         return $services->getTwig()->render('StemsBlogBundle:Section:pollForm.html.twig', array(
             'form'      => $form->createView(),
+            'section'   => $this,
             'link'      => $link,
         ));
     }
@@ -76,7 +77,7 @@ class SectionPoll implements SectionInstanceInterface
      */
     public function save($services, $parameters, $request, $link)
     {
-        // save the values
+        // Save the values
         $section->setContent($parameters['content']);
 
         $services->getManager()->persist($this);
@@ -113,5 +114,28 @@ class SectionPoll implements SectionInstanceInterface
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set poll
+     *
+     * @param integer $poll
+     * @return Section
+     */
+    public function setPoll($poll)
+    {
+        $this->poll = $poll;
+    
+        return $this;
+    }
+
+    /**
+     * Get poll
+     *
+     * @return integer 
+     */
+    public function getPoll()
+    {
+        return $this->poll;
     }
 }
