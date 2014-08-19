@@ -78,7 +78,7 @@ class SectionPoll implements SectionInstanceInterface
     public function save($services, $parameters, $request, $link)
     {
         // Save the values
-        $section->setContent($parameters['content']);
+        $this->setContent($parameters['content']);
 
         $services->getManager()->persist($this);
     }

@@ -27,11 +27,6 @@ class SectionHtml implements SectionInstanceInterface
      */
     protected $content;
 
-    /** 
-     * @ORM\Column(type="integer")
-     */
-    protected $poll;
-
     /**
      * Build the html for rendering in the front end, using any nessary custom code
      */
