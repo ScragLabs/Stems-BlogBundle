@@ -1,2 +1,12 @@
 parameters:
+
+    # Bundle specific
     stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
+
+    # Admin menu items
+    stems.admin.menu_core_stemsblogbundle:
+        stems_blog:
+            title: 'Blog'
+            route: 'stems_admin_blog_overview'
+            icon: 'fa fa-comment-o'
+            children: []
