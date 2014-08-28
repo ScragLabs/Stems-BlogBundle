@@ -4,7 +4,8 @@
 <div class="section-poll">
 	{{ form_row(form.content) }}
 	{% if section.poll is not empty %}
-		{{ render(controller('StemsPollBundle:Widget:renderPoll', { 'id' : section.poll })) }}
+		<label>Poll Chosen</label>
+		<input type="text" value="{{ section.poll }}" disabled>
 	{% else %}
 		<button class="btn btn-primary">Add Existing Poll</button>
 	{% endif %}
