@@ -118,25 +118,25 @@ class RestController extends BaseRestController
 	 */
 	public function parseProductGalleryProductAction($id, Request $request)
 	{
-		// get the url from the query paramter and attempt to parse the product
+		// Get the url from the query paramter and attempt to parse the product
 		$em = $this->getDoctrine()->getManager();
 
 		$product = $em->getRepository('ThreadAndMirrorProductsBundle:Product')->getProductFromUrl($request->get('url'));
 
-		// get the section for the field id
+		// Get the section for the field id
 		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->findOneById($id);
 
-		// if we manage to parse a product from the url then create the product listing for the gallery
+		// If we manage to parse a product from the url then create the product listing for the gallery
 		if (is_object($product)) {
 
-			// save the product as it may not already exist in the database
+			// Save the product as it may not already exist in the database
 			$em->persist($product);
 
-			// create a pick from the product
+			// Create a pick from the product
 			$image = new SectionProductGalleryProduct();
 			$image->setHeading($product->getName());
 			$image->setCaption($product->getShop()->getName());
-			$image->setUrl($product->getFrontendUrl());
+			$image->setUrl($this->generateUrl('thread_products_front_product_buy', array('slug' => $product->getslug())));
 			$image->setThumbnail($product->getThumbnail());
 			$image->setImage($product->getImage());
 			$image->setRatio($product->getShop()->getImageRatio());
@@ -145,17 +145,17 @@ class RestController extends BaseRestController
 			$em->persist($image);
 			$em->flush();
 
-			// get the associated section linkage to tag the fields with the right id
+			// Get the associated section linkage to tag the fields with the right id
 			$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($section->getId());
 
-			// get the html for the new product gallery item and to add to the page
+			// Get the html for the new product gallery item and to add to the page
 			$html = $this->renderView('StemsBlogBundle:Rest:productGalleryProduct.html.twig', array(
 				'product'	=> $image,
 				'section'	=> $section,
 				'link'		=> $link,
 			));
 
-			// store the seciton id for use in the response handler
+			// Store the section id for use in the response handler
 			$this->addMeta(array('section' => $link->getId()));
 
 			return $this->addHtml($html)->success('The product was successfully updated.')->sendResponse();
