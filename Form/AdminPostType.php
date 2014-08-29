@@ -25,6 +25,7 @@ class AdminPostType extends AbstractType
 			'label'     		=> 'Url',
 			'required'			=> false,
 			'error_bubbling' 	=> true,
+			'disabled' 			=> true,
 		));
 
 		$builder->add('excerpt', 'textarea', array(
