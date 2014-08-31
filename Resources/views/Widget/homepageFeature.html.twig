@@ -11,9 +11,12 @@
 		</a>
 	</div>
 	<div class="feature-item">
-		{% set image = getMediaImage(posts[0].image) %}
-		<a href="/magazine/{{ posts[0].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[0].image }}{% endif %}') center 30px; background-size:cover;">
+		<a href="/magazine/{{ posts[0].slug }}">
 			<h2>{{ posts[0].title }}<span>{{ posts[0].excerpt }}</span></h2>
+			<div class="image" style="background:url('{{ getMediaImage(posts[0].image).src }}') center center; background-size:cover;"></div>
+			<div class="description">
+				<p>{{ posts[0].metaDescription }}</p>
+			</div>
 		</a>
 	</div>
 	<div class="right-items">
