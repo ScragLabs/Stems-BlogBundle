@@ -1,23 +1,28 @@
 <div class="widget widget-blog-homepage-feature">
 	<h5><a href="/magazine">Magazine Features</a></h5>
 	<div class="left-items">
-		<a href="/magazine/{{ posts[1].slug }}" style="background:url('{{ posts[1].image }}') center center; background-size:cover;">
+		{% set image = getMediaImage(posts[1].image) %}
+		<a href="/magazine/{{ posts[1].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[1].image }}{% endif %}') center center; background-size:cover;">
 			<h2>{{ posts[1].title }}<span>{{ posts[1].excerpt }}</span></h2>
 		</a>
-		<a href="/magazine/{{ posts[3].slug }}" style="background:url('{{ posts[3].image }}') center center; background-size:cover;">
+		{% set image = getMediaImage(posts[3].image) %}
+		<a href="/magazine/{{ posts[3].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[3].image }}{% endif %}') center center; background-size:cover;">
 			<h2>{{ posts[3].title }}<span>{{ posts[3].excerpt }}</span></h2>
 		</a>
 	</div>
 	<div class="feature-item">
-		<a href="/magazine/{{ posts[0].slug }}" style="background:url('{{ posts[0].image }}') center 30px; background-size:cover;">
+		{% set image = getMediaImage(posts[0].image) %}
+		<a href="/magazine/{{ posts[0].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[0].image }}{% endif %}') center 30px; background-size:cover;">
 			<h2>{{ posts[0].title }}<span>{{ posts[0].excerpt }}</span></h2>
 		</a>
 	</div>
 	<div class="right-items">
-		<a href="/magazine/{{ posts[2].slug }}" style="background:url('{{ posts[2].image }}') center center; background-size:cover;">
+		{% set image = getMediaImage(posts[2].image) %}
+		<a href="/magazine/{{ posts[2].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[2].image }}{% endif %}') center center; background-size:cover;">
 			<h2>{{ posts[2].title }}<span>{{ posts[2].excerpt }}</span></h2>
 		</a>
-		<a href="/magazine/{{ posts[4].slug }}" style="background:url('{{ posts[4].image }}') center center; background-size:cover;">
+		{% set image = getMediaImage(posts[4].image) %}
+		<a href="/magazine/{{ posts[4].slug }}" style="background:url('{% if image is not empty %}{{ image.src }}{% else %}{{ posts[4].image }}{% endif %}') center center; background-size:cover;">
 			<h2>{{ posts[4].title }}<span>{{ posts[4].excerpt }}</span></h2>
 		</a>
 	</div>

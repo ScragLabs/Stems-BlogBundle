@@ -21,7 +21,7 @@
 		<div class="feature-image">
 			{% for product in section.products %}
 				<div class="product" {% if loop.index != 1 %}style="display:none"{% endif %} data-image="{{ loop.index }}">
-					<img src="{{ product.image }}" width="{{ 256 * product.ratio }}" height="400" alt="{{ product.heading }} {{ product.caption }}" />
+					<img src="{{ product.image }}" height="400" alt="{{ product.heading }} {{ product.caption }}" />
 					<div class="caption">
 						{% if product.heading is not empty %}<h6>{{ product.heading }}</h6>{% endif %}
 						{% if product.caption is not empty %}<p>{{ product.caption }}</p>{% endif %}
@@ -33,7 +33,7 @@
 		<div class="gallery-thumbnails">
 			{% for product in section.products %}
 				<div class="product" data-image="{{ loop.index }}">
-					<img src="{{ product.thumbnail }}" width="{{ 32 * product.ratio }}" height="50" alt="{{ product.heading }} {{ product.caption }}" />
+					<img src="{{ product.thumbnail }}" height="50" alt="{{ product.heading }} {{ product.caption }}" />
 				</div>
 			{% endfor %}
 		</div>		

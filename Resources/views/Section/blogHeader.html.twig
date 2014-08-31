@@ -9,9 +9,9 @@
 		{{ share.sharePinterest(link.post.sharer('pinterest')) }}
 		{{ share.shareTwitter(link.post.sharer('twitter')) }}
 		{{ share.shareFacebook(link.post.sharer('facebook')) }}	
-	</div><!--social-->
+	</div>
 	<br class="clear">
 	<h2 itemprop="name">{{ link.post.title }} <span>{{ link.post.excerpt }}</span></h2>
-	<div class="image" title="{{ link.post.title }} {{ link.post.excerpt }}" style="background-image: url('{{ link.post.image }}')"></div>
-	{# {% if section.content is not empty %}<p class="introduction">{{ section.content|raw }}</p>{% endif %} #}
+	{% set image = getMediaImage(link.post.image) %}
+	<div class="image" title="{{ link.post.title }} {{ link.post.excerpt }}" style="background-image: url('{% if image is not empty %}{{ image.src }}{% else %}{{ link.post.image }}{% endif %}')"></div>
 </div>
