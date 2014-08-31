@@ -49,14 +49,9 @@ class Post
     protected $slug;
 
     /** 
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $image;
-
-    /** 
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $src;
 
     /** 
      * @ORM\Column(type="integer")
@@ -289,29 +284,6 @@ class Post
     public function getImage()
     {
         return $this->image;
-    }
-
-    /**
-     * Set src
-     *
-     * @param integer $src
-     * @return Post
-     */
-    public function setSrc($src)
-    {
-        $this->src = $src;
-    
-        return $this;
-    }
-
-    /**
-     * Get src
-     *
-     * @return integer 
-     */
-    public function getSrc()
-    {
-        return $this->src;
     }
 
     /**
