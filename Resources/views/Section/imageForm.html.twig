@@ -6,7 +6,7 @@
 		{{ form_row(form.position) }}
 		{{ form_row(form.caption) }}
 		{{ form_row(form.link) }}
-		{{ form_row(form.image) }}
+		{{ form_widget(form.image) }}
 		<a class="btn btn-primary rest-get-popup" href="{{ path('stems_popup_blog_set_imagesectionimage', { id : section.id }) }}"><i class="fa fa-picture-o"></i> Upload Image</a>
 	</div>
 	<div class="column column-preview">
