@@ -72,11 +72,19 @@ stems_rest_blog_set_featureimage:
     pattern:  /admin/blog/rest/set-feature-image/{id}
     defaults: { _controller: StemsBlogBundle:Rest:setFeatureImage }
 
+stems_rest_blog_set_imagesectionimage:
+    pattern:  /admin/blog/rest/set-imagesection-image/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:setImageSectionImage }
+
 # Popup routes
 
 stems_rest_blog_popup_set_featureimage:
     pattern:  /admin/blog/popup/set-feature-image/{id}
     defaults: { _controller: StemsBlogBundle:Popup:setFeatureImage }
+
+stems_popup_blog_set_imagesectionimage:
+    pattern:  /admin/blog/popup/set-imagesection-image/{id}
+    defaults: { _controller: StemsBlogBundle:Popup:setImageSectionImage }
 
 stems_rest_blog_popup_add_productgalleryproduct:
     pattern:  /admin/blog/popup/add-product-gallery-product/{id}

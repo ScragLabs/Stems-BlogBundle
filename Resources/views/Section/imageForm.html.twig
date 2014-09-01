@@ -3,14 +3,25 @@
 <input type="hidden" name="sections[]" value="{{ link.id }}">
 <div class="section-image">
 	<div class="column column-form">
-		{{ form_row(form.image) }}
 		{{ form_row(form.position) }}
 		{{ form_row(form.caption) }}
 		{{ form_row(form.link) }}
+		{{ form_row(form.image) }}
+		<a class="btn btn-primary rest-get-popup" href="{{ path('stems_popup_blog_set_imagesectionimage', { id : section.id }) }}"><i class="fa fa-picture-o"></i> Upload Image</a>
 	</div>
 	<div class="column column-preview">
-		<div class="image-preview">
-			
+		<label>Image Preview</label>
+		<div class="image-preview {% if section.image is empty %}image-preview-empty{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
+			{% if section.image is not empty %}
+				<img 
+					src="{{ getMediaImage(section.image).src }}" 
+					{% if getMediaImage(section.image).width > 356 %}
+						width="356"
+					{% else %}
+						width="{{ getMediaImage(section.image).width }}"
+					{% endif %}
+				/>
+			{% endif %}
 		</div>
 	</div>
 	<br class="clear">

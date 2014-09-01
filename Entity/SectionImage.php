@@ -23,7 +23,7 @@ class SectionImage implements SectionInstanceInterface
 	protected $id;
 
 	/** 
-	 * @ORM\Column(type="text", nullable=true)
+	 * @ORM\Column(type="integer", nullable=true)
 	 */
 	protected $image;
 
@@ -44,10 +44,14 @@ class SectionImage implements SectionInstanceInterface
 
 	/**
 	 * Build the html for rendering in the front end, using any nessary custom code
+	 *
+	 * @param  Sections 	$services  	The section manager service
+	 * @param  Section 		$link  		The section link entity
+	 * @return string 					The rendered section html
 	 */
 	public function render($services, $link)
 	{
-		// render the twig template
+		// Render the twig template
 		return $services->getTwig()->render('StemsBlogBundle:Section:image.html.twig', array(
 			'section'   => $this,
 			'link'      => $link,
@@ -56,25 +60,35 @@ class SectionImage implements SectionInstanceInterface
 
 	/**
 	 * Build the html for admin editor form
+	 *
+	 * @param  Sections 	$services  	The section manager service
+	 * @param  Section 		$link  		The section link entity
+	 * @return string 					The rendered html for the section admin form
 	 */
 	public function editor($services, $link)
 	{
-		// build the section from using the generic builder method
+		// Build the section from using the generic builder method
 		$form = $services->createSectionForm($link, $this);
 
-		// render the admin form html
+		// Render the admin form html
 		return $services->getTwig()->render('StemsBlogBundle:Section:imageForm.html.twig', array(
 			'form'      => $form->createView(),
+			'section'	=> $this,
 			'link'      => $link,
 		));
 	}
 
 	/**
 	 * Update the section from posted data
+	 *
+	 * @param  Sections 	$services  		The section manager service
+	 * @param  array 		$parameters 	Posted parameters for this section's form
+	 * @param  Request  	$request 		The request object
+	 * @param  Section 		$link  			The section link entity
 	 */
 	public function save($services, $parameters, $request, $link)
 	{
-		// save the values
+		// Save the values
 		$this->setImage($parameters['image']);
 		$this->setCaption($parameters['caption']);
 		$this->setPosition($parameters['position']);
@@ -97,7 +111,7 @@ class SectionImage implements SectionInstanceInterface
 	 * Set image
 	 *
 	 * @param string $image
-	 * @return SectionTextAndImage
+	 * @return SectionImage
 	 */
 	public function setImage($image)
 	{
@@ -120,7 +134,7 @@ class SectionImage implements SectionInstanceInterface
 	 * Set position
 	 *
 	 * @param string $position
-	 * @return SectionTextAndImage
+	 * @return SectionImage
 	 */
 	public function setPosition($position)
 	{
@@ -143,7 +157,7 @@ class SectionImage implements SectionInstanceInterface
 	 * Set caption
 	 *
 	 * @param string $caption
-	 * @return SectionTextAndImage
+	 * @return SectionImage
 	 */
 	public function setCaption($caption)
 	{
@@ -166,7 +180,7 @@ class SectionImage implements SectionInstanceInterface
 	 * Set link
 	 *
 	 * @param string $link
-	 * @return SectionTextAndImage
+	 * @return SectionImage
 	 */
 	public function setLink($link)
 	{

@@ -107,4 +107,37 @@ class PopupController extends BaseRestController
 
 		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
 	}
+
+	/**
+	 * Build a popup to set the image of an image section
+	 *
+	 * @param  integer 		$id 	The ID of the section
+	 * @param  Request
+	 * @return JsonResponse
+	 */
+	public function setImageSectionImageAction($id, Request $request)
+	{
+		// Get the blog post and existing image
+		$em      = $this->getDoctrine()->getManager();
+		$section = $em->getRepository('StemsBlogBundle:SectionImage')->find($id);
+
+		if ($section->getImage()) {
+			$image = $em->getRepository('StemsMediaBundle:Image')->find($section->getImage());
+		} else {
+			$image = new Image();
+		}
+
+		// Build the form 
+		$form = $this->createForm(new ImageType(), $image);
+
+		// Get the html for the popup
+		$html = $this->renderView('StemsBlogBundle:Popup:setImageSectionImage.html.twig', array(
+			'section'	=> $section,
+			'existing'	=> rawurldecode($request->query->get('existing')),
+			'title'		=> $section->getImage() ? 'Change Image' : 'Add Image',
+			'form'		=> $form->createView(),
+		));
+
+		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
+	}
 }

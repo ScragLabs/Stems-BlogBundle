@@ -1,7 +1,17 @@
 <div class="section-image">
 	<div class="image">
-		<img src="{{ section.image }}" alt="{% if section.caption is not empty %}{{ section.caption }}{% else %}Image{% endif %}" >
-		{% if section.link is not empty %}<a href="{{ section.link }}" target="_blank"></a>{% endif %}
-		{% if section.caption is not empty %}<p>{{ section.caption }}</p>{% endif %}
+		{% if section.link is not empty %}<a href="{{ section.link }}" target="_blank">{% endif %}
+			<img 
+				src="{{ getMediaImage(section.image).src }}" 
+				alt="{% if section.caption is not empty %}{{ section.caption }}{% else %}Image{% endif %}" 
+				{% if getMediaImage(section.image).width > 720 %}
+					width="720"
+				{% else %}
+					width="{{ getMediaImage(section.image).width }}"
+				{% endif %}
+			>
+			{% if section.caption is not empty %}<p class="image-caption">{{ section.caption }}</p>{% endif %}
+		{% if section.link is not empty %}</a>{% endif %}
+		
 	</div>
 </div>

@@ -18,9 +18,10 @@ class SectionImageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 		$builder->add('image', 'text', array(
-			'label'     		=> 'Image',
+			'label'     		=> 'Image File',
 			'required'			=> false,
 			'error_bubbling' 	=> true,
+			'attr'				=> array('class' => 'invisible'),
 		));	
 
 		$builder->add('position', 'choice', array(
