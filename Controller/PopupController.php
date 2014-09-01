@@ -5,7 +5,9 @@ namespace Stems\BlogBundle\Controller;
 use Stems\CoreBundle\Controller\BaseRestController,
 	Symfony\Component\HttpFoundation\Request,
 	Stems\BlogBundle\Entity\SectionProductGalleryProduct,
-	Stems\BlogBundle\Form\SectionProductGalleryProductType;
+	Stems\BlogBundle\Form\SectionProductGalleryProductType,
+	Stems\MediaBundle\Entity\Image,
+	Stems\MediaBundle\Form\ImageType;
 
 
 class PopupController extends BaseRestController
@@ -19,11 +21,11 @@ class PopupController extends BaseRestController
 	 */
 	public function addProductGalleryProductAction($id, Request $request)
 	{
-		// get the section for the field id
+		// Get the section for the field id
 		$em      = $this->getDoctrine()->getManager();
 		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->find($id);
 
-		// create the product
+		// Create the product
 		$image = new SectionProductGalleryProduct();
 		$image->setSectionProductGallery($section);
 		$image->setHeading('New Product');
@@ -33,10 +35,10 @@ class PopupController extends BaseRestController
 		$em->persist($image);
 		$em->flush();
 
-		// build the form 
+		// Build the form 
 		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
 
-		// get the html for the new product gallery item and to add to the page
+		// Get the html for the popup
 		$html = $this->renderView('StemsBlogBundle:Popup:updateProductGalleryProduct.html.twig', array(
 			'product'	=> $image,
 			'title'		=> 'Add a New Product Manually',
@@ -55,17 +57,50 @@ class PopupController extends BaseRestController
 	 */
 	public function updateProductGalleryProductAction($id, Request $request)
 	{
-		// get the url from the query parameter and attempt to parse the product
+		// Get the product
 		$em    = $this->getDoctrine()->getManager();
 		$image = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->find($id);
 
-		// build the form 
+		// Build the form 
 		$form = $this->createForm(new SectionProductGalleryProductType(), $image);
 
-		// get the html for the new product gallery item and to add to the page
+		// Get the html for the popup
 		$html = $this->renderView('StemsBlogBundle:Popup:updateProductGalleryProduct.html.twig', array(
 			'product'	=> $image,
 			'title'		=> 'Edit Product '.$image->getHeading(),
+			'form'		=> $form->createView(),
+		));
+
+		return $this->addHtml($html)->success('The popup was successfully created.')->sendResponse();
+	}
+
+	/**
+	 * Build a popup to set the feature image of a blog post
+	 *
+	 * @param  integer 		$id 	The ID of the blog post
+	 * @param  Request
+	 * @return JsonResponse
+	 */
+	public function setFeatureImageAction($id, Request $request)
+	{
+		// Get the blog post and existing image
+		$em    = $this->getDoctrine()->getManager();
+		$post  = $em->getRepository('StemsBlogBundle:Post')->find($id);
+
+		if ($post->getImage()) {
+			$image = $em->getRepository('StemsMediaBundle:Image')->find($post->getImage());
+		} else {
+			$image = new Image();
+			$image->setCategory('blog');
+		}
+
+		// Build the form 
+		$form = $this->createForm(new ImageType(), $image);
+
+		// Get the html for the popup
+		$html = $this->renderView('StemsBlogBundle:Popup:setFeatureImage.html.twig', array(
+			'post'		=> $post,
+			'title'		=> $post->getImage() ? 'Change Feature Image' : 'Add Feature Image',
 			'form'		=> $form->createView(),
 		));
 

@@ -42,6 +42,7 @@ class AdminPostType extends AbstractType
 		$builder->add('image', 'text', array(
 			'label'     		=> 'Feature Image',
 			'error_bubbling' 	=> true,
+			'attr'				=> array('class' => 'invisible'),
 		));	
 
 		$builder->add('metaTitle', null, array(

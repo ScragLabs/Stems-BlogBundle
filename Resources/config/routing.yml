@@ -68,7 +68,15 @@ stems_rest_blog_update_productgalleryproduct:
     pattern:  /admin/blog/rest/update-product-gallery-product/{id}
     defaults: { _controller: StemsBlogBundle:Rest:updateProductGalleryProduct }
 
+stems_rest_blog_set_featureimage:
+    pattern:  /admin/blog/rest/set-feature-image/{id}
+    defaults: { _controller: StemsBlogBundle:Rest:setFeatureImage }
+
 # Popup routes
+
+stems_rest_blog_popup_set_featureimage:
+    pattern:  /admin/blog/popup/set-feature-image/{id}
+    defaults: { _controller: StemsBlogBundle:Popup:setFeatureImage }
 
 stems_rest_blog_popup_add_productgalleryproduct:
     pattern:  /admin/blog/popup/add-product-gallery-product/{id}

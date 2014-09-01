@@ -23,7 +23,37 @@
 					{{ form_row(form.title) }}
 					{{ form_row(form.excerpt) }}
 					{{ form_row(form.slug) }}
-					{{ form_row(form.image) }}
+					{{ form_label(form.image) }}
+					{% if post.image is not empty %}
+						<div class="feature-image">
+							<img 
+								src="{{ getMediaImage(post.image).src }}" 
+								{% if getMediaImage(post.image).width > 738 %}
+									width="738"
+								{% else %}
+									width="{{ getMediaImage(post.image).width }}"
+								{% endif %}
+							/>
+							<div class="button-holder">
+								<div>
+									<div>
+										<a class="btn btn-primary rest-get-popup" href="{{ path('stems_rest_blog_popup_set_featureimage', { id : post.id }) }}"><i class="fa fa-picture-o"></i> Change Feature Image</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<div class="feature-image feature-image-empty">
+							<div class="button-holder">
+								<div>
+									<div>
+										<a class="btn btn-primary rest-get-popup" href="{{ path('stems_rest_blog_popup_set_featureimage', { id : post.id }) }}"><i class="fa fa-picture-o"></i> Add Feature Image</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					{{ form_widget(form.image) }}
 				</div>
 				<div class="edit-panel" id="edit-post-seo" style="height:0px">
 					{{ form_row(form.metaTitle) }}

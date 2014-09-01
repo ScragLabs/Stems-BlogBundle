@@ -6,7 +6,9 @@ use Stems\CoreBundle\Controller\BaseRestController,
 	Symfony\Component\HttpFoundation\Request,
 	Stems\BlogBundle\Entity\Section,
 	Stems\BlogBundle\Entity\SectionProductGalleryProduct,
-	Stems\BlogBundle\Form\SectionProductGalleryProductType;
+	Stems\BlogBundle\Form\SectionProductGalleryProductType,
+	Stems\MediaBundle\Entity\Image,
+	Stems\MediaBundle\Form\ImageType;
 
 class RestController extends BaseRestController
 {
@@ -19,15 +21,15 @@ class RestController extends BaseRestController
 	 */
 	public function getMorePostsAction($offset, $chunk=3)
 	{
-		// get more of the blog posts for the view
+		// Get more of the blog posts for the view
 		$em = $this->getDoctrine()->getManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), $chunk, $offset);
 
-		// render the html for the posts
+		// Render the html for the posts
 		$html = '';
 
 		foreach ($posts as &$post) {
-			// prerender the sections, as referencing twig within itself causes a circular reference
+			// Prerender the sections, as referencing twig within itself causes a circular reference
 			$sections = array();
 
 			foreach ($post->getSections() as $link) {
@@ -40,7 +42,7 @@ class RestController extends BaseRestController
 			));
 		}
 		
-		// let the ajax response know when there's no more additional posts to load
+		// Let the ajax response know when there's no more additional posts to load
 		count($posts) < $chunk and $this->setCallback('stopLoading');
 
 		return $this->addHtml($html)->success()->sendResponse();
@@ -54,29 +56,29 @@ class RestController extends BaseRestController
 	 */
 	public function addSectionTypeAction($id)
 	{
-		// get the section type
+		// Get the section type
 		$em = $this->getDoctrine()->getManager();
 		$type = $em->getRepository('StemsBlogBundle:SectionType')->find($id);
 
-		// create a new section of the specified type
+		// Create a new section of the specified type
 		$class = 'Stems\\BlogBundle\\Entity\\'.$type->getClass();
 		$section = new $class();
 
 		$em->persist($section);
 		$em->flush();
 		
-		// create the section linkage
+		// Create the section linkage
 		$link = new Section();
 		$link->setType($type);
 		$link->setEntity($section->getId());
 		$em->persist($link);
 		$em->flush();
 
-		// get the form html
+		// Get the form html
 		$sectionHandler = $this->get('stems.blog.sections');
 		$html = $section->editor($sectionHandler, $link);
 
-		// store the seciton id for use in the response handler
+		// Store the section id for use in the response handler
 		$meta = array('section' => $link->getId());
 
 		return $this->addHtml($html)->addMeta($meta)->success()->sendResponse();
@@ -92,9 +94,9 @@ class RestController extends BaseRestController
 	{
 		try
 		{
-			// get the section linkage and the specific section
-			$em = $this->getDoctrine()->getManager();
-			$link = $em->getRepository('StemsBlogBundle:Section')->find($id);
+			// Get the section linkage and the specific section
+			$em      = $this->getDoctrine()->getManager();
+			$link    = $em->getRepository('StemsBlogBundle:Section')->find($id);
 			$section = $em->getRepository('StemsBlogBundle:'.$link->getType()->getClass())->find($link->getEntity());
 
 			$em->remove($section);
@@ -106,6 +108,48 @@ class RestController extends BaseRestController
 		catch (\Exception $e) 
 		{
 			return $this->error($e->getMessage())->sendResponse();
+		}
+	}
+
+	/**
+	 * Updates the feature image for a blog post
+	 *
+	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
+	 * @param  Request
+	 * @return JsonResponse
+	 */
+	public function setFeatureImageAction($id, Request $request)
+	{
+		// Get the blog post and existing image
+		$em    = $this->getDoctrine()->getManager();
+		$post  = $em->getRepository('StemsBlogBundle:Post')->find($id);
+
+		if ($post->getImage()) {
+			$image = $em->getRepository('StemsMediaBundle:Image')->find($post->getImage());
+		} else {
+			$image = new Image();
+			$image->setCategory('blog');
+		}
+
+		// Build the form and handle the request
+		$form = $this->createForm(new ImageType(), $image);
+
+		if ($form->bindRequest($request)->isValid()) {
+
+			// Upload the file and save the entity
+			$image->doUpload();
+			$em->persist($image);
+			$em->flush();
+
+			// Get the html for updating the feature image
+			$html = $this->renderView('StemsBlogBundle:Rest:setFeatureImage.html.twig', array(
+				'post'	=> $post,
+				'image'	=> $image,
+			));
+
+			return $this->addHtml($html)->setCallback('updateFeatureImage')->success('Image updated.')->sendResponse();
+		} else {
+			return $this->error('Please choose an image to upload.', true)->sendResponse();
 		}
 	}
 
@@ -173,16 +217,16 @@ class RestController extends BaseRestController
 	 */
 	public function updateProductGalleryProductAction($id, Request $request)
 	{
-		// get the url from the query parameter and attempt to parse the product
+		// Get the url from the query parameter and attempt to parse the product
 		$em    = $this->getDoctrine()->getManager();
 		$image = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->find($id);
 
 		$data = json_decode($request->getContent());
 
-		// if the product exists, then handle the request
+		// If the product exists, then handle the request
 		if (is_object($image)) {
 
-			// update the product
+			// Update the product
 			$image->setHeading($request->request->get('section_productgalleryproduct_type')['heading']);
 			$image->setCaption($request->request->get('section_productgalleryproduct_type')['caption']);
 			$image->setUrl($request->request->get('section_productgalleryproduct_type')['url']);
@@ -192,17 +236,17 @@ class RestController extends BaseRestController
 			$em->persist($image);
 			$em->flush();
 
-			// get the associated section linkage to tag the fields with the right id
+			// Get the associated section linkage to tag the fields with the right id
 			$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($image->getSectionProductGallery()->getId());
 
-			// get the html for the product gallery item and to add to the page
+			// Get the html for the product gallery item and to add to the page
 			$html = $this->renderView('StemsBlogBundle:Rest:productGalleryProduct.html.twig', array(
 				'product'	=> $image,
 				'section'	=> $image->getSectionProductGallery(),
 				'link'		=> $link,
 			));
 
-			// store the section and product id for use in the response handler
+			// Store the section and product id for use in the response handler
 			$this->addMeta(array(
 				'section' => $link->getId(),
 				'product' => $image->getId(),
