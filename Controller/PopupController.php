@@ -100,6 +100,7 @@ class PopupController extends BaseRestController
 		// Get the html for the popup
 		$html = $this->renderView('StemsBlogBundle:Popup:setFeatureImage.html.twig', array(
 			'post'		=> $post,
+			'existing'	=> rawurldecode($request->query->get('existing')),
 			'title'		=> $post->getImage() ? 'Change Feature Image' : 'Add Feature Image',
 			'form'		=> $form->createView(),
 		));

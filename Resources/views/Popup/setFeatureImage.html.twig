@@ -18,10 +18,16 @@
 		</div>
 		<div class="column">
 			<label>Current Image</label>
-			<div class="popup-image-preview" {% if post.image is not empty %}style="background-image:url('{{ getMediaImage(post.image).src }}')"{% endif %}></div>
+			<div class="popup-image-preview" 
+				{% if post.image is not empty %}
+					style="background-image:url('{{ getMediaImage(post.image).src }}')"
+				{% elseif existing is not empty %}
+					style="background-image:url('{{ existing }}')"
+				{% endif %}
+			></div>
 		</div>
 		<br class="clear">
 	</div>
-	<button class="btn btn-success rest-upload-popup">Save Changes</button>
+	<button class="btn btn-success rest-upload-popup">Upload Image</button>
 	<br class="clear">
 {% endblock %}
