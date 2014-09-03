@@ -128,7 +128,8 @@ class PopupController extends BaseRestController
 		}
 
 		// Build the form 
-		$form = $this->createForm(new ImageType(), $image);
+		$mediaCategories = $this->container->getParameter('stems.media.image.categories');
+		$form = $this->createForm(new ImageType($mediaCategories), $image);
 
 		// Get the html for the popup
 		$html = $this->renderView('StemsBlogBundle:Popup:setImageSectionImage.html.twig', array(

@@ -3,6 +3,10 @@ parameters:
     # Bundle specific
     stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
 
+    # Media categories
+    stems.media.image.categories: 
+        blog: 'Blog'
+
     # Admin menu items
     stems.admin.menu_core_stemsblogbundle:
         stems_blog:
