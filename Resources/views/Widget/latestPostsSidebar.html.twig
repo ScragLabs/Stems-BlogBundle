@@ -3,7 +3,7 @@
 		{% if loop.index > 1 %}
 			<div>
 				<h2>{{ post.title }}<span>{{ post.excerpt }}</span></h2>
-				<a href="/magazine/{{ post.slug }}" style="background:url('{{ getMediaImage(post.image).src }}') center center; background-size:cover;"></a>
+				<a href="/blog/{{ post.slug }}" style="background:url('{{ getMediaImage(post.image).src }}') center center; background-size:cover;"></a>
 			</div>
 		{% endif %}
 	{% endfor %}

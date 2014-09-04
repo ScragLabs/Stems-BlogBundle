@@ -2,7 +2,7 @@
 
 {% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
 
-{% block breadcrumbs %}<a href="{{ path('stems_front_blog_list') }}">Magazine</a> › <a href="{{ path('stems_front_blog_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
+{% block breadcrumbs %}<a href="{{ path('stems_front_blog_list') }}">Blog</a> › <a href="{{ path('stems_front_blog_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
 
 {% block title %}{% endblock %}
 

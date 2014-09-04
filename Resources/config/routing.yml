@@ -23,27 +23,27 @@ stems_admin_blog_publish:
 # Front-end routes
 
 stems_front_blog_sequential:
-    pattern:  /magazine
+    pattern:  /blog
     defaults: { _controller: StemsBlogBundle:Front:sequential }
 
 stems_front_blog_list:
-    pattern:  /magazine/archive
+    pattern:  /blog/archive
     defaults: { _controller: StemsBlogBundle:Front:list }
 
 stems_front_blog_rss:
-    pattern:  /magazine/rss
+    pattern:  /blog/rss
     defaults: { _controller: StemsBlogBundle:Front:rss }
 
 stems_front_blog_rss_xml:
-    pattern:  /magazine/rss.xml
+    pattern:  /blog/rss.xml
     defaults: { _controller: StemsBlogBundle:Front:rss }
 
 stems_front_blog_preview:
-    pattern:  /magazine/preview/{slug}
+    pattern:  /blog/preview/{slug}
     defaults: { _controller: StemsBlogBundle:Front:preview }
 
 stems_front_blog_post:
-    pattern:  /magazine/{slug}
+    pattern:  /blog/{slug}
     defaults: { _controller: StemsBlogBundle:Front:post }
 
 # REST routes

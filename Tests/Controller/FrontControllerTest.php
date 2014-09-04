@@ -16,7 +16,7 @@ class FrontControllerTest extends WebTestCase
     public function testList()
     {
     	// load the page
-        $crawler = $this->client->request('GET', '/magazine');
+        $crawler = $this->client->request('GET', '/blog');
 
         // check any content loaded
         $this->assertTrue($crawler->filter('.cms-page')->count() > 0);
@@ -30,7 +30,7 @@ class FrontControllerTest extends WebTestCase
     public function testPost()
     {
     	// load the page for the first ever blog post
-        $crawler = $this->client->request('GET', '/magazine/the-wedding-guest-edit');
+        $crawler = $this->client->request('GET', '/blog/the-wedding-guest-edit');
 
         // check any content loaded
         $this->assertTrue($crawler->filter('.cms-page')->count() > 0);

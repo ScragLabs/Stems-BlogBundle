@@ -131,7 +131,7 @@ class Post
 
         $sharer->setTitle($this->title.' - '.$this->excerpt);
         $sharer->setText($this->title.' - '.$this->excerpt);
-        $sharer->setUrl('http://www.threadandmirror.com/magazine/'.$this->slug);
+        $sharer->setUrl('http://www.threadandmirror.com/blog/'.$this->slug);
         $sharer->setImage('http://www.threadandmirror.com/'.$this->image);
         $sharer->setTags(array('threadandmirror'));
 

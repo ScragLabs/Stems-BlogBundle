@@ -102,7 +102,7 @@ class FrontController extends BaseFrontController
 	{
 		// redirect if the user isn't at least an admin
 		if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-			return $this->redirect('/magazine');
+			return $this->redirect('/blog');
 		}
 
 		// get the requested post
@@ -166,8 +166,8 @@ class FrontController extends BaseFrontController
 			$xml .= '<item>';
 			$xml .= '<title><![CDATA['.$title.']]></title>';
          	$xml .= '<author><![CDATA['.$this->container->getParameter('stems.site.name').']]></author>';
-         	$xml .= '<link>'.$this->container->getParameter('stems.site.url').'/magazine/'.$post->getSlug().'</link>';
-         	$xml .= '<guid>'.$this->container->getParameter('stems.site.url').'/magazine/'.$post->getSlug().'</guid>';
+         	$xml .= '<link>'.$this->container->getParameter('stems.site.url').'/blog/'.$post->getSlug().'</link>';
+         	$xml .= '<guid>'.$this->container->getParameter('stems.site.url').'/blog/'.$post->getSlug().'</guid>';
          	$xml .= '<category>fashion</category>';
          	$xml .= '<pubDate>'.$post->getPublished()->format('r').'</pubDate>';
          	$xml .= '<description><![CDATA['.$post->getMetaDescription().']]></description>';

@@ -36,8 +36,9 @@ class AdminController extends BaseAdminController
 	 */
 	public function sitemapAction()
 	{
-		// the slug used for the blog (eg. news, magazine or blog)
-		$slug = 'magazine';
+		// the slug used for the blog (eg. news, blog or magazine)
+		/// @todo: properly integrate this site-wide via config
+		$slug = 'blog';
 
 		// get the posts
 		$em = $this->getDoctrine()->getEntityManager();
