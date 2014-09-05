@@ -120,6 +120,7 @@ class SectionMagazine implements SectionInstanceInterface
 		// render the admin form html
 		return $services->getTwig()->render('StemsBlogBundle:Section:magazineForm.html.twig', array(
 			'form'      => $form->createView(),
+			'section'   => $this,
 			'link'      => $link,
 		));
 	}

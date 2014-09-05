@@ -10,7 +10,7 @@
 	</div>
 	<div class="column column-preview">
 		<label>Image Preview</label>
-		<div class="preview-image {% if section.image is empty %}preview-image-empty{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
+		<div class="preview-image {% if section.image is empty %}preview-image-empty-mini{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
 			{% if section.image is not empty %}
 				<img 
 					src="{{ getMediaImage(section.image).src }}" 
