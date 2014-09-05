@@ -24,9 +24,16 @@ $(document).ready(function() {
 	 */
 	$('.available-sections').on('click', 'a', function(e){
 		e.preventDefault();
+		var originator =  $(this);
+		var buttonText = originator.html();
+		var buttonWidth = originator.css('width');
+
+		originator.css('width', buttonWidth);
+		originator.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
 		$.get('/admin/blog/rest/add-section-type/'+$(this).data('type-id')).done(function(data) {
 			$('ul.sections').append('<li>'+data.html+'</li>');
+			originator.html(buttonText);
 		});
 	});
 
