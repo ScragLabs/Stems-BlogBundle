@@ -4,7 +4,7 @@
 <div class="section-magazine">
 	<div class="column">
 		{{ form_row(form.contentA) }}
-		<label>Image Preview</label>
+		<label>Image 1 Preview</label>
 		<div class="preview-image  preview-image-mini {% if section.imageB is empty %}preview-image-empty{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
 			{% if section.imageA is not empty %}
 				<img 
@@ -38,8 +38,8 @@
 	</div>
 	<div class="column">
 		{{ form_row(form.contentB) }}
-		<label>Image Preview</label>
-		<div class="preview-image  preview-image-mini {% if section.imageB is empty %}preview-image-empty-mini{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
+		<label>Image 2 Preview</label>
+		<div class="preview-image  preview-image-mini {% if section.imageB is empty %}preview-image-empty{% endif %}" data-type="imageSectionImage" data-section="{{ section.id }}">
 			{% if section.imageB is not empty %}
 				<img 
 					src="{{ getMediaImage(section.imageB).src }}" 
