@@ -117,58 +117,61 @@ class AdminController extends BaseAdminController
 	}
 
 	/**
-	 * Edit a post
+	 * Edit a blog post
+	 *
+	 * @param  integer 	$id  	The ID of the blog post
+	 * @param  Request 
 	 */
 	public function editAction(Request $request, $id)
 	{
-		// get the entity manager from the section service so they all reference the same instance
-		$sectionHandler = $this->get('stems.blog.sections');
-		$em = $sectionHandler->getManager();
-
-		// get the blog post request
+		// Get the blog post requested
+		$em   = $this->getDoctrine()->getEntityManager();
 		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBy(array('id' => $id, 'deleted' => false));
 
-		// throw an exception if the post could not be found
+		// Load the section management service
+		$sectionHandler = $this->get('stems.core.sections.manager')->setBundle('blog');
+
+		// Throw an error if the post could not be found
 		if (!$post) {
 			$request->getSession()->setFlash('error', 'The requested post could not be found.');
 			return $this->redirect($this->generateUrl($this->home));
 		}
 
-		// create the edit form and forms for the sections
+		// Create the edit form and forms for the sections
 		$form = $this->createForm(new AdminPostType(), $post);
 		$sectionForms = $sectionHandler->getEditors($post->getSections());
 
-		// get the available section types
+		// Get the available section types
 		$types = $em->getRepository('StemsBlogBundle:SectionType')->findByEnabled(true);
 
-		// handle the form submission
+		// Handle the form submission
 		if ($request->getMethod() == 'POST') {
 
-			// validate the submitted values
+			// Validate the submitted values
 			$form->bindRequest($request);
 
 			//if ($form->isValid()) {
 
-				// update the post in the database
+				// Update the post in the database
 				$post->setNew(false);
 				$post->setTitle(stripslashes($post->getTitle()));
 				$post->setExcerpt(stripslashes($post->getExcerpt()));
 				$post->setContent(stripslashes($post->getContent()));
 				$post->setAuthor($this->getUser()->getId());
 
-				// order the sections, attached to the page and save their values
+				// Order the sections, attached to the page and save their values
 				$position = 1;
 
 				foreach ($request->get('sections') as $section) {
 					
-					// attach and update order
+					// Attach and update order
 					$sectionEntity = $em->getRepository('StemsBlogBundle:Section')->find($section);
 					$sectionEntity->setPost($post);
 					$sectionEntity->setPosition($position);
 
-					// get all form fields relevant to the section...
+					// Get all form fields relevant to the section...
 					foreach ($request->request->all() as $parameter => $value) {
-						// strip the section id from the parameter group and save if it matches
+						// Strip the section id from the parameter group and save if it matches
 						$explode = explode('_', $parameter);
 						$parameterId = reset($explode);
 						$parameterId == $sectionEntity->getId() and $sectionParameters = $value;
@@ -181,7 +184,7 @@ class AdminController extends BaseAdminController
 					$position++;
 				}
 
-				// if there were no errors then save the entity, otherwise display the save errors
+				// If there were no errors then save the entity, otherwise display the save errors
 				// if ($sectionHandler->getSaveErrors()) {
 					
 					$em->persist($post);
@@ -206,22 +209,26 @@ class AdminController extends BaseAdminController
 
 	/**
 	 * Delete a post
+	 *
+	 * @param  integer 	$id  	The ID of the blog post
+	 * @param  Request 
 	 */
 	public function deleteAction(Request $request, $id)
 	{
-		// get the entity
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get the post
+		$em   = $this->getDoctrine()->getEntityManager();
 		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBy(array('id' => $id, 'deleted' => false));
 
 		if ($post) {
-			// delete the post if was found
+			// Delete the post if was found
 			$name = $post->getTitle();
 			$post->setDeleted(true);
 			$em->persist($post);
 			$em->flush();
 
-			// return the success message
+			// Return the success message
 			$request->getSession()->setFlash('success', 'The post "'.$name.'" was successfully deleted!');
+
 		} else {
 			$request->getSession()->setFlash('error', 'The requested post could not be deleted as it does not exist in the database.');
 		}
@@ -231,16 +238,19 @@ class AdminController extends BaseAdminController
 
 	/**
 	 * Publish/unpublish a post
+	 *
+	 * @param  integer 	$id  	The ID of the blog post
+	 * @param  Request 
 	 */
 	public function publishAction(Request $request, $id)
 	{
-		// get the entity
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get the post
+		$em   = $this->getDoctrine()->getEntityManager();
 		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBy(array('id' => $id, 'deleted' => false));
 
 		if ($post) {
 
-			// set the post the published/unpublished 
+			// Set the post the published/unpublished 
 			if ($post->getStatus() == 'Draft') {	
 				$post->setStatus('Published');
 				$post->setPublished(new \DateTime());
