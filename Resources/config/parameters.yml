@@ -3,6 +3,55 @@ parameters:
     # Bundle specific
     stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
 
+    stems.blog.sections.available:
+        magazine:
+            name: 'Magazine'
+            enabled: true
+            entity: 'StemsPageBundle:SectionMagazine'
+            class: 'Stems\PageBundle\Entity\SectionMagazine'
+            form: 'Stems\PageBundle\Form\SectionMagazineType'
+        text:
+            name: 'Text'
+            enabled: true
+            entity: 'StemsPageBundle:SectionText'
+            class: 'Stems\PageBundle\Entity\SectionText'
+            form: 'Stems\PageBundle\Form\SectionTextType'
+        text_and_image:
+            name: 'Text and Image'
+            enabled: true
+            entity: 'StemsPageBundle:SectionTextAndImage'
+            class: 'Stems\PageBundle\Entity\SectionTextAndImage'
+            form: 'Stems\PageBundle\Form\SectionTextAndImageType'
+        # scrapbook:
+        #     name: 'Scrapbook'
+        #     enabled: true
+        #     entity: 'StemsPageBundle:SectionScrapbook'
+        #     class: 'Stems\PageBundle\Entity\SectionScrapbook'
+        image:
+            name: 'Image'
+            enabled: true
+            entity: 'StemsPageBundle:SectionImage'
+            class: 'Stems\PageBundle\Entity\SectionImage'
+            form: 'Stems\PageBundle\Form\SectionImageType'
+        poll:
+            name: 'Poll'
+            enabled: true
+            entity: 'StemsPollBundle:SectionPoll'
+            class: 'Stems\PollBundle\Entity\SectionPoll'
+            form: 'Stems\PollBundle\Form\SectionPollType'
+        blog_header:
+            name: 'Blog Header'
+            enabled: true
+            entity: 'StemsBlogBundle:SectionBlogHeader'
+            class: 'Stems\BlogBundle\Entity\SectionBlogHeader'
+            form: 'Stems\BlogBundle\Form\SectionBlogHeaderType'
+        product_gallery:
+            name: 'Product Gallery'
+            enabled: true
+            entity: 'ThreadAndMirrorProductsBundle:SectionProductGallery'
+            class: 'ThreadAndMirror\ProductsBundle\Entity\SectionProductGallery'
+            form: 'ThreadAndMirror\ProductsBundle\Form\SectionProductGalleryType'
+
     # Media categories
     stems.media.image.categories: 
         blog: 'Blog'
