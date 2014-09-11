@@ -5,9 +5,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
-
-use Stems\BlogBundle\Form\SectionTextType;
-use Stems\BlogBundle\Definition\SectionInstanceInterface;
+use Stems\CoreBundle\Definition\SectionInstanceInterface;
 
 /** 
  * @ORM\Entity

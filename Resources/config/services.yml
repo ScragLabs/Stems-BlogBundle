@@ -1,7 +1,1 @@
 services:
-    stems.blog.sections:
-        class: Stems\BlogBundle\Service\Sections
-        arguments: 
-            em:          "@doctrine.orm.entity_manager"
-            twig:        "@templating"
-            formFactory: "@form.factory"
