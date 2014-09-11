@@ -50,7 +50,7 @@ class FrontController extends BaseFrontController
 			$sections = array();
 
 			foreach ($post->getSections() as $link) {
-				$sections[] = $this->get('stems.core.sections.manager')->renderSection($link);
+				$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 			}
 
 			$postSections[] = $sections; 
@@ -83,7 +83,7 @@ class FrontController extends BaseFrontController
 		$sections = array();
 
 		foreach ($post->getSections() as $link) {
-			$sections[] = $this->get('stems.core.sections.manager')->renderSection($link);
+			$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 		}
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
@@ -119,7 +119,7 @@ class FrontController extends BaseFrontController
 		$sections = array();
 
 		foreach ($post->getSections() as $link) {
-			$sections[] = $this->get('stems.core.sections.manager')->renderSection($link);
+			$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 		}
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
