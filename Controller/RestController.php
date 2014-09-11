@@ -33,7 +33,7 @@ class RestController extends BaseRestController
 			$sections = array();
 
 			foreach ($post->getSections() as $link) {
-				$sections[] = $this->get('stems.blog.sections')->renderSection($link);
+				$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 			}
 
 			$html .= $this->renderView('StemsBlogBundle:Rest:post.html.twig', array(
@@ -75,7 +75,7 @@ class RestController extends BaseRestController
 		$em->flush();
 
 		// Get the form html
-		$sectionHandler = $this->get('stems.blog.sections');
+		$sectionHandler = $this->get('stems.core.sections.manager')->setBundle('blog');
 		$html = $section->editor($sectionHandler, $link);
 
 		// Store the section id for use in the response handler
