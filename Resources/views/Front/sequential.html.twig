@@ -7,7 +7,7 @@
 {% block title %}{% endblock %}
 
 {% block dynamic %}
-	{% for post in posts.records %}
+	{% for post in posts %}
 		<div class="article" itemscope itemtype="http://schema.org/Article">
 			{% if post.content is not empty %}
 				{{ post.content|raw }}

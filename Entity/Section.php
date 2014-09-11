@@ -37,8 +37,7 @@ class Section
     protected $post;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SectionType", inversedBy="sections")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\Column(type="string", length=255)
      */
     protected $type;
 
@@ -121,9 +120,9 @@ class Section
     /**
      * Set type
      *
-     * @param Stems\BlogBundle\Entity\SectionType $type
+     * @param  $type
      */
-    public function setType(\Stems\BlogBundle\Entity\SectionType $type)
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -131,7 +130,7 @@ class Section
     /**
      * Get type
      *
-     * @return Stems\BlogBundle\Entity\SectionType 
+     * @return string 
      */
     public function getType()
     {

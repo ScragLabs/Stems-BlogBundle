@@ -36,10 +36,7 @@ class FrontController extends BaseFrontController
 	public function sequentialAction(Request $request)
 	{
 		// get all of the blog posts for the view
-		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
-
-		// paginate the result
-		$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => 3));
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), 3);
 
 		// gather render sections for each of the posts
 		$postSections = array();
@@ -57,7 +54,7 @@ class FrontController extends BaseFrontController
 		}
 
 		return $this->render('StemsBlogBundle:Front:sequential.html.twig', array(
-			'posts' 		=> $data,
+			'posts' 		=> $posts,
 			'postSections' 	=> $postSections,
 			'page'			=> $this->page,
 		));
