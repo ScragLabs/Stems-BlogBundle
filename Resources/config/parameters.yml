@@ -2,6 +2,10 @@ parameters:
 
     # Bundle specific
     stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
+    stems.blog.comments:
+        enabled: true
+        moderated: true
+        captcha: false
 
     stems.core.sections.available:
         blog: 
