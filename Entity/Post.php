@@ -99,6 +99,11 @@ class Post
      */
     protected $sections; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+     */
+    protected $comments; 
+
     /** 
      * @ORM\Column(type="string", nullable=true)
      */
@@ -498,6 +503,26 @@ class Post
     public function getSections()
     {
         return $this->sections;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param Stems\BlogBundle\Entity\Comment $comment
+     */
+    public function addComment(\Stems\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     /**
