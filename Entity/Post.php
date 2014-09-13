@@ -129,6 +129,9 @@ class Post
 
     /**
      * Create the social sharer object for this post, if no platform is passed we return a default configuration
+     *
+     * @param  string   $platform   The social media platform to generate the sharer for
+     * @return Sharer               The generated sharer
      */
     public function getSharer($platform=null)
     {
@@ -141,6 +144,25 @@ class Post
         $sharer->setTags(array('threadandmirror'));
 
         return $sharer;
+    }
+
+    /** 
+     * Get all comments that have been moderated and are not deleted
+     *
+     * @return array                A collection of valid comments
+     */
+    public function getModeratedComments()
+    {
+        // Strip any comments that are deleted or unmoderated
+        $comments = array_filter($this->getComments(), function($comment) {
+            if ($comment->getDeleted() || !$comment->getModerated()) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return $comments;
     }
 
     /**
