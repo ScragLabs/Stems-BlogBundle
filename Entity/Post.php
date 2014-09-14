@@ -147,14 +147,33 @@ class Post
     }
 
     /** 
-     * Get all comments that have been moderated and are not deleted
+     * Get all comments that are not soft deleted
+     *
+     * @return array                A collection of valid comments
+     */
+    public function getUndeletedComments()
+    {
+        // Strip any comments that are deleted
+        $comments = array_filter($this->getComments()->toArray(), function($comment) {
+            if ($comment->getDeleted()) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return $comments;
+    }
+
+    /** 
+     * Get all comments that have been moderated and not soft deleted
      *
      * @return array                A collection of valid comments
      */
     public function getModeratedComments()
     {
         // Strip any comments that are deleted or unmoderated
-        $comments = array_filter($this->getComments(), function($comment) {
+        $comments = array_filter($this->getComments()->toArray(), function($comment) {
             if ($comment->getDeleted() || !$comment->getModerated()) {
                 return false;
             } else {

@@ -2,21 +2,14 @@
 
 namespace Stems\BlogBundle\Controller;
 
-// Dependencies
-use Stems\CoreBundle\Controller\BaseAdminController,
-	Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\Response,
-	Symfony\Component\HttpFoundation\Request;
-
-// Forms
+use Stems\CoreBundle\Controller\BaseAdminController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Stems\BlogBundle\Form\AdminPostType;
-
-// Entities
-use Stems\BlogBundle\Entity\Post,
-	Stems\BlogBundle\Entity\Section;
-
-// Exceptions
+use Stems\BlogBundle\Entity\Post;
+use Stems\BlogBundle\Entity\Section;
 use Doctrine\ORM\NoResultException;
 
 class AdminController extends BaseAdminController
@@ -28,7 +21,12 @@ class AdminController extends BaseAdminController
 	 */
 	public function dashboardAction()
 	{
-		return $this->render('StemsBlogBundle:Admin:dashboard.html.twig', array());
+		// Get the number of unmoderated comments
+		$comments = 1;
+
+		return $this->render('StemsBlogBundle:Admin:dashboard.html.twig', array(
+			'comments' => $comments,
+		));
 	}
 
 	/**
@@ -36,11 +34,11 @@ class AdminController extends BaseAdminController
 	 */
 	public function sitemapAction()
 	{
-		// the slug used for the blog (eg. news, blog or magazine)
-		/// @todo: properly integrate this site-wide via config
+		// The slug used for the blog (eg. news, blog or magazine)
+		// @todo: properly integrate this site-wide via config
 		$slug = 'blog';
 
-		// get the posts
+		// Get the posts
 		$em = $this->getDoctrine()->getEntityManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'));
 
@@ -71,12 +69,12 @@ class AdminController extends BaseAdminController
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 
-		// create a new post for persisting, so we already have an id for adding sections etc.
+		// Create a new post for persisting, so we already have an id for adding sections etc.
 		$post = new Post();
 		$post->setAuthor($this->getUser()->getId());
 		$em->persist($post);
 		
-		// if a title was posted then use it
+		// If a title was posted then use it
 		$request->get('title') and $post->setTitle($request->get('title'));
 		$em->flush();
 
@@ -109,10 +107,10 @@ class AdminController extends BaseAdminController
 			}
 		}
 
-		// save all the things
+		// Save all the things
 		$em->flush();
 
-		// redirect to the edit page for the new post
+		// Redirect to the edit page for the new post
 		return $this->redirect($this->generateUrl('stems_admin_blog_edit', array('id' => $post->getId())));
 	}
 
