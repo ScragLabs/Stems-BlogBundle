@@ -22,11 +22,13 @@ class Comment
 
     /**
      * @ORM\Column(type="string", length=2048)
+     * @Assert\NotBlank
      */
     protected $content;
 
     /**
      * @ORM\Column(type="string", length=64)
+     * @Assert\NotBlank
      */
     protected $author;
 

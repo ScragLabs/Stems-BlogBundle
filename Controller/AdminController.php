@@ -21,8 +21,11 @@ class AdminController extends BaseAdminController
 	 */
 	public function dashboardAction()
 	{
+		$em = $this->getDoctrine()->getEntityManager();
+
 		// Get the number of unmoderated comments
-		$comments = 1;
+		$comments = $em->getRepository('StemsBlogBundle:Comment')->findBy(array('moderated' => false, 'deleted' => false));
+		$comments = count($comments); 
 
 		return $this->render('StemsBlogBundle:Admin:dashboard.html.twig', array(
 			'comments' => $comments,
@@ -39,7 +42,7 @@ class AdminController extends BaseAdminController
 		$slug = 'blog';
 
 		// Get the posts
-		$em = $this->getDoctrine()->getEntityManager();
+		$em    = $this->getDoctrine()->getEntityManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'));
 
 		return $this->render('StemsBlogBundle:Admin:sitemap.html.twig', array(
@@ -53,8 +56,8 @@ class AdminController extends BaseAdminController
 	 */
 	public function indexAction()
 	{		
-		// get all undeleted articles
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get all undeleted articles
+		$em    = $this->getDoctrine()->getEntityManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false), array('created' => 'DESC'));
 
 		return $this->render('StemsBlogBundle:Admin:index.html.twig', array(
@@ -218,6 +221,7 @@ class AdminController extends BaseAdminController
 		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBy(array('id' => $id, 'deleted' => false));
 
 		if ($post) {
+
 			// Delete the post if was found
 			$name = $post->getTitle();
 			$post->setDeleted(true);
@@ -248,7 +252,7 @@ class AdminController extends BaseAdminController
 
 		if ($post) {
 
-			// Set the post the published/unpublished 
+			// Set the post to published/unpublished 
 			if ($post->getStatus() == 'Draft') {	
 				$post->setStatus('Published');
 				$post->setPublished(new \DateTime());
@@ -263,6 +267,77 @@ class AdminController extends BaseAdminController
 
 		} else {
 			$request->getSession()->setFlash('error', 'The requested post could not be published as it does not exist in the database.');
+		}
+
+		return $this->redirect($this->generateUrl($this->home));
+	}
+
+	/**
+	 * A listing of all unmoderated comments
+	 */
+	public function commentsAction()
+	{		
+		// Get all unmoderated comments
+		$em       = $this->getDoctrine()->getEntityManager();
+		$comments = $em->getRepository('StemsBlogBundle:Comment')->findBy(array('deleted' => false, 'moderated' => false), array('created' => 'DESC'));
+
+		return $this->render('StemsBlogBundle:Admin:comments.html.twig', array(
+			'comments' 	=> $comments,
+		));
+	}
+
+	/**
+	 * Moderate a comment
+	 *
+	 * @param  integer 	$id  	The ID of the comment
+	 * @param  Request 
+	 */
+	public function moderateCommentAction(Request $request, $id)
+	{
+		// Get the comment
+		$em      = $this->getDoctrine()->getEntityManager();
+		$comment = $em->getRepository('StemsBlogBundle:Comment')->findOneBy(array('id' => $id, 'deleted' => false));
+
+		if ($comment) {
+
+			// Set the comment to moderated
+			$comment->setModerated(true);
+			$request->getSession()->setFlash('success', 'The comment was successfully authorised!');
+
+			$em->persist($comment);
+			$em->flush();
+
+		} else {
+			$request->getSession()->setFlash('error', 'The requested comment could not be moderated as it does not exist in the database.');
+		}
+
+		return $this->redirect($this->generateUrl($this->home));
+	}
+
+	/**
+	 * Delete a comment
+	 *
+	 * @param  integer 	$id  	The ID of the post comment
+	 * @param  Request 
+	 */
+	public function deleteCommentAction(Request $request, $id)
+	{
+		// Get the comment
+		$em   = $this->getDoctrine()->getEntityManager();
+		$comment = $em->getRepository('StemsBlogBundle:Comment')->findOneBy(array('id' => $id, 'deleted' => false));
+
+		if ($comment) {
+
+			// Delete the comment if was found
+			$comment->setDeleted(true);
+			$em->persist($comment);
+			$em->flush();
+
+			// Return the success message
+			$request->getSession()->setFlash('success', 'The comment was successfully deleted!');
+
+		} else {
+			$request->getSession()->setFlash('error', 'The requested comment could not be deleted as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));
