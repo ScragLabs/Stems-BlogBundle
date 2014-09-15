@@ -17,36 +17,40 @@
 			</div>
 		{% endfor %}
 		<div class="comments">
+			{# Comment configuration parameters #}
 			{% if 'stems.blog.comments.moderated'|parameter %}
 				{% set comments = post.moderatedComments %}
 			{% else %}
 				{% set comments = post.undeletedComments %}
 			{% endif %}
-			<h4><i class="fa fa-fw fa-comments-o"></i> {{ comments|length }} comments <a class="add-comment">Add Comment <i class="fa fa-plus"></i></a></h4>
-			<div class="add-comment">
-				
-			</div>
+			{% if 'stems.blog.comments.require_login'|parameter and app.user is empty %}
+				{% set authorised = false %}
+			{% else %}
+				{% set authorised = true %}
+			{% endif %}
+			<h4>
+				<i class="fa fa-fw fa-comments-o"></i> {{ comments|length }} comments
+				{% if authorised %}
+					<a class="add-comment show">Add Comment <i class="fa fa-plus"></i></a>
+				{% else %}
+					<p class="add-comment require-login">
+						<a href="{{ path('stems_front_user_login') }}">Sign In</a> or 
+						<a href="{{ path('stems_front_user_register') }}">Register</a> to Comment 
+						<i class="fa fa-plus"></i>
+					</p>
+				{% endif %}
+			</h4>
+			{% if authorised and 'stems.blog.comments.enabled'|parameter %}
+				<div class="add-comment-form">
+					<form action="{{ path('stems_rest_blog_add_comment', { post : post.id }) }}">
+						{{ form_rest(form) }}
+						<button class="rest-post-request">Submit</button>
+					</form>
+				</div>
+			{% endif %}
 			<ul>
 				{% for comment in comments %}
-					<li>
-						{% if 'stems.blog.comments.require_login'|parameter and 'stems.blog.comments.show_avatars'|parameter %}
-							<div class="avatar">
-							</div>
-						{% endif %}
-						<div class="content">
-							<h6>
-								By <span>
-								{% if 'stems.blog.comments.require_login'|parameter %}
-									{{ comment.author|username }}
-								{% else %}
-									{{ comment.author }}
-								{% endif %}
-								</span> on {{ comment.created|date('jS F Y') }} at {{ comment.created|date('h:i') }}
-							</h6>
-							<p>{{ comment.content }}</p>
-						</div>
-						<br class="clear">
-					</li>
+					{% embed 'StemsBlogBundle:Embed:comment.html.twig' %}{% endembed %}
 				{% endfor %}
 			</ul>
 		</div>

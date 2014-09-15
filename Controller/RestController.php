@@ -22,7 +22,7 @@ class RestController extends BaseRestController
 	public function getMorePostsAction($offset, $chunk=3)
 	{
 		// Get more of the blog posts for the view
-		$em = $this->getDoctrine()->getManager();
+		$em    = $this->getDoctrine()->getManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), $chunk, $offset);
 
 		// Render the html for the posts
@@ -49,6 +49,62 @@ class RestController extends BaseRestController
 	}
 
 	/**
+	 * Processes the submission of an add comment form
+	 *
+	 * @param  integer 		$post 		The ID of the post to add the comment to
+	 * @param  Request 		$request
+	 * @return JsonResponse
+	 */
+	public function addCommentAction($post, Request $request)
+	{
+		// Get the post
+		$em   = $this->getDoctrine()->getManager();
+		$post = $em->getRepository('StemsBlogBundle:Post')->find($id);
+
+		// Build the comment form
+		$requireLogin = $this->container->getParameter('stems.blog.comments.require_login');
+		$comment 	  = new Comment();
+		$form         = $this->createForm(new CommentType($requireLogin), $comment);
+
+		// Process the submission
+		if ($request->getMethod() == 'POST') {
+
+			// Validate the submitted values
+			$form->bindRequest($request);
+
+			if ($form->isValid()) {
+
+				// Set the user ID if we require login for commenting
+				if ($requireLogin) {
+					if ($this->get('security.context')->isGranted('ROLE_USER')) {
+						$comment->setAuthor($this->getUser()->getId());
+					} else {
+						return $this->error('You need to be logged in to post a comment.', true)->sendResponse();
+					}
+				}
+
+				// Attach to the post and save
+				$comment->setPost($post);
+				$em->persist($comment);
+				$em->flush();
+
+				// Return the rendered comment
+				$html = $this->renderView('StemsBlogBundle:Rest:comment.html.twig', array(
+					'image'		 => $image,
+					'created'	 => true,
+					'moderation' => $this->container->getParameter('stems.blog.comments.moderated'),
+				));
+
+				return $this->addHtml($html)->setCallback('commentAdded')->success()->sendResponse();
+			} else {
+				return $this->setCallback('commentNotAdded')->error('Please ensure all fields are completed.')->sendResponse();
+			}
+		}
+
+		return $this->error('Unauthorised Method.')->sendResponse();
+	}
+
+	/**
 	 * Returns form html for the requested section type
 	 *
 	 * @param  integer 	$id 	Section type id
@@ -57,7 +113,7 @@ class RestController extends BaseRestController
 	public function addSectionTypeAction($id)
 	{
 		// Get the section type
-		$em = $this->getDoctrine()->getManager();
+		$em   = $this->getDoctrine()->getManager();
 		$type = $em->getRepository('StemsBlogBundle:SectionType')->find($id);
 
 		// Create a new section of the specified type
@@ -114,8 +170,8 @@ class RestController extends BaseRestController
 	/**
 	 * Updates the feature image for a blog post
 	 *
-	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
-	 * @param  Request
+	 * @param  integer 		$id 		The ID of the Product Gallery Section to add the image to
+	 * @param  Request 		$request
 	 * @return JsonResponse
 	 */
 	public function setFeatureImageAction($id, Request $request)

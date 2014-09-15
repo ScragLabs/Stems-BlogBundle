@@ -2,10 +2,12 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Stems\CoreBundle\Controller\BaseFrontController,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\Response,
-	Symfony\Component\HttpFoundation\Request;
+use Stems\CoreBundle\Controller\BaseFrontController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Stems\BlogBundle\Form\CommentType;
+use Stems\BlogBundle\Entity\Comment;
 
 class FrontController extends BaseFrontController
 {
@@ -67,26 +69,31 @@ class FrontController extends BaseFrontController
 	 */
 	public function postAction($slug)
 	{
-		// get the requested post
+		// Get the requested post
 		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
 
-		// set the dynamic page values
+		// Set the dynamic page values
 		$this->page->setTitle($post->getTitle());
 		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
 		$this->page->setMetaKeywords($post->getMetaKeywords());
 		$this->page->setMetaDescription($post->getMetaDescription());
 
-		// prerender the sections, as referencing twig within itself causes a circular reference
+		// Prerender the sections, as referencing twig within itself causes a circular reference
 		$sections = array();
 
 		foreach ($post->getSections() as $link) {
 			$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 		}
 
+		// Build the comment form
+		$requireLogin = $this->container->getParameter('stems.blog.comments.require_login');
+		$form         = $this->createForm(new CommentType($requireLogin), new Comment());
+
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
 			'page'		=> $this->page,
 			'post' 		=> $post,
 			'sections' 	=> $sections,
+			'form' 		=> $form->createView(),
 		));
 	}
 
