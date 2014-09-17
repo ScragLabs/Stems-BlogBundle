@@ -138,12 +138,12 @@ class AdminController extends BaseAdminController
 			return $this->redirect($this->generateUrl($this->home));
 		}
 
+		// Get the available section types
+		$types = $this->container->getParameter('stems.sections.available');
+
 		// Create the edit form and forms for the sections
 		$form = $this->createForm(new AdminPostType(), $post);
 		$sectionForms = $sectionHandler->getEditors($post->getSections());
-
-		// Get the available section types
-		$types = $em->getRepository('StemsBlogBundle:SectionType')->findByEnabled(true);
 
 		// Handle the form submission
 		if ($request->getMethod() == 'POST') {
@@ -191,6 +191,7 @@ class AdminController extends BaseAdminController
 					$em->persist($post);
 					$em->flush();
 					$request->getSession()->setFlash('success', 'The post "'.$post->getTitle().'" has been updated.');
+
 					return $this->redirect($this->generateUrl($this->home));
 
 				// } else {
@@ -203,8 +204,8 @@ class AdminController extends BaseAdminController
 		return $this->render('StemsBlogBundle:Admin:edit.html.twig', array(
 			'form'			=> $form->createView(),
 			'sectionForms'	=> $sectionForms,
+			'types'			=> $types['blog'],
 			'post' 			=> $post,
-			'types'			=> $types,
 		));
 	}
 

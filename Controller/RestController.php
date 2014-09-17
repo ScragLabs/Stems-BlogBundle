@@ -29,13 +29,10 @@ class RestController extends BaseRestController
 		// Render the html for the posts
 		$html = '';
 
-		foreach ($posts as &$post) {
-			// Prerender the sections, as referencing twig within itself causes a circular reference
-			$sections = array();
+		foreach ($posts as $post) {
 
-			foreach ($post->getSections() as $link) {
-				$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
-			}
+			// Prerender the sections, as referencing twig within itself causes a circular reference
+			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSections($post);
 
 			$html .= $this->renderView('StemsBlogBundle:Rest:post.html.twig', array(
 				'post' 		=> $post,
@@ -111,17 +108,17 @@ class RestController extends BaseRestController
 	/**
 	 * Returns form html for the requested section type
 	 *
-	 * @param  integer 	$id 	Section type id
+	 * @param  integer 	$type 	Section type id
 	 * @return JsonResponse
 	 */
-	public function addSectionTypeAction($id)
+	public function addSectionTypeAction($type)
 	{
 		// Get the section type
-		$em   = $this->getDoctrine()->getManager();
-		$type = $em->getRepository('StemsBlogBundle:SectionType')->find($id);
+		$em    	   = $this->getDoctrine()->getManager();
+		$available = $this->container->getParameter('stems.sections.available')
 
 		// Create a new section of the specified type
-		$class = 'Stems\\BlogBundle\\Entity\\'.$type->getClass();
+		$class = $available['blog'][$type]['class'];
 		$section = new $class();
 
 		$em->persist($section);
@@ -157,7 +154,8 @@ class RestController extends BaseRestController
 			// Get the section linkage and the specific section
 			$em      = $this->getDoctrine()->getManager();
 			$link    = $em->getRepository('StemsBlogBundle:Section')->find($id);
-			$section = $em->getRepository('StemsBlogBundle:'.$link->getType()->getClass())->find($link->getEntity());
+			$types   = $this->container->getParameter('stems.sections.available');
+			$section = $em->getRepository($types['blog'][$link->getType()]['entity'])->find($link->getEntity());
 
 			$em->remove($section);
 			$em->remove($link);
