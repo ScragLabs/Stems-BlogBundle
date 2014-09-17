@@ -6,60 +6,46 @@ use Stems\CoreBundle\Controller\BaseFrontController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Stems\BlogBundle\Form\CommentType;
 use Stems\BlogBundle\Entity\Comment;
 
 class FrontController extends BaseFrontController
 {
 	/**
-	 * Overview of the blog articles
+	 * Overview of the blog articles, with config controlled listing style
 	 *
 	 * @param  Request 		$request 	The request object
 	 */
 	public function listAction(Request $request)
 	{
-		// get all of the blog posts for the view
-		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
+		$chunk = $this->container->getParameter('stems.blog.index.chunk_size');
 
-		// paginate the result
-		$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => 6));
+		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
 
-		$this->render('StemsBlogBundle:Front:list.html.twig', array(
-			'posts' 		=> $data,
-			'page'			=> $this->page,
-		));
-	}
+			// Get all of the blog posts for the view
+			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), $chunk);
 
-	/**
-	 * Loads the blog articles sequentially
-	 *
-	 * @param  Request 		$request 	The request object
-	 */
-	public function sequentialAction(Request $request)
-	{
-		// get all of the blog posts for the view
-		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), 3);
+			// Gather render sections for each of the posts
+			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderCollection($posts);
+			
+			return $this->render('StemsBlogBundle:Front:sequential.html.twig', array(
+				'posts' 		=> $posts,
+				'sections' 		=> $sections,
+				'page'			=> $this->page,
+			));
 
-		// gather render sections for each of the posts
-		$postSections = array();
+		} else {
 
-		foreach ($posts as &$post) {
-				
-			// prerender the sections, as referencing twig within itself causes a circular reference (grrrr)
-			$sections = array();
+			// Get all of the blog posts for the view
+			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
 
-			foreach ($post->getSections() as $link) {
-				$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
-			}
+			// Paginate the result
+			$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => $chunk));
 
-			$postSections[] = $sections; 
+			$this->render('StemsBlogBundle:Front:list.html.twig', array(
+				'posts' 		=> $data,
+				'page'			=> $this->page,
+			));
 		}
-
-		return $this->render('StemsBlogBundle:Front:sequential.html.twig', array(
-			'posts' 		=> $posts,
-			'postSections' 	=> $postSections,
-			'page'			=> $this->page,
-		));
 	}
 
 	/**
@@ -79,15 +65,10 @@ class FrontController extends BaseFrontController
 		$this->page->setMetaDescription($post->getMetaDescription());
 
 		// Prerender the sections, as referencing twig within itself causes a circular reference
-		$sections = array();
-
-		foreach ($post->getSections() as $link) {
-			$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
-		}
+		$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSections($post);
 
 		// Build the comment form
-		$requireLogin = $this->container->getParameter('stems.blog.comments.require_login');
-		$form         = $this->createForm(new CommentType($requireLogin), new Comment());
+		$form = $this->createForm('blog_comment', new Comment());
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
 			'page'		=> $this->page,

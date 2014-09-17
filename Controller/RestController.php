@@ -2,13 +2,14 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Stems\CoreBundle\Controller\BaseRestController,
-	Symfony\Component\HttpFoundation\Request,
-	Stems\BlogBundle\Entity\Section,
-	Stems\BlogBundle\Entity\SectionProductGalleryProduct,
-	Stems\BlogBundle\Form\SectionProductGalleryProductType,
-	Stems\MediaBundle\Entity\Image,
-	Stems\MediaBundle\Form\ImageType;
+use Stems\CoreBundle\Controller\BaseRestController;
+use Symfony\Component\HttpFoundation\Request;
+use Stems\BlogBundle\Entity\Section;
+use Stems\BlogBundle\Entity\SectionProductGalleryProduct;
+use Stems\BlogBundle\Form\SectionProductGalleryProductType;
+use Stems\MediaBundle\Entity\Image;
+use Stems\MediaBundle\Form\ImageType;
+use Stems\BlogBundle\Entity\Comment;
 
 class RestController extends BaseRestController
 {
@@ -59,12 +60,11 @@ class RestController extends BaseRestController
 	{
 		// Get the post
 		$em   = $this->getDoctrine()->getManager();
-		$post = $em->getRepository('StemsBlogBundle:Post')->find($id);
+		$post = $em->getRepository('StemsBlogBundle:Post')->find($post);
 
 		// Build the comment form
-		$requireLogin = $this->container->getParameter('stems.blog.comments.require_login');
 		$comment 	  = new Comment();
-		$form         = $this->createForm(new CommentType($requireLogin), $comment);
+		$form         = $this->createForm('blog_comment', $comment);
 
 		// Process the submission
 		if ($request->getMethod() == 'POST') {
@@ -75,7 +75,7 @@ class RestController extends BaseRestController
 			if ($form->isValid()) {
 
 				// Set the user ID if we require login for commenting
-				if ($requireLogin) {
+				if $this->container->getParameter('stems.blog.comments.require_login')) {
 					if ($this->get('security.context')->isGranted('ROLE_USER')) {
 						$comment->setAuthor($this->getUser()->getId());
 					} else {
@@ -97,7 +97,11 @@ class RestController extends BaseRestController
 
 				return $this->addHtml($html)->setCallback('commentAdded')->success()->sendResponse();
 			} else {
-				return $this->setCallback('commentNotAdded')->error('Please ensure all fields are completed.')->sendResponse();
+				var_dump($form); die();
+				// Add the validation errors to the response
+				$this->addValidationErrors($form);
+				
+				return $this->setCallback('commentNotAdded')->error()->sendResponse();
 			}
 		}
 
@@ -188,7 +192,7 @@ class RestController extends BaseRestController
 		}
 
 		// Build the form and handle the request
-		$form = $this->createForm(new ImageType(), $image);
+		$form = $this->createForm('media_image', $image);
 
 		if ($form->bindRequest($request)->isValid()) {
 
@@ -229,7 +233,7 @@ class RestController extends BaseRestController
 		}
 
 		// Build the form and handle the request
-		$form = $this->createForm(new ImageType(), $image);
+		$form = $this->createForm('media_image', $image);
 
 		if ($form->bindRequest($request)->isValid()) {
 

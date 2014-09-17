@@ -34,12 +34,8 @@ stems_admin_blog_delete_comment:
 
 # Front-end routes
 
-stems_front_blog_sequential:
-    pattern:  /blog
-    defaults: { _controller: StemsBlogBundle:Front:sequential }
-
 stems_front_blog_list:
-    pattern:  /blog/archive
+    pattern:  /blog
     defaults: { _controller: StemsBlogBundle:Front:list }
 
 stems_front_blog_rss:

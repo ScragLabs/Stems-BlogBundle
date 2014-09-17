@@ -8,21 +8,28 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CommentType extends AbstractType
 {
-	protected $requireLogin;
+	protected $login;
 
-	function __construct($requireLogin) 
+	function __construct($login) 
 	{
-		$this->requireLogin = $requireLogin;
+		$this->login = $login;
 	}
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    	if (!$this->requireLogin) {
+    	if (!$this->login) {
     		$builder->add('author', null, array(
 				'label'     		=> 'Your Name',
 				'required'			=> true,
 				'error_bubbling' 	=> true,
-			));	
+			));
+
+			$builder->add('email', null, array(
+				'label'     		=> 'Email Address',
+				'required'			=> true,
+				'error_bubbling' 	=> true,
+				'mapped'			=> false,
+			));		
     	}
 
 		$builder->add('content', null, array(
@@ -30,6 +37,13 @@ class CommentType extends AbstractType
 			'required'			=> true,
 			'error_bubbling' 	=> true,
 		));	
+	}
+
+	public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+	    $resolver->setDefaults(array(
+	        'data_class' => 'Stems\BlogBundle\Entity\Comment',
+	    ));
 	}
 
 	public function getName()
