@@ -99,6 +99,11 @@ class Post
      */
     protected $sections; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+     */
+    protected $comments; 
+
     /** 
      * @ORM\Column(type="string", nullable=true)
      */
@@ -124,6 +129,9 @@ class Post
 
     /**
      * Create the social sharer object for this post, if no platform is passed we return a default configuration
+     *
+     * @param  string   $platform   The social media platform to generate the sharer for
+     * @return Sharer               The generated sharer
      */
     public function getSharer($platform=null)
     {
@@ -136,6 +144,44 @@ class Post
         $sharer->setTags(array('threadandmirror'));
 
         return $sharer;
+    }
+
+    /** 
+     * Get all comments that are not soft deleted
+     *
+     * @return array                A collection of valid comments
+     */
+    public function getUndeletedComments()
+    {
+        // Strip any comments that are deleted
+        $comments = array_filter($this->getComments()->toArray(), function($comment) {
+            if ($comment->getDeleted()) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return $comments;
+    }
+
+    /** 
+     * Get all comments that have been moderated and not soft deleted
+     *
+     * @return array                A collection of valid comments
+     */
+    public function getModeratedComments()
+    {
+        // Strip any comments that are deleted or unmoderated
+        $comments = array_filter($this->getComments()->toArray(), function($comment) {
+            if ($comment->getDeleted() || !$comment->getModerated()) {
+                return false;
+            } else {
+                return true;
+            }
+        });
+
+        return $comments;
     }
 
     /**
@@ -498,6 +544,26 @@ class Post
     public function getSections()
     {
         return $this->sections;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param Stems\BlogBundle\Entity\Comment $comment
+     */
+    public function addComment(\Stems\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+    }
+
+    /**
+     * Get comments
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getComments()
+    {
+        return $this->comments;
     }
 
     /**

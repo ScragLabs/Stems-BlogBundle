@@ -2,21 +2,14 @@
 
 namespace Stems\BlogBundle\Controller;
 
-// Dependencies
-use Stems\CoreBundle\Controller\BaseAdminController,
-	Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\Response,
-	Symfony\Component\HttpFoundation\Request;
-
-// Forms
+use Stems\CoreBundle\Controller\BaseAdminController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Stems\BlogBundle\Form\AdminPostType;
-
-// Entities
-use Stems\BlogBundle\Entity\Post,
-	Stems\BlogBundle\Entity\Section;
-
-// Exceptions
+use Stems\BlogBundle\Entity\Post;
+use Stems\BlogBundle\Entity\Section;
 use Doctrine\ORM\NoResultException;
 
 class AdminController extends BaseAdminController
@@ -28,7 +21,15 @@ class AdminController extends BaseAdminController
 	 */
 	public function dashboardAction()
 	{
-		return $this->render('StemsBlogBundle:Admin:dashboard.html.twig', array());
+		$em = $this->getDoctrine()->getEntityManager();
+
+		// Get the number of unmoderated comments
+		$comments = $em->getRepository('StemsBlogBundle:Comment')->findBy(array('moderated' => false, 'deleted' => false));
+		$comments = count($comments); 
+
+		return $this->render('StemsBlogBundle:Admin:dashboard.html.twig', array(
+			'comments' => $comments,
+		));
 	}
 
 	/**
@@ -36,12 +37,12 @@ class AdminController extends BaseAdminController
 	 */
 	public function sitemapAction()
 	{
-		// the slug used for the blog (eg. news, blog or magazine)
-		/// @todo: properly integrate this site-wide via config
+		// The slug used for the blog (eg. news, blog or magazine)
+		// @todo: properly integrate this site-wide via config
 		$slug = 'blog';
 
-		// get the posts
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get the posts
+		$em    = $this->getDoctrine()->getEntityManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'));
 
 		return $this->render('StemsBlogBundle:Admin:sitemap.html.twig', array(
@@ -55,8 +56,8 @@ class AdminController extends BaseAdminController
 	 */
 	public function indexAction()
 	{		
-		// get all undeleted articles
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get all undeleted articles
+		$em    = $this->getDoctrine()->getEntityManager();
 		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false), array('created' => 'DESC'));
 
 		return $this->render('StemsBlogBundle:Admin:index.html.twig', array(
@@ -71,12 +72,12 @@ class AdminController extends BaseAdminController
 	{
 		$em = $this->getDoctrine()->getEntityManager();
 
-		// create a new post for persisting, so we already have an id for adding sections etc.
+		// Create a new post for persisting, so we already have an id for adding sections etc.
 		$post = new Post();
 		$post->setAuthor($this->getUser()->getId());
 		$em->persist($post);
 		
-		// if a title was posted then use it
+		// If a title was posted then use it
 		$request->get('title') and $post->setTitle($request->get('title'));
 		$em->flush();
 
@@ -109,10 +110,10 @@ class AdminController extends BaseAdminController
 			}
 		}
 
-		// save all the things
+		// Save all the things
 		$em->flush();
 
-		// redirect to the edit page for the new post
+		// Redirect to the edit page for the new post
 		return $this->redirect($this->generateUrl('stems_admin_blog_edit', array('id' => $post->getId())));
 	}
 
@@ -137,12 +138,12 @@ class AdminController extends BaseAdminController
 			return $this->redirect($this->generateUrl($this->home));
 		}
 
+		// Get the available section types
+		$types = $this->container->getParameter('stems.sections.available');
+
 		// Create the edit form and forms for the sections
 		$form = $this->createForm(new AdminPostType(), $post);
 		$sectionForms = $sectionHandler->getEditors($post->getSections());
-
-		// Get the available section types
-		$types = $em->getRepository('StemsBlogBundle:SectionType')->findByEnabled(true);
 
 		// Handle the form submission
 		if ($request->getMethod() == 'POST') {
@@ -190,6 +191,7 @@ class AdminController extends BaseAdminController
 					$em->persist($post);
 					$em->flush();
 					$request->getSession()->setFlash('success', 'The post "'.$post->getTitle().'" has been updated.');
+
 					return $this->redirect($this->generateUrl($this->home));
 
 				// } else {
@@ -202,8 +204,8 @@ class AdminController extends BaseAdminController
 		return $this->render('StemsBlogBundle:Admin:edit.html.twig', array(
 			'form'			=> $form->createView(),
 			'sectionForms'	=> $sectionForms,
+			'types'			=> $types['blog'],
 			'post' 			=> $post,
-			'types'			=> $types,
 		));
 	}
 
@@ -220,6 +222,7 @@ class AdminController extends BaseAdminController
 		$post = $em->getRepository('StemsBlogBundle:Post')->findOneBy(array('id' => $id, 'deleted' => false));
 
 		if ($post) {
+
 			// Delete the post if was found
 			$name = $post->getTitle();
 			$post->setDeleted(true);
@@ -250,7 +253,7 @@ class AdminController extends BaseAdminController
 
 		if ($post) {
 
-			// Set the post the published/unpublished 
+			// Set the post to published/unpublished 
 			if ($post->getStatus() == 'Draft') {	
 				$post->setStatus('Published');
 				$post->setPublished(new \DateTime());
@@ -265,6 +268,77 @@ class AdminController extends BaseAdminController
 
 		} else {
 			$request->getSession()->setFlash('error', 'The requested post could not be published as it does not exist in the database.');
+		}
+
+		return $this->redirect($this->generateUrl($this->home));
+	}
+
+	/**
+	 * A listing of all unmoderated comments
+	 */
+	public function commentsAction()
+	{		
+		// Get all unmoderated comments
+		$em       = $this->getDoctrine()->getEntityManager();
+		$comments = $em->getRepository('StemsBlogBundle:Comment')->findBy(array('deleted' => false, 'moderated' => false), array('created' => 'DESC'));
+
+		return $this->render('StemsBlogBundle:Admin:comments.html.twig', array(
+			'comments' 	=> $comments,
+		));
+	}
+
+	/**
+	 * Moderate a comment
+	 *
+	 * @param  integer 	$id  	The ID of the comment
+	 * @param  Request 
+	 */
+	public function moderateCommentAction(Request $request, $id)
+	{
+		// Get the comment
+		$em      = $this->getDoctrine()->getEntityManager();
+		$comment = $em->getRepository('StemsBlogBundle:Comment')->findOneBy(array('id' => $id, 'deleted' => false));
+
+		if ($comment) {
+
+			// Set the comment to moderated
+			$comment->setModerated(true);
+			$request->getSession()->setFlash('success', 'The comment was successfully authorised!');
+
+			$em->persist($comment);
+			$em->flush();
+
+		} else {
+			$request->getSession()->setFlash('error', 'The requested comment could not be moderated as it does not exist in the database.');
+		}
+
+		return $this->redirect($this->generateUrl($this->home));
+	}
+
+	/**
+	 * Delete a comment
+	 *
+	 * @param  integer 	$id  	The ID of the post comment
+	 * @param  Request 
+	 */
+	public function deleteCommentAction(Request $request, $id)
+	{
+		// Get the comment
+		$em   = $this->getDoctrine()->getEntityManager();
+		$comment = $em->getRepository('StemsBlogBundle:Comment')->findOneBy(array('id' => $id, 'deleted' => false));
+
+		if ($comment) {
+
+			// Delete the comment if was found
+			$comment->setDeleted(true);
+			$em->persist($comment);
+			$em->flush();
+
+			// Return the success message
+			$request->getSession()->setFlash('success', 'The comment was successfully deleted!');
+
+		} else {
+			$request->getSession()->setFlash('error', 'The requested comment could not be deleted as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));

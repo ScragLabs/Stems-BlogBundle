@@ -20,14 +20,22 @@ stems_admin_blog_publish:
     pattern:  /admin/blog/{id}/publish
     defaults: { _controller: StemsBlogBundle:Admin:publish }
 
+stems_admin_blog_comments:
+    pattern:  /admin/blog/comments
+    defaults: { _controller: StemsBlogBundle:Admin:comments }
+
+stems_admin_blog_moderate_comment:
+    pattern:  /admin/blog/comment/{id}/moderate
+    defaults: { _controller: StemsBlogBundle:Admin:moderateComment }
+
+stems_admin_blog_delete_comment:
+    pattern:  /admin/blog/comment/{id}/delete
+    defaults: { _controller: StemsBlogBundle:Admin:deleteComment }
+
 # Front-end routes
 
-stems_front_blog_sequential:
-    pattern:  /blog
-    defaults: { _controller: StemsBlogBundle:Front:sequential }
-
 stems_front_blog_list:
-    pattern:  /blog/archive
+    pattern:  /blog
     defaults: { _controller: StemsBlogBundle:Front:list }
 
 stems_front_blog_rss:
@@ -49,24 +57,16 @@ stems_front_blog_post:
 # REST routes
 
 stems_rest_blog_get_more_posts:
-    pattern:  /rest/get-more-posts/{offset}
+    pattern:  /rest/blog/get-more-posts/{offset}
     defaults: { _controller: StemsBlogBundle:Rest:getMorePosts }
 
 stems_rest_blog_add_section_type:
-    pattern:  /admin/blog/rest/add-section-type/{id}
+    pattern:  /admin/blog/rest/add-section-type/{type}
     defaults: { _controller: StemsBlogBundle:Rest:addSectionType }
 
 stems_rest_blog_remove_section:
     pattern:  /admin/blog/rest/remove-section/{id}
     defaults: { _controller: StemsBlogBundle:Rest:removeSection }
-
-stems_rest_blog_parse_productgalleryproduct:
-    pattern:  /admin/blog/rest/parse-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:parseProductGalleryProduct }
-
-stems_rest_blog_update_productgalleryproduct:
-    pattern:  /admin/blog/rest/update-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:updateProductGalleryProduct }
 
 stems_rest_blog_set_featureimage:
     pattern:  /admin/blog/rest/set-feature-image/{id}
@@ -75,6 +75,10 @@ stems_rest_blog_set_featureimage:
 stems_rest_blog_set_imagesectionimage:
     pattern:  /admin/blog/rest/set-imagesection-image/{id}
     defaults: { _controller: StemsBlogBundle:Rest:setImageSectionImage }
+
+stems_rest_blog_add_comment:
+    pattern:  /rest/blog/add-comment/{post}
+    defaults: { _controller: StemsBlogBundle:Rest:addComment }
 
 # Popup routes
 

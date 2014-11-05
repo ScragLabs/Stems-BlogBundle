@@ -2,6 +2,13 @@ parameters:
 
     # Bundle specific
     stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
+    stems.blog.index.list_style: 'sequential'
+    stems.blog.index.chunk_size: 3
+    stems.blog.comments.enabled: true
+    stems.blog.comments.moderated: true
+    stems.blog.comments.captcha: false
+    stems.blog.comments.require_login: false
+    stems.blog.comments.show_avatars: false
 
     stems.core.sections.available:
         blog: 
@@ -69,5 +76,5 @@ parameters:
         stems_blog:
             title: 'Blog'
             route: 'stems_admin_blog_overview'
-            icon: 'fa fa-comment-o'
+            icon: 'fa fa-edit'
             children: []

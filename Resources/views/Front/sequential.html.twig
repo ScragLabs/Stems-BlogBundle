@@ -13,12 +13,12 @@
 				{{ post.content|raw }}
 			{% endif %}
 			{% set count = loop.index - 1 %}
-			{% for section in postSections[count] %}
+			{% for section in sections[count] %}
 				<div class="section" itemprop="articleBody">
 					{{ section|raw }}
 				</div>
 			{% endfor %}
 		</div>
 	{% endfor %}
-	<div class="rest-load-more" data-url="/rest/get-more-posts/" data-offset="3"></div>
+	<div class="rest-load-more" data-url="/rest/blog/get-more-posts/" data-offset="3"></div>
 {% endblock %}

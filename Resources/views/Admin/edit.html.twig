@@ -80,8 +80,8 @@
 					</ul>
 					<div id="add-section">
 						<div class="available-sections">
-							{% for type in types %}
-								<a class="btn" data-type-id="{{ type.id }}">{{ type.name }} Section</a>
+							{% for id,type in types if type.enabled %}
+								<a class="btn" data-type-id="{{ id }}">{{ type.name }} Section</a>
 							{% endfor %}
 						</div>
 						<a class="btn btn-primary"><i class="fa fa-plus"></i> Add a New Section</a>
