@@ -68,7 +68,7 @@ class FrontController extends BaseFrontController
 		$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSections($post);
 
 		// Build the comment form
-		$form = $this->createForm('blog_comment', new Comment());
+		$form = $this->createForm('blog_comment_type', new Comment());
 
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
 			'page'		=> $this->page,
@@ -85,32 +85,36 @@ class FrontController extends BaseFrontController
 	 */
 	public function previewAction($slug)
 	{
-		// redirect if the user isn't at least an admin
+		// Redirect if the user isn't at least an admin
 		if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
 			return $this->redirect('/blog');
 		}
 
-		// get the requested post
+		// Get the requested post
 		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
 
-		// set the dynamic page values
+		// Set the dynamic page values
 		$this->page->setTitle($post->getTitle());
 		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
 		$this->page->setmetaKeywords($post->getMetaKeywords());
 		$this->page->setMetaDescription($post->getMetaDescription());
 		$this->page->setDisableAnalytics(true);
 
-		// prerender the sections, as referencing twig within itself causes a circular reference
+		// Pre-render the sections, as referencing twig within itself causes a circular reference
 		$sections = array();
 
 		foreach ($post->getSections() as $link) {
 			$sections[] = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSection($link);
 		}
 
+		// Build the comment form
+		$form = $this->createForm('blog_comment_type', new Comment());
+
 		return $this->render('StemsBlogBundle:Front:post.html.twig', array(
 			'page'		=> $this->page,
 			'post' 		=> $post,
 			'sections' 	=> $sections,
+			'form' 		=> $form->createView(),
 		));
 	}
 

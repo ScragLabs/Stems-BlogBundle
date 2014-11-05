@@ -1,9 +1,9 @@
 services:
 
-	# Forms
+    # Forms
     stems.blog.form.type.comment:
         class: Stems\BlogBundle\Form\CommentType
         arguments: 
-        	login: %stems.blog.comments.require_login%
+            login: %stems.blog.comments.require_login%
         tags:
-            - { name: form.type, alias: blog_comment }
+            - { name: form.type, alias: blog_comment_type }

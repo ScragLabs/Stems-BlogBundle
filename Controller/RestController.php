@@ -72,7 +72,7 @@ class RestController extends BaseRestController
 			if ($form->isValid()) {
 
 				// Set the user ID if we require login for commenting
-				if $this->container->getParameter('stems.blog.comments.require_login')) {
+				if ($this->container->getParameter('stems.blog.comments.require_login')) {
 					if ($this->get('security.context')->isGranted('ROLE_USER')) {
 						$comment->setAuthor($this->getUser()->getId());
 					} else {
@@ -115,7 +115,7 @@ class RestController extends BaseRestController
 	{
 		// Get the section type
 		$em    	   = $this->getDoctrine()->getManager();
-		$available = $this->container->getParameter('stems.sections.available')
+		$available = $this->container->getParameter('stems.sections.available');
 
 		// Create a new section of the specified type
 		$class = $available['blog'][$type]['class'];
@@ -190,7 +190,7 @@ class RestController extends BaseRestController
 		}
 
 		// Build the form and handle the request
-		$form = $this->createForm('media_image', $image);
+		$form = $this->createForm('media_image_type', $image);
 
 		if ($form->bindRequest($request)->isValid()) {
 
@@ -255,111 +255,6 @@ class RestController extends BaseRestController
 			return $this->addHtml($html)->addMeta($meta)->setCallback('updateSectionImage')->success('Image updated.')->sendResponse();
 		} else {
 			return $this->error('Please choose an image to upload.', true)->sendResponse();
-		}
-	}
-
-	/**
-	 * Adds a product to a product gallery section
-	 *
-	 * @param  integer 		$id 	The ID of the Product Gallery Section to add the image to
-	 * @param  Request
-	 * @return JsonResponse
-	 */
-	public function parseProductGalleryProductAction($id, Request $request)
-	{
-		// Get the url from the query paramter and attempt to parse the product
-		$em = $this->getDoctrine()->getManager();
-
-		$product = $em->getRepository('ThreadAndMirrorProductsBundle:Product')->getProductFromUrl($request->get('url'));
-
-		// Get the section for the field id
-		$section = $em->getRepository('StemsBlogBundle:SectionProductGallery')->findOneById($id);
-
-		// If we manage to parse a product from the url then create the product listing for the gallery
-		if (is_object($product)) {
-
-			// Save the product as it may not already exist in the database
-			$em->persist($product);
-
-			// Create a pick from the product
-			$image = new SectionProductGalleryProduct();
-			$image->setHeading($product->getName());
-			$image->setCaption($product->getShop()->getName());
-			$image->setUrl($this->generateUrl('thread_products_front_product_buy', array('slug' => $product->getslug())));
-			$image->setThumbnail($product->getThumbnail());
-			$image->setImage($product->getImage());
-			$image->setRatio($product->getShop()->getImageRatio());
-			$image->setPid($product->getId());
-
-			$em->persist($image);
-			$em->flush();
-
-			// Get the associated section linkage to tag the fields with the right id
-			$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($section->getId());
-
-			// Get the html for the new product gallery item and to add to the page
-			$html = $this->renderView('StemsBlogBundle:Rest:productGalleryProduct.html.twig', array(
-				'product'	=> $image,
-				'section'	=> $section,
-				'link'		=> $link,
-			));
-
-			// Store the section id for use in the response handler
-			$this->addMeta(array('section' => $link->getId()));
-
-			return $this->addHtml($html)->success('The product was successfully updated.')->sendResponse();
-		} else {
-			return $this->error('We could not load a product using that link.', true)->sendResponse();
-		}
-	}
-
-	/**
-	 * Update a product gallery product, both generated and manually added
-	 *
-	 * @param  integer 		$id 	The ID of the Product Gallery Section to update
-	 * @param  Request
-	 * @return JsonResponse
-	 */
-	public function updateProductGalleryProductAction($id, Request $request)
-	{
-		// Get the url from the query parameter and attempt to parse the product
-		$em    = $this->getDoctrine()->getManager();
-		$image = $em->getRepository('StemsBlogBundle:SectionProductGalleryProduct')->find($id);
-
-		$data = json_decode($request->getContent());
-
-		// If the product exists, then handle the request
-		if (is_object($image)) {
-
-			// Update the product
-			$image->setHeading($request->request->get('section_productgalleryproduct_type')['heading']);
-			$image->setCaption($request->request->get('section_productgalleryproduct_type')['caption']);
-			$image->setUrl($request->request->get('section_productgalleryproduct_type')['url']);
-			$image->setThumbnail($request->request->get('section_productgalleryproduct_type')['thumbnail']);
-			$image->setImage($request->request->get('section_productgalleryproduct_type')['image']);
-
-			$em->persist($image);
-			$em->flush();
-
-			// Get the associated section linkage to tag the fields with the right id
-			$link = $em->getRepository('StemsBlogBundle:Section')->findOneByEntity($image->getSectionProductGallery()->getId());
-
-			// Get the html for the product gallery item and to add to the page
-			$html = $this->renderView('StemsBlogBundle:Rest:productGalleryProduct.html.twig', array(
-				'product'	=> $image,
-				'section'	=> $image->getSectionProductGallery(),
-				'link'		=> $link,
-			));
-
-			// Store the section and product id for use in the response handler
-			$this->addMeta(array(
-				'section' => $link->getId(),
-				'product' => $image->getId(),
-			));
-
-			return $this->addHtml($html)->setCallback('insertProductGalleryProduct')->success('The product was successfully updated.')->sendResponse();
-		} else {
-			return $this->addHtml($html)->error('There was a problem updating the product.', true)->sendResponse();
 		}
 	}
 }

@@ -13,7 +13,7 @@
 				{{ post.content|raw }}
 			{% endif %}
 			{% set count = loop.index - 1 %}
-			{% for section in postSections[count] %}
+			{% for section in sections[count] %}
 				<div class="section" itemprop="articleBody">
 					{{ section|raw }}
 				</div>

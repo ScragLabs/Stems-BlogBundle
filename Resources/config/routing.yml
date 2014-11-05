@@ -61,20 +61,12 @@ stems_rest_blog_get_more_posts:
     defaults: { _controller: StemsBlogBundle:Rest:getMorePosts }
 
 stems_rest_blog_add_section_type:
-    pattern:  /admin/blog/rest/add-section-type/{id}
+    pattern:  /admin/blog/rest/add-section-type/{type}
     defaults: { _controller: StemsBlogBundle:Rest:addSectionType }
 
 stems_rest_blog_remove_section:
     pattern:  /admin/blog/rest/remove-section/{id}
     defaults: { _controller: StemsBlogBundle:Rest:removeSection }
-
-stems_rest_blog_parse_productgalleryproduct:
-    pattern:  /admin/blog/rest/parse-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:parseProductGalleryProduct }
-
-stems_rest_blog_update_productgalleryproduct:
-    pattern:  /admin/blog/rest/update-product-gallery-product/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:updateProductGalleryProduct }
 
 stems_rest_blog_set_featureimage:
     pattern:  /admin/blog/rest/set-feature-image/{id}
