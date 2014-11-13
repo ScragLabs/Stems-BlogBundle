@@ -13,5 +13,5 @@
 	<br class="clear">
 	<h2 itemprop="name">{{ link.post.title }} <span>{{ link.post.excerpt }}</span></h2>
 	{% set image = getMediaImage(link.post.image) %}
-	<div class="image" title="{{ link.post.title }} {{ link.post.excerpt }}" style="background-image: url('{{ getMediaImage(link.post.image).src }}')"></div>
+	<div class="image" title="{{ link.post.title }} {{ link.post.excerpt }}" style="background-image: url('{{ getMediaImage(link.post.image).src|imagine_filter('blog_header') }}')"></div>
 </div>

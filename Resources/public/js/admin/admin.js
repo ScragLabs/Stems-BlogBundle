@@ -54,4 +54,16 @@ $(document).ready(function() {
 		});
 	});
 
+	/** 
+	 * Update the image on the blog sections
+	 */
+	$('.admin-blog-editor').on('change', '.feature-image', function(e){
+		var header_section = $('.section-blog-header .image');
+		if (header_section.length) {
+			header_section.css('background-image', $(this).css('background-image'));
+		} else {
+			
+		}
+	});
+
 });

@@ -72,10 +72,6 @@ stems_rest_blog_set_featureimage:
     pattern:  /admin/blog/rest/set-feature-image/{id}
     defaults: { _controller: StemsBlogBundle:Rest:setFeatureImage }
 
-stems_rest_blog_set_imagesectionimage:
-    pattern:  /admin/blog/rest/set-imagesection-image/{id}
-    defaults: { _controller: StemsBlogBundle:Rest:setImageSectionImage }
-
 stems_rest_blog_add_comment:
     pattern:  /rest/blog/add-comment/{post}
     defaults: { _controller: StemsBlogBundle:Rest:addComment }

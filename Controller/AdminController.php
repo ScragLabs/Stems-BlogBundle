@@ -67,6 +67,8 @@ class AdminController extends BaseAdminController
 
 	/**
 	 * Create a post, using a template if defined
+	 *
+	 * @param  Request 
 	 */
 	public function createAction(Request $request)
 	{
@@ -81,33 +83,28 @@ class AdminController extends BaseAdminController
 		$request->get('title') and $post->setTitle($request->get('title'));
 		$em->flush();
 
-		// add the blog template sections as defined in the config
+		// Add the blog template sections as defined in the config
 		$position = 1;
+		$availableSections = $this->container->getParameter('stems.core.sections.available')['blog'];
 
-		foreach ($this->container->getParameter('stems.blog.template_sections') as $sectionClass) {
+		foreach ($this->container->getParameter('stems.blog.template_sections') as $sectionName) {
 
-			// only add the section if it exists
-			$type = $em->getRepository('StemsBlogBundle:SectionType')->findOneByClass($sectionClass);
-	
-			if ($type) {
+			// Create a new section of the specified type
+			$sectionClass = $availableSections[$sectionName]['class'];
+			$section = new $sectionClass();
+			$em->persist($section);
+			$em->flush();
 
-				// create a new section of the specified type
-				$class = 'Stems\\BlogBundle\\Entity\\'.$type->getClass();
-				$section = new $class();
-				$em->persist($section);
-				$em->flush();
+			// Create the section linkage
+			$link = new Section();
+			$link->setType($sectionName);
+			$link->setPost($post);
+			$link->setPosition($position);
+			$link->setEntity($section->getId());
 
-				// create the section linkage
-				$link = new Section();
-				$link->setType($type);
-				$link->setPost($post);
-				$link->setPosition($position);
-				$link->setEntity($section->getId());
-
-				$em->persist($link);
-				$em->flush();
-				$position++;
-			}
+			$em->persist($link);
+			$em->flush();
+			$position++;
 		}
 
 		// Save all the things
@@ -134,7 +131,7 @@ class AdminController extends BaseAdminController
 
 		// Throw an error if the post could not be found
 		if (!$post) {
-			$request->getSession()->setFlash('error', 'The requested post could not be found.');
+			$request->getSession()->getFlashBag()->set('error', 'The requested post could not be found.');
 			return $this->redirect($this->generateUrl($this->home));
 		}
 
@@ -149,7 +146,7 @@ class AdminController extends BaseAdminController
 		if ($request->getMethod() == 'POST') {
 
 			// Validate the submitted values
-			$form->bindRequest($request);
+			$form->bind($request);
 
 			//if ($form->isValid()) {
 
@@ -190,13 +187,13 @@ class AdminController extends BaseAdminController
 					
 					$em->persist($post);
 					$em->flush();
-					$request->getSession()->setFlash('success', 'The post "'.$post->getTitle().'" has been updated.');
+					$request->getSession()->getFlashBag()->set('success', 'The post "'.$post->getTitle().'" has been updated.');
 
 					return $this->redirect($this->generateUrl($this->home));
 
 				// } else {
-				// 	$request->getSession()->setFlash('error', 'Your request was not processed as errors were found.');
-				// 	$request->getSession()->setFlash('debug', '');
+				// 	$request->getSession()->getFlashBag()->set('error', 'Your request was not processed as errors were found.');
+				// 	$request->getSession()->getFlashBag()->set('debug', '');
 				// }
 			//}
 		}
@@ -230,10 +227,10 @@ class AdminController extends BaseAdminController
 			$em->flush();
 
 			// Return the success message
-			$request->getSession()->setFlash('success', 'The post "'.$name.'" was successfully deleted!');
+			$request->getSession()->getFlashBag()->set('success', 'The post "'.$name.'" was successfully deleted!');
 
 		} else {
-			$request->getSession()->setFlash('error', 'The requested post could not be deleted as it does not exist in the database.');
+			$request->getSession()->getFlashBag()->set('error', 'The requested post could not be deleted as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));
@@ -257,17 +254,17 @@ class AdminController extends BaseAdminController
 			if ($post->getStatus() == 'Draft') {	
 				$post->setStatus('Published');
 				$post->setPublished(new \DateTime());
-				$request->getSession()->setFlash('success', 'The post "'.$post->getTitle().'" was successfully published!');
+				$request->getSession()->getFlashBag()->set('success', 'The post "'.$post->getTitle().'" was successfully published!');
 			} else {
 				$post->setStatus('Draft');
-				$request->getSession()->setFlash('success', 'The post "'.$post->getTitle().'" was successfully unpublished!');
+				$request->getSession()->getFlashBag()->set('success', 'The post "'.$post->getTitle().'" was successfully unpublished!');
 			}
 
 			$em->persist($post);
 			$em->flush();
 
 		} else {
-			$request->getSession()->setFlash('error', 'The requested post could not be published as it does not exist in the database.');
+			$request->getSession()->getFlashBag()->set('error', 'The requested post could not be published as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));
@@ -303,13 +300,13 @@ class AdminController extends BaseAdminController
 
 			// Set the comment to moderated
 			$comment->setModerated(true);
-			$request->getSession()->setFlash('success', 'The comment was successfully authorised!');
+			$request->getSession()->getFlashBag()->set('success', 'The comment was successfully authorised!');
 
 			$em->persist($comment);
 			$em->flush();
 
 		} else {
-			$request->getSession()->setFlash('error', 'The requested comment could not be moderated as it does not exist in the database.');
+			$request->getSession()->getFlashBag()->set('error', 'The requested comment could not be moderated as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));
@@ -335,10 +332,10 @@ class AdminController extends BaseAdminController
 			$em->flush();
 
 			// Return the success message
-			$request->getSession()->setFlash('success', 'The comment was successfully deleted!');
+			$request->getSession()->getFlashBag()->set('success', 'The comment was successfully deleted!');
 
 		} else {
-			$request->getSession()->setFlash('error', 'The requested comment could not be deleted as it does not exist in the database.');
+			$request->getSession()->getFlashBag()->set('error', 'The requested comment could not be deleted as it does not exist in the database.');
 		}
 
 		return $this->redirect($this->generateUrl($this->home));

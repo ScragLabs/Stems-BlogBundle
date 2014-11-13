@@ -67,7 +67,7 @@ class RestController extends BaseRestController
 		if ($request->getMethod() == 'POST') {
 
 			// Validate the submitted values
-			$form->bindRequest($request);
+			$form->bind($request);
 
 			if ($form->isValid()) {
 
@@ -192,7 +192,7 @@ class RestController extends BaseRestController
 		// Build the form and handle the request
 		$form = $this->createForm('media_image_type', $image);
 
-		if ($form->bindRequest($request)->isValid()) {
+		if ($form->bind($request)->isValid()) {
 
 			// Upload the file and save the entity
 			$image->doUpload();
@@ -233,7 +233,7 @@ class RestController extends BaseRestController
 		// Build the form and handle the request
 		$form = $this->createForm('media_image', $image);
 
-		if ($form->bindRequest($request)->isValid()) {
+		if ($form->bind($request)->isValid()) {
 
 			// Upload the file and save the entity
 			$image->doUpload();

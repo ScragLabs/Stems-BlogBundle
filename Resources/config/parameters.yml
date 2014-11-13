@@ -1,7 +1,7 @@
 parameters:
 
     # Bundle specific
-    stems.blog.template_sections: ['SectionBlogHeader','SectionMagazine']
+    stems.blog.template_sections: ['blog_header','magazine']
     stems.blog.index.list_style: 'sequential'
     stems.blog.index.chunk_size: 3
     stems.blog.comments.enabled: true
