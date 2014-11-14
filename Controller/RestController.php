@@ -199,13 +199,15 @@ class RestController extends BaseRestController
 			$em->persist($image);
 			$em->flush();
 
+			$meta = array('id' => $image->getId());
+
 			// Get the html for updating the feature image
 			$html = $this->renderView('StemsBlogBundle:Rest:setFeatureImage.html.twig', array(
 				'post'	=> $post,
 				'image'	=> $image,
 			));
 
-			return $this->addHtml($html)->setCallback('updateFeatureImage')->success('Image updated.')->sendResponse();
+			return $this->addHtml($html)->setCallback('updateFeatureImage')->addMeta($meta)->success('Image updated.')->sendResponse();
 		} else {
 			return $this->error('Please choose an image to upload.', true)->sendResponse();
 		}

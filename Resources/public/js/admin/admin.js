@@ -62,7 +62,9 @@ $(document).ready(function() {
 		if (header_section.length) {
 			header_section.css('background-image', $(this).css('background-image'));
 		} else {
-			
+			var image = $('<div class="image" style="background-image: url('+$(this).css('background-image')+')></div>');
+			$('.section-blog-header').prepend(image);
+			console.log('test');
 		}
 	});
 
