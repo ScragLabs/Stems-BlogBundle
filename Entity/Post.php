@@ -1,14 +1,15 @@
 <?php
+
 namespace Stems\BlogBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection,
-    Symfony\Component\Validator\Constraints as Assert,
-    Symfony\Component\HttpFoundation\File\UploadedFile,
-    Doctrine\ORM\Mapping as ORM,
-    Stems\SocialBundle\Service\Sharer;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Doctrine\ORM\Mapping as ORM;
+use Stems\SocialBundle\Service\Sharer;
 
 /** 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Stems\BlogBundle\Repository\PostRepository")
  * @ORM\Table(name="stm_blog_post")
  */
 class Post
@@ -57,6 +58,11 @@ class Post
      * @ORM\Column(type="integer")
      */
     protected $author;
+
+    /** 
+     * @ORM\Column(type="integer")
+     */
+    protected $height = 800;
 
     /**
      * @ORM\Column(type="string") 
@@ -330,6 +336,29 @@ class Post
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set height
+     *
+     * @param integer $height
+     * @return Post
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
+    
+        return $this;
+    }
+
+    /**
+     * Get height
+     *
+     * @return integer 
+     */
+    public function getHeight()
+    {
+        return $this->height;
     }
 
     /**

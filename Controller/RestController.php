@@ -24,7 +24,7 @@ class RestController extends BaseRestController
 	{
 		// Get more of the blog posts for the view
 		$em    = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), $chunk, $offset);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatest($chunk, $offset);
 
 		// Render the html for the posts
 		$html = '';
@@ -94,7 +94,6 @@ class RestController extends BaseRestController
 
 				return $this->addHtml($html)->setCallback('commentAdded')->success()->sendResponse();
 			} else {
-				var_dump($form); die();
 				// Add the validation errors to the response
 				$this->addValidationErrors($form);
 				
@@ -208,53 +207,6 @@ class RestController extends BaseRestController
 			));
 
 			return $this->addHtml($html)->setCallback('updateFeatureImage')->addMeta($meta)->success('Image updated.')->sendResponse();
-		} else {
-			return $this->error('Please choose an image to upload.', true)->sendResponse();
-		}
-	}
-
-	/**
-	 * Updates the image for an image section
-	 *
-	 * @param  integer 		$id 	The ID of the image section
-	 * @param  Request
-	 * @return JsonResponse
-	 */
-	public function setImageSectionImageAction($id, Request $request)
-	{
-		// Get the section and existing image
-		$em      = $this->getDoctrine()->getManager();
-		$section = $em->getRepository('StemsBlogBundle:SectionImage')->find($id);
-
-		if ($section->getImage()) {
-			$image = $em->getRepository('StemsMediaBundle:Image')->find($section->getImage());
-		} else {
-			$image = new Image();
-		}
-
-		// Build the form and handle the request
-		$form = $this->createForm('media_image', $image);
-
-		if ($form->bind($request)->isValid()) {
-
-			// Upload the file and save the entity
-			$image->doUpload();
-			$em->persist($image);
-			$em->flush();
-
-			// Get the html for updating the feature image
-			$html = $this->renderView('StemsBlogBundle:Rest:setImageSectionImage.html.twig', array(
-				'section'	=> $section,
-				'image'		=> $image,
-			));
-
-			// Set the meta data for the update callback
-			$meta = array(
-				'imageType' => 'imageGalleryImage',
-				'section'	=> $section->getId(),
-			);
-
-			return $this->addHtml($html)->addMeta($meta)->setCallback('updateSectionImage')->success('Image updated.')->sendResponse();
 		} else {
 			return $this->error('Please choose an image to upload.', true)->sendResponse();
 		}

@@ -2,10 +2,10 @@
 
 namespace Stems\BlogBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller,
-	Symfony\Component\HttpFoundation\RedirectResponse,
-	Symfony\Component\HttpFoundation\Response,
-	Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class WidgetController extends Controller
 {
@@ -14,9 +14,9 @@ class WidgetController extends Controller
 	 */
 	public function latestPostAction()
 	{
-		// get the latest blog post
-		$em = $this->getDoctrine()->getEntityManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published', 'hideFromWidgets' => false), array('created' => 'DESC'), 1);
+		// Get the latest blog post
+		$em    = $this->getDoctrine()->getManager();
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget(1);
 
 		return $this->render('StemsBlogBundle:Widget:latestPost.html.twig', array(
 			'post' 	=> reset($posts),
@@ -26,11 +26,11 @@ class WidgetController extends Controller
 	/**
 	 * Renders a (unpaginated) list of the most recent posts, defaulting to 5 if no limit is set
 	 */
-	public function latestPostsSidebarAction($limit=4)
+	public function latestPostsSidebarAction($limit = 4)
 	{
-		// get the latest blog post
-		$em = $this->getDoctrine()->getEntityManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published', 'hideFromWidgets' => false), array('created' => 'DESC'), $limit);
+		// Get the latest blog post
+		$em    = $this->getDoctrine()->getManager();
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget($limit);
 
 		return $this->render('StemsBlogBundle:Widget:latestPostsSidebar.html.twig', array(
 			'posts' 	=> $posts,
@@ -42,8 +42,8 @@ class WidgetController extends Controller
 	 */
 	public function featurePostAction($id)
 	{
-		// get the blog post
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get the blog post
+		$em   = $this->getDoctrine()->getManager();
 		$post = $em->getRepository('StemsBlogBundle:Post')->find($id);
 
 		return $this->render('StemsBlogBundle:Widget:latestPost.html.twig', array(
@@ -56,8 +56,8 @@ class WidgetController extends Controller
 	 */
 	public function featuredInAction($id)
 	{
-		// get the blog post
-		$em = $this->getDoctrine()->getEntityManager();
+		// Get the blog post
+		$em   = $this->getDoctrine()->getManager();
 		$post = $em->getRepository('StemsBlogBundle:Post')->find($id);
 
 		return $this->render('StemsBlogBundle:Widget:featuredIn.html.twig', array(
@@ -66,13 +66,13 @@ class WidgetController extends Controller
 	}
 
 	/**
-	 * Renders the latest blog posts in a feature block
+	 * Renders the latest blog posts for the feature block
 	 */
 	public function homepageFeatureAction()
 	{
-		// get the latest blog post
-		$em = $this->getDoctrine()->getEntityManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'), 5);
+		// Get the latest blog post
+		$em    = $this->getDoctrine()->getManager();
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget(5);
 
 		return $this->render('StemsBlogBundle:Widget:homepageFeature.html.twig', array(
 			'posts' 	=> $posts,

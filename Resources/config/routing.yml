@@ -35,7 +35,7 @@ stems_admin_blog_delete_comment:
 # Front-end routes
 
 stems_front_blog_list:
-    pattern:  /blog
+    pattern:  /magazine
     defaults: { _controller: StemsBlogBundle:Front:list }
 
 stems_front_blog_rss:
@@ -51,7 +51,7 @@ stems_front_blog_preview:
     defaults: { _controller: StemsBlogBundle:Front:preview }
 
 stems_front_blog_post:
-    pattern:  /blog/{slug}
+    pattern:  /magazine/{slug}
     defaults: { _controller: StemsBlogBundle:Front:post }
 
 # REST routes

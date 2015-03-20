@@ -1,41 +1,55 @@
 <div class="widget widget-blog-homepage-feature">
-	<h5><a href="/blog">Blog Features</a></h5>
-	<div class="left-items">
-		<a href="/blog/{{ posts[1].slug }}">
-			<div class="image" style="background:url('{{ getMediaImage(posts[1].image).src|imagine_filter('blog_homepage_small')  }}') center center; background-size:cover;"></div>
-			<div class="description">
-				<h2>{{ posts[1].title }}<span>{{ posts[1].excerpt }}</span></h2>
-			</div>
-		</a>
-		<a href="/blog/{{ posts[3].slug }}">
-			<div class="image" style="background:url('{{ getMediaImage(posts[3].image).src|imagine_filter('blog_homepage_small') }}') center center; background-size:cover;"></div>
-			<div class="description">
-				<h2>{{ posts[3].title }}<span>{{ posts[3].excerpt }}</span></h2>
-			</div>
-		</a>
+	<div>
+		<div class="background" style="background:url('{{ getMediaImage(posts[0].image).src|imagine_filter('blog_homepage_main') }}') center center; background-size:cover;"></div>
+		<div class="feature-article wrap" >
+			<a href="{{ path('stems_front_blog_post', { slug:posts[0].slug }) }}">
+				<div class="title">
+					<p>Latest Feature</p>
+					<h2>{{ posts[0].title }}</h2>
+					<h4>{{ posts[0].excerpt }}</h4>
+				</div>
+				<div class="image" style="background:url('{{ getMediaImage(posts[0].image).src|imagine_filter('blog_header') }}') center center; background-size:cover;"></div>
+				<div class="description">
+					<p>{{ posts[0].metaDescription }}</p>
+				</div>
+				<button>Read More</button>
+			</a>
+		</div>
 	</div>
-	<div class="feature-item">
-		<a href="/blog/{{ posts[0].slug }}">
-			<h2>{{ posts[0].title }}<span>{{ posts[0].excerpt }}</span></h2>
-			<div class="image" style="background:url('{{ getMediaImage(posts[0].image).src|imagine_filter('blog_homepage_main') }}') center center; background-size:cover;"></div>
-			<div class="description">
-				<p>{{ posts[0].metaDescription }}</p>
-			</div>
-		</a>
+	<div class="other-articles wrap">
+		<figure>
+			<a href="{{ path('stems_front_blog_post', { slug:posts[1].slug }) }}">
+				<div class="title">
+					<h2>{{ posts[1].title }}</h2>
+					<hr>
+					<h4>{{ posts[1].excerpt }}</h4>
+					<p>{{ posts[1].metaDescription }}</p>
+				</div>
+				<div class="image" style="background:url('{{ getMediaImage(posts[1].image).src|imagine_filter('blog_homepage_circle')  }}') center center; background-size:cover;"></div>
+			</a>
+		</figure>
+		<figure>
+			<a href="{{ path('stems_front_blog_post', { slug:posts[2].slug }) }}">
+				<div class="title">
+					<h2>{{ posts[2].title }}</h2>
+					<hr>
+					<h4>{{ posts[2].excerpt }}</h4>
+					<p>{{ posts[2].metaDescription }}</p>
+				</div>
+				<div class="image" style="background:url('{{ getMediaImage(posts[2].image).src|imagine_filter('blog_homepage_circle')  }}') center center; background-size:cover;"></div>
+			</a>
+		</figure>
+		<figure>
+			<a href="{{ path('stems_front_blog_post', { slug:posts[3].slug }) }}">
+				<div class="title">
+					<h2>{{ posts[3].title }}</h2>
+					<hr>
+					<h4>{{ posts[3].excerpt }}</h4>
+					<p>{{ posts[3].metaDescription }}</p>
+				</div>
+				<div class="image" style="background:url('{{ getMediaImage(posts[3].image).src|imagine_filter('blog_homepage_circle')  }}') center center; background-size:cover;"></div>
+			</a>
+		</figure>
+		<br class="clear">
 	</div>
-	<div class="right-items">
-		<a href="/blog/{{ posts[2].slug }}">
-			<div class="image" style="background:url('{{ getMediaImage(posts[2].image).src|imagine_filter('blog_homepage_small') }}') center center; background-size:cover;"></div>
-			<div class="description">
-				<h2>{{ posts[2].title }}<span>{{ posts[2].excerpt }}</span></h2>
-			</div>
-		</a>
-		<a href="/blog/{{ posts[4].slug }}">
-			<div class="image" style="background:url('{{ getMediaImage(posts[4].image).src|imagine_filter('blog_homepage_small') }}') center center; background-size:cover;"></div>
-			<div class="description">
-				<h2>{{ posts[4].title }}<span>{{ posts[4].excerpt }}</span></h2>
-			</div>
-		</a>
-	</div>
-	<br class="clear">
 </div>

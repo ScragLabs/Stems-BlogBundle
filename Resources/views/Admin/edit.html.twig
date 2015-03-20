@@ -12,7 +12,6 @@
 					<li></li>
 					<li><a href="#" data-tab="edit-post-overview" class="active">General <i class="fa fa-tasks fa-fw"></i></a></li>
 					<li><a href="#" data-tab="edit-post-content">Content <i class="fa fa-file-text-o fa-fw"></i></a></li>
-					<li><a href="#" data-tab="edit-post-layout">Layout <i class="fa fa-th-large fa-fw"></i></a></li>
 					<li><a href="#" data-tab="edit-post-tags">Tags <i class="fa fa-tags fa-fw"></i></a></li>
 					<li><a href="#" data-tab="edit-post-seo">SEO <i class="fa fa-bar-chart-o fa-fw"></i></a></li>
 					<li></li>
@@ -65,21 +64,13 @@
 				<div class="edit-panel" id="edit-post-tags" style="height:0px">
 					Tags go here
 				</div>
-				<div class="edit-panel" id="edit-post-layout" style="height:0px">
-					{# <h2>{{ post.title }}</h2>
-					<ul class="section-ordering">
-						{% for section in post.sections %}
-							<li data-section-id="{{ section.id }}"><h4>{{ section.type.name }}</h4></li>
-						{% endfor %}
-					</ul> #}
-				</div>
 				<div class="edit-panel" id="edit-post-content" style="height:0px">
-					<h2>{{ post.title }}</h2>
-					<ul class="sections">
+					<div id="packery-editor" class="layout-editor col-2" style="height:{{ form.vars.value.height }}px">
 						{% for sectionForm in sectionForms %}
-							<li>{{ sectionForm|raw }}</li>
+							{{ sectionForm|raw }}
 						{% endfor %}
-					</ul>
+						<br class="clear">
+					</div>
 					<div id="add-section">
 						<div class="available-sections">
 							{% for id,type in types if type.enabled %}
@@ -88,6 +79,7 @@
 						</div>
 						<a class="btn btn-primary"><i class="fa fa-plus"></i> Add a New Section</a>
 					</div>
+					{{ form_row(form.height) }}
 				</div>
 			</div>
 		</div>

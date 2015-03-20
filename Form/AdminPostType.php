@@ -62,6 +62,12 @@ class AdminPostType extends AbstractType
 			'required'			=> false,
 			'error_bubbling' 	=> true,
 		));
+
+		$builder->add('height', 'hidden', array(
+			'required'			=> false,
+			'error_bubbling' 	=> true,
+			'attr'				=> array('class' => 'layout-height')
+		));
 	}
 
 	public function getName()

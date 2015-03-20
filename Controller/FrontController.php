@@ -22,7 +22,7 @@ class FrontController extends BaseFrontController
 		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
 
 			// Get all of the blog posts for the view
-			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'), $chunk);
+			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findLatest($chunk);
 
 			// Gather render sections for each of the posts
 			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderCollection($posts);

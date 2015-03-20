@@ -33,12 +33,12 @@ class Section
     /** 
      * @ORM\Column(type="integer")
      */
-    protected $x = 0;
+    protected $x;
 
     /** 
      * @ORM\Column(type="integer")
      */
-    protected $y = 0;
+    protected $y;
 
     /** 
      * @ORM\Column(type="integer")
@@ -150,74 +150,5 @@ class Section
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set width
-     *
-     * @param integer $width
-     * @return Section
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * Get width
-     *
-     * @return integer 
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * Set x
-     *
-     * @param integer $x
-     * @return Section
-     */
-    public function setX($x)
-    {
-        $this->x = $x;
-
-        return $this;
-    }
-
-    /**
-     * Get x
-     *
-     * @return integer 
-     */
-    public function getX()
-    {
-        return $this->x;
-    }
-
-    /**
-     * Set y
-     *
-     * @param integer $y
-     * @return Section
-     */
-    public function setY($y)
-    {
-        $this->y = $y;
-
-        return $this;
-    }
-
-    /**
-     * Get y
-     *
-     * @return integer 
-     */
-    public function getY()
-    {
-        return $this->y;
     }
 }

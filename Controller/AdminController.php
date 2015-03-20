@@ -167,6 +167,9 @@ class AdminController extends BaseAdminController
 					$sectionEntity->setPost($post);
 					$sectionEntity->setPosition($position);
 
+					$sectionEntity->setX($request->get('sections_x')[$section]);
+					$sectionEntity->setY($request->get('sections_y')[$section]);
+
 					// Get all form fields relevant to the section...
 					foreach ($request->request->all() as $parameter => $value) {
 						// Strip the section id from the parameter group and save if it matches

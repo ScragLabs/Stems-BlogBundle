@@ -32,8 +32,17 @@ $(document).ready(function() {
 		originator.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
 		$.get('/admin/blog/rest/add-section-type/'+$(this).data('type-id')).done(function(data) {
-			$('ul.sections').append('<li>'+data.html+'</li>');
+			// $('.layout-editor').append(data.html);
+			var section = $(data.html);
+			section.draggable({
+                    grid: [ 480, 15 ]
+                });
+			$('#packery-editor').append(section); //.packery('appended', section);
 			originator.html(buttonText);
+			// $('#packery-editor section').draggable({
+   //                  grid: [ 480, 15 ]
+   //              });
+            //$('#packery-editor').packery('bindUIDraggableEvents', $('#packery-editor section'));
 		});
 	});
 
@@ -66,6 +75,20 @@ $(document).ready(function() {
 			$('.section-blog-header').prepend(image);
 			console.log('test');
 		}
+	});
+
+	/**
+	 * Update headings on update
+	 */
+	$('.layout-editor').on('keyup', '.section-heading textarea', function() {
+		$(this).siblings('h6').html($(this).val());
+	});
+
+	/**
+	 * Update text sections on update
+	 */
+	$('.layout-editor').on('keyup', '.section-text textarea', function() {
+		$(this).siblings('p').html($(this).val());
 	});
 
 });

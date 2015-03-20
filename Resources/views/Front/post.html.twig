@@ -1,58 +1,71 @@
 {% extends 'StemsPageBundle:Layout:' ~ page.layout.slug ~ '.html.twig' %}
 
 {% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
+{% import 'StemsSocialBundle:Macro:share.html.twig' as share %}
 
 {% block breadcrumbs %}<a href="{{ path('stems_front_blog_list') }}">Blog</a> › <a href="{{ path('stems_front_blog_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
 
-{% block title %}{% endblock %}
+{% block twitterCard %}
+	<meta name="twitter:card" content="photo">
+	<meta name="twitter:url" content="{{ app.request.uri }}">
+	<meta name="twitter:description" content="{{ post.excerpt }}">
+	<meta name="twitter:image" content="{{ post.image }}">
+	<meta name="twitter:site" content="@threadandmirror">
+	<meta name="twitter:creator" content="@threadandmirror">
+	<meta name="twitter:title" content="{{ post.title }}">
+	<meta name="twitter:domain" content="http://www.threadandmirror.com">
+{% endblock %}
+
+{% block banner %}
+	<div class="banner-wrapper">
+		<div class="banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
+		<p class="date">{{ post.published|date('jS F Y') }}</p>
+		{% block title %}<h1>{{ post.title }}<span>{{ post.excerpt }}</span></h1>{% endblock %}
+	</div>
+{% endblock %}
 
 {% block dynamic %}
-	<div class="article" itemscope itemtype="http://schema.org/Article">
+	<div class="feature-image" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('blog_header') }}');background-size:cover;"></div>
+	<div class="social">
+		<a href="http://www.bloglovin.com/blog/12328721/?claim=vyv5723q8t6" target="_blank" rel="nofollow" title="Follow this blog on Bloglovin"><i class="fa fa-heart-o"></i></a>
+		{{ share.shareGoogleplus(post.sharer('googleplus')) }}
+		{{ share.sharePinterest(post.sharer('pinterest')) }}
+		{{ share.shareTwitter(post.sharer('twitter')) }}
+		{{ share.shareFacebook(post.sharer('facebook')) }}		
+	</div>
+	<div class="article col-2" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
 		{% if post.content is not empty %}
 			{{ post.content|raw }}
 		{% endif %}
 		{% for section in sections %}
-			<div class="section" itemprop="articleBody">
 				{{ section|raw }}
-			</div>
 		{% endfor %}
-		<div class="comments">
-			{# Comment configuration parameters #}
-			{% if 'stems.blog.comments.moderated'|parameter %}
-				{% set comments = post.moderatedComments %}
-			{% else %}
-				{% set comments = post.undeletedComments %}
-			{% endif %}
-			{% if 'stems.blog.comments.require_login'|parameter and app.user is empty %}
-				{% set authorised = false %}
-			{% else %}
-				{% set authorised = true %}
-			{% endif %}
-			<h4>
-				<i class="fa fa-fw fa-comments-o"></i> {{ comments|length }} comments
-				{% if authorised %}
-					<a class="add-comment show">Add Comment <i class="fa fa-plus"></i></a>
-				{% else %}
-					<p class="add-comment require-login">
-						<a href="{{ path('stems_front_user_login') }}">Sign In</a> or 
-						<a href="{{ path('stems_front_user_register') }}">Register</a> to Comment 
-						<i class="fa fa-plus"></i>
-					</p>
-				{% endif %}
-			</h4>
-			{% if authorised and 'stems.blog.comments.enabled'|parameter %}
-				<div class="add-comment-form">
-					<form action="{{ path('stems_rest_blog_add_comment', { post : post.id }) }}">
-						{{ form_rest(form) }}
-						<button class="rest-post-request">Submit</button>
-					</form>
-				</div>
-			{% endif %}
-			<ul>
-				{% for comment in comments %}
-					{% embed 'StemsBlogBundle:Embed:comment.html.twig' %}{% endembed %}
-				{% endfor %}
-			</ul>
-		</div>
+	</div>
+	<div class="comments">
+		{# Comment configuration parameters #}
+		{% if 'stems.blog.comments.moderated'|parameter %}
+			{% set comments = post.moderatedComments %}
+		{% else %}
+			{% set comments = post.undeletedComments %}
+		{% endif %}
+		{% if 'stems.blog.comments.require_login'|parameter and app.user is empty %}
+			{% set authorised = false %}
+		{% else %}
+			{% set authorised = true %}
+		{% endif %}
+		<div id="disqus_thread"></div>
+		{% if 'stems.blog.comments.enabled'|parameter %}
+			<div class="add-comment-form">
+   			 	<script type="text/javascript">
+	        		var disqus_shortname = 'threadandmirror';
+			        (function() {
+			            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+			            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+			            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+			        })();
+    			</script>
+    			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+			</div>
+		{% endif %}
 	</div>
 {% endblock %}
