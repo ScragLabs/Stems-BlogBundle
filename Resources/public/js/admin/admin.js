@@ -32,15 +32,14 @@ $(document).ready(function() {
 		originator.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
 		$.get('/admin/blog/rest/add-section-type/'+$(this).data('type-id')).done(function(data) {
-			// $('.layout-editor').append(data.html);
 			var section = $(data.html);
 			section.draggable({
                     grid: [ 480, 15 ]
                 });
-			$('#packery-editor').append(section); //.packery('appended', section);
+			$('.layout-editor').append(section);
 			originator.html(buttonText);
             section.css('top', $('.layout-editor').css('height'));
-            section.find('.section-y').val($('.layout-editor').css('height'));
+            section.find('.section-y').val(section.position().top);
             updateLayoutEditorHeight();
 		});
 	});
@@ -72,7 +71,6 @@ $(document).ready(function() {
 		} else {
 			var image = $('<div class="image" style="background-image: url('+$(this).css('background-image')+')></div>');
 			$('.section-blog-header').prepend(image);
-			console.log('test');
 		}
 	});
 
