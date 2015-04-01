@@ -55,7 +55,7 @@ $(document).ready(function() {
 
 		$.get('/admin/blog/rest/remove-section/'+button.data('id')).done(function(data) {
 			if (data.status == 'success') {
-				button.parent().remove();
+				button.parent().parent().remove();
 			} else {
 				createFlashMessage(data.status, data.message);
 			}
