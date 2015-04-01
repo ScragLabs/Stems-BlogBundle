@@ -39,10 +39,9 @@ $(document).ready(function() {
                 });
 			$('#packery-editor').append(section); //.packery('appended', section);
 			originator.html(buttonText);
-			// $('#packery-editor section').draggable({
-   //                  grid: [ 480, 15 ]
-   //              });
-            //$('#packery-editor').packery('bindUIDraggableEvents', $('#packery-editor section'));
+            section.css('top', $('.layout-editor').css('height'));
+            section.find('.section-y').val($('.layout-editor').css('height'));
+            updateLayoutEditorHeight();
 		});
 	});
 
