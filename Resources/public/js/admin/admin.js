@@ -47,19 +47,55 @@ $(document).ready(function() {
 	/** 
 	 * Remove section from blog post
 	 */
-	$('.admin-editor').on('click', 'button.remove-section',  function(e){
+	$('.admin-editor').on('click', 'a.remove-section',  function(e){
 		e.preventDefault();
 		var button = $(this);
 		confirm('Are you sure you want to delete this section?');
 
 		$.get('/admin/blog/rest/remove-section/'+button.data('id')).done(function(data) {
 			if (data.status == 'success') {
-				button.parent().parent().remove();
+				button.closest('section').remove();
+                updateLayoutEditorHeight();
 			} else {
 				createFlashMessage(data.status, data.message);
 			}
 		});
 	});
+
+    /**
+     * Increase section column span
+     */
+    $('.admin-editor').on('click', 'a.column-span',  function(e){
+
+        e.preventDefault();
+        var className = 'col-' + $(this).text();
+        $(this).closest('section').removeClass('col-1 col-2').addClass(className).find('.section-width').val($(this).text());
+
+        updateLayoutEditorHeight();
+    });
+
+    /**
+     * Change section heading style
+     */
+    $('.admin-editor').on('click', 'a.heading-style',  function(e){
+
+        e.preventDefault();
+        $(this).closest('section').children('.preview').children().last().changeElementType($(this).text());
+
+        updateLayoutEditorHeight();
+    });
+
+    /**
+     * Change section alignment
+     */
+    $('.admin-editor').on('click', 'a.alignment',  function(e){
+
+        e.preventDefault();
+        var className = 'alignment-' + $(this).data('value');
+        $(this).closest('section').children('.preview').removeClass('alignment-left alignment-center alignment-right').addClass(className).find('.section-alignment').val($(this).text());
+        $(this).closest('section').find('.selected-alignment > i').removeClass().addClass('fa fa-align-' + $(this).data('value'));
+        updateLayoutEditorHeight();
+    });
 
 	/** 
 	 * Update the image on the blog sections

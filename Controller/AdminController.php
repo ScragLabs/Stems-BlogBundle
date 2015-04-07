@@ -169,6 +169,7 @@ class AdminController extends BaseAdminController
 
 					$sectionEntity->setX($request->get('sections_x')[$section]);
 					$sectionEntity->setY($request->get('sections_y')[$section]);
+					$sectionEntity->setWidth($request->get('sections_width')[$section]);
 
 					// Get all form fields relevant to the section...
 					foreach ($request->request->all() as $parameter => $value) {
