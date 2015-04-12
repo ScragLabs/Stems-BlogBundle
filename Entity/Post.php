@@ -101,7 +101,7 @@ class Post
 
     /**
      * @ORM\OneToMany(targetEntity="Section", mappedBy="post")
-     * @ORM\OrderBy({"position" = "ASC"})
+     * @ORM\OrderBy({"x" = "ASC", "y" = "ASC"})
      */
     protected $sections; 
 

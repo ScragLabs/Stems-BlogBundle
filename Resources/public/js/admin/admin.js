@@ -80,7 +80,13 @@ $(document).ready(function() {
     $('.admin-editor').on('click', 'a.heading-style',  function(e){
 
         e.preventDefault();
-        $(this).closest('section').children('.preview').children().last().changeElementType($(this).text());
+        var section = $(this).closest('section');
+        var preview = section.children('.preview');
+        var value = $(this).text();
+
+        preview.children().last().changeElementType(value);
+        preview.children('textarea').removeClass('h4 h6').addClass(value);
+        section.find('input.section-style').val(value);
 
         updateLayoutEditorHeight();
     });
@@ -91,9 +97,14 @@ $(document).ready(function() {
     $('.admin-editor').on('click', 'a.alignment',  function(e){
 
         e.preventDefault();
-        var className = 'alignment-' + $(this).data('value');
-        $(this).closest('section').children('.preview').removeClass('alignment-left alignment-center alignment-right').addClass(className).find('.section-alignment').val($(this).text());
-        $(this).closest('section').find('.selected-alignment > i').removeClass().addClass('fa fa-align-' + $(this).data('value'));
+        var value = $(this).data('value');
+        var className = 'alignment-' + value;
+        var section = $(this).closest('section');
+
+        section.children('.preview').removeClass('alignment-left alignment-center alignment-right').addClass(className);
+        section.find('input.section-alignment').val(value);
+        section.find('.selected-alignment > i').removeClass().addClass('fa fa-align-' + value);
+
         updateLayoutEditorHeight();
     });
 
@@ -114,7 +125,7 @@ $(document).ready(function() {
 	 * Update headings on update
 	 */
 	$('.layout-editor').on('keyup', '.section-heading textarea', function() {
-		$(this).siblings('h6').html($(this).val());
+		$(this).siblings().last().html($(this).val());
 	});
 
 	/**
@@ -124,4 +135,21 @@ $(document).ready(function() {
 		$(this).siblings('p').html($(this).val());
 	});
 
+    /**
+     * Update wysiwig sections on change
+     */
+    $('.layout-editor').on('keyup', '.wysiwig-editor', function() {
+        $(this).siblings('.wysiwig-preview').html($(this).val());
+    });
+
+    /**
+     * Add new item to list section
+     */
+    $('.layout-editor').on('click', '.section-list .add-list-item', function() {
+        var section = $(this).closest('section');
+        var index = section.find('li').length - 1;
+        var item = $('<li><textarea id="section_list_type_items_'+index+'" name="420_section_list_type[items]['+index+']" class="wysiwig-editor"></textarea> <p class="wysiwig-preview"></p></li>');
+
+        section.find('.preview ul').append(item);
+    });
 });

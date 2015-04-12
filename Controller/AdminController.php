@@ -83,30 +83,6 @@ class AdminController extends BaseAdminController
 		$request->get('title') and $post->setTitle($request->get('title'));
 		$em->flush();
 
-		// Add the blog template sections as defined in the config
-		$position = 1;
-		$availableSections = $this->container->getParameter('stems.core.sections.available')['blog'];
-
-		foreach ($this->container->getParameter('stems.blog.template_sections') as $sectionName) {
-
-			// Create a new section of the specified type
-			$sectionClass = $availableSections[$sectionName]['class'];
-			$section = new $sectionClass();
-			$em->persist($section);
-			$em->flush();
-
-			// Create the section linkage
-			$link = new Section();
-			$link->setType($sectionName);
-			$link->setPost($post);
-			$link->setPosition($position);
-			$link->setEntity($section->getId());
-
-			$em->persist($link);
-			$em->flush();
-			$position++;
-		}
-
 		// Save all the things
 		$em->flush();
 

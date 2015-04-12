@@ -73,11 +73,12 @@
 					</div>
 					<div id="add-section">
 						<div class="available-sections">
-							{% for id,type in types if type.enabled %}
-								<a class="btn" data-type-id="{{ id }}">{{ type.name }} Section</a>
-							{% endfor %}
+							<a class="btn btn-large btn-primary" data-type-id="text" title="Add Paragraph"><i class="fa fa-align-left"></i></a>
+                            <a class="btn btn-large btn-primary" data-type-id="image" title="Add Image"><i class="fa fa-picture-o"></i></a>
+                            <a class="btn btn-large btn-primary" data-type-id="heading" title="Add Heading"><i class="fa fa-header"></i></a>
+                            <a class="btn btn-large btn-primary" data-type-id="list" title="Add List"><i class="fa fa-list-ul"></i></a>
+                            <a class="btn btn-large btn-primary" data-type-id="product_gallery" title="Add Product Gallery"><i class="fa fa-gbp"></i></a>
 						</div>
-						<a class="btn btn-primary"><i class="fa fa-plus"></i> Add a New Section</a>
 					</div>
 					{{ form_row(form.height) }}
 				</div>

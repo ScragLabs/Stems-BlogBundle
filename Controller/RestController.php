@@ -132,8 +132,8 @@ class RestController extends BaseRestController
 
 		// Get the form html
 		$sectionHandler = $this->get('stems.core.sections.manager')->setBundle('blog');
-		$html = $section->editor($sectionHandler, $link);
 
+		$html = $section->editor($sectionHandler, $link);
 		// Store the section id for use in the response handler
 		$meta = array('section' => $link->getId());
 
