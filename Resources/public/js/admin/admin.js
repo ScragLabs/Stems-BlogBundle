@@ -101,7 +101,7 @@ $(document).ready(function() {
         var className = 'alignment-' + value;
         var section = $(this).closest('section');
 
-        section.children('.preview').removeClass('alignment-left alignment-center alignment-right').addClass(className);
+        section.removeClass('alignment-left alignment-center alignment-right').addClass(className);
         section.find('input.section-alignment').val(value);
         section.find('.selected-alignment > i').removeClass().addClass('fa fa-align-' + value);
 
