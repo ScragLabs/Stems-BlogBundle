@@ -108,6 +108,20 @@ $(document).ready(function() {
         updateLayoutEditorHeight();
     });
 
+    /**
+     * Change section alignment
+     */
+    $('.admin-editor').on('click', 'a.image-effect',  function(e){
+
+        e.preventDefault();
+        var value = $(this).data('value');
+        var className = 'css-filter-' + value;
+        var section = $(this).closest('section');
+
+        section.removeClass('css-filter-sepia css-filter-none css-filter-grayscale css-filter-cutout').addClass(className);
+        section.find('input.section-effect').val(value);
+    });
+
 	/** 
 	 * Update the image on the blog sections
 	 */
