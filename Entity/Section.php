@@ -28,7 +28,17 @@ class Section
     /** 
      * @ORM\Column(type="integer")
      */
-    protected $width = 1;
+    protected $span = 1;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $height = 210;
+
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $width = 210;
 
     /** 
      * @ORM\Column(type="integer")
@@ -39,6 +49,11 @@ class Section
      * @ORM\Column(type="integer")
      */
     protected $y = 0;
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $pinned = true;
 
     /** 
      * @ORM\Column(type="integer")
@@ -152,6 +167,29 @@ class Section
         return $this->type;
     }
 
+	/**
+	 * Set span
+	 *
+	 * @param integer $span
+	 * @return Section
+	 */
+	public function setSpan($span)
+	{
+		$this->span = $span;
+
+		return $this;
+	}
+
+	/**
+	 * Get span
+	 *
+	 * @return integer
+	 */
+	public function getSpan()
+	{
+		return $this->span;
+	}
+
     /**
      * Set width
      *
@@ -174,6 +212,52 @@ class Section
     {
         return $this->width;
     }
+
+	/**
+	 * Set height
+	 *
+	 * @param integer $height
+	 * @return Section
+	 */
+	public function setHeight($height)
+	{
+		$this->height = $height;
+
+		return $this;
+	}
+
+	/**
+	 * Get height
+	 *
+	 * @return integer
+	 */
+	public function getHeight()
+	{
+		return $this->height;
+	}
+
+	/**
+	 * Set pinned
+	 *
+	 * @param boolean $pinned
+	 * @return Section
+	 */
+	public function setPinned($pinned)
+	{
+		$this->pinned = $pinned;
+
+		return $this;
+	}
+
+	/**
+	 * Get pinned
+	 *
+	 * @return boolean
+	 */
+	public function getPinned()
+	{
+		return $this->pinned;
+	}
 
     /**
      * Set x

@@ -44,6 +44,18 @@ $(document).ready(function() {
 		});
 	});
 
+    /**
+     * Resizable sections
+     */
+    $('section.unpinned').draggable({
+        grid: [ 5, 5 ]
+    }).resizable({
+        aspectRatio: true,
+        grid: [ 5, 5 ],
+        handles: 'se',
+        containment: $('.admin-editor')
+    });
+
 	/** 
 	 * Remove section from blog post
 	 */
@@ -69,7 +81,7 @@ $(document).ready(function() {
 
         e.preventDefault();
         var className = 'col-' + $(this).text();
-        $(this).closest('section').removeClass('col-1 col-2').addClass(className).find('.section-width').val($(this).text());
+        $(this).closest('section').removeClass('col-1 col-2').addClass(className).find('.section-span').val($(this).text());
 
         updateLayoutEditorHeight();
     });
@@ -109,7 +121,7 @@ $(document).ready(function() {
     });
 
     /**
-     * Change section alignment
+     * Change section image effect
      */
     $('.admin-editor').on('click', 'a.image-effect',  function(e){
 
@@ -134,6 +146,38 @@ $(document).ready(function() {
 			$('.section-blog-header').prepend(image);
 		}
 	});
+
+    /**
+     * Unpin section
+     */
+    $('.admin-editor').on('click', 'a.unpin-section',  function(e){
+
+        e.preventDefault();
+        var section = $(this).closest('section');
+        section.addClass('unpinned');
+        section.draggable({
+            grid: [ 5, 5 ]
+        }).resizable({
+            aspectRatio: true,
+            grid: [ 5, 5 ],
+            handles: 'se',
+            containment: $('.admin-editor')
+        });
+
+        $(this).removeClass('unpin-section').addClass('pin-section').html('<i class="fa fa-thumb-tack"></i>');
+        section.find('input.section-pinned').val(0);
+        section.find('input.section-width').val(section.width());
+        section.find('input.section-height').val(section.height());
+    });
+
+    /**
+     * Update position on resize
+     */
+    $('.admin-editor').on('resizestop', 'section.unpinned', function() {
+        var section = $(this);
+        section.find('input.section-width').val(section.width());
+        section.find('input.section-height').val(section.height());
+    });
 
 	/**
 	 * Update headings on update
