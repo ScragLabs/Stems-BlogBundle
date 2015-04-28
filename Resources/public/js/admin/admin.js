@@ -154,6 +154,7 @@ $(document).ready(function() {
 
         e.preventDefault();
         var section = $(this).closest('section');
+        section.css('height', section.height()+'px');
         section.addClass('unpinned');
         section.draggable({
             grid: [ 5, 5 ]
