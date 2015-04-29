@@ -2,9 +2,9 @@
 
 namespace Stems\BlogBundle\Form;
 
-use Symfony\Component\Form\AbstractType,
-	Symfony\Component\Form\FormBuilderInterface,
-	Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\AbstractType;
+use	Symfony\Component\Form\FormBuilderInterface;
+use	Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AdminPostType extends AbstractType
 {
@@ -32,6 +32,13 @@ class AdminPostType extends AbstractType
 			'required'			=> false,
 			'error_bubbling' 	=> true,
 		));
+
+	    $builder->add('category', null, array(
+		    'label'     		=> 'Category',
+		    'required'			=> false,
+		    'error_bubbling' 	=> true,
+		    'empty_data'        => false
+	    ));
 
 		$builder->add('content', null, array(
 			'label'     		=> 'Content',

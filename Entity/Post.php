@@ -4,6 +4,7 @@ namespace Stems\BlogBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use Stems\SocialBundle\Service\Sharer;
@@ -45,7 +46,7 @@ class Post
 
     /** 
      * @ORM\Column(type="string")
-     * @Assert\NotBlank
+     * @Gedmo\Slug(fields={"title", "subTitle"}, separator="-")
      */
     protected $slug;
 
@@ -125,6 +126,12 @@ class Post
      */
     protected $metaDescription;
 
+	/**
+	 * @ORM\ManyToOne(targetEntity="Category", inversedBy="posts")
+	 * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+	 */
+	protected $category;
+
     public function __construct()
     {
         $this->title = 'New Post';
@@ -143,8 +150,8 @@ class Post
     {
         $sharer = new Sharer($platform);
 
-        $sharer->setTitle($this->title.' - '.$this->excerpt);
-        $sharer->setText($this->title.' - '.$this->excerpt);
+        $sharer->setTitle($this->title.' - '.$this->subTitle);
+        $sharer->setText($this->title.' - '.$this->subTitle);
         $sharer->setUrl('http://www.threadandmirror.com/blog/'.$this->slug);
         $sharer->setImage('http://www.threadandmirror.com/'.$this->image);
         $sharer->setTags(array('threadandmirror'));
@@ -663,4 +670,24 @@ class Post
     {
         return $this->metaDescription;
     }
+
+	/**
+	 * Set category
+	 *
+	 * @param Stems\BlogBundle\Entity\Category $category
+	 */
+	public function setCategory(\Stems\BlogBundle\Entity\Category $category)
+	{
+		$this->category = $category;
+	}
+
+	/**
+	 * Get category
+	 *
+	 * @return Stems\BlogBundle\Entity\Category
+	 */
+	public function getCategory()
+	{
+		return $this->category;
+	}
 }

@@ -20,8 +20,9 @@
 			<div class="edit-panels">
 				<div class="edit-panel" id="edit-post-overview">
 					{{ form_row(form.title) }}
+                    {{ form_row(form.subTitle) }}
 					{{ form_row(form.excerpt) }}
-					{{ form_row(form.slug) }}
+                    {{ form_row(form.category) }}
 					{{ form_label(form.image) }}
 					<div class="feature-image-container">
 						{% if post.image is not empty %}
