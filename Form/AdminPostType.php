@@ -35,9 +35,7 @@ class AdminPostType extends AbstractType
 
 	    $builder->add('category', null, array(
 		    'label'     		=> 'Category',
-		    'required'			=> false,
 		    'error_bubbling' 	=> true,
-		    'empty_data'        => false
 	    ));
 
 		$builder->add('content', null, array(

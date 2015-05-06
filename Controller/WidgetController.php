@@ -16,7 +16,7 @@ class WidgetController extends Controller
 	{
 		// Get the latest blog post
 		$em    = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget(1);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', 1);
 
 		return $this->render('StemsBlogBundle:Widget:latestPost.html.twig', array(
 			'post' 	=> reset($posts),
@@ -30,7 +30,7 @@ class WidgetController extends Controller
 	{
 		// Get the latest blog post
 		$em    = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget($limit);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', $limit);
 
 		return $this->render('StemsBlogBundle:Widget:latestPostsSidebar.html.twig', array(
 			'posts' 	=> $posts,
@@ -72,7 +72,7 @@ class WidgetController extends Controller
 	{
 		// Get the latest blog post
 		$em    = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatestForWidget(5);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', 5);
 
 		return $this->render('StemsBlogBundle:Widget:homepageFeature.html.twig', array(
 			'posts' 	=> $posts,

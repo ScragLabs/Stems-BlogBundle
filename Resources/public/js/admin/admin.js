@@ -1,23 +1,37 @@
+/**
+ * Update the col span of the layout editor
+ */
+function updateLayoutEditorSpan(span) {
+
+    //$('.layout-editor section').each(function(){
+    //    if (($(this).position().top + $(this).height() + 30) > height) {
+    //        height = $(this).position().top + $(this).height() + 30;
+    //    }
+    //});
+
+    $('.layout-editor').removeClass('col-2 col-4').addClass('col-'+span);
+}
+
 $(document).ready(function() {
 
-	/**
-	 * Update the blog slug
-	 */
-	var admin_post_type_slug = $('#admin_post_type_slug');
-	var admin_post_type_excerpt = $('#admin_post_type_excerpt');
-	var admin_post_type_title = $('#admin_post_type_title');
-	
-	function updateBlogPostSlug() {
-		admin_post_type_slug.val(slugify(admin_post_type_title.val()+' '+admin_post_type_excerpt.val()));
-	}
+    /**
+     * Initialise draggable on section
+     */
+    function intiliaseDraggable(section) {
+        if ($('.layout-editor.col-2').length) {
+            section.draggable({
+                grid: [ 480, 15 ]
+            });
+        } else {
+            section.draggable({
+                grid: [ 240, 15 ]
+            });
+        }
+    }
 
-	admin_post_type_title.on('keyup', function(e){
-		updateBlogPostSlug();
-	});
-
-	admin_post_type_excerpt.on('keyup', function(e){
-		updateBlogPostSlug();
-	});
+    $('.layout-editor section').each(function(){
+        intiliaseDraggable($(this));
+    });
 
 	/** 
 	 * Add section to blog post
@@ -33,9 +47,9 @@ $(document).ready(function() {
 
 		$.get('/admin/blog/rest/add-section-type/'+$(this).data('type-id')).done(function(data) {
 			var section = $(data.html);
-			section.draggable({
-                    grid: [ 480, 15 ]
-                });
+
+            intiliaseDraggable(section);
+
 			$('.layout-editor').append(section);
 			originator.html(buttonText);
             section.css('top', $('.layout-editor').css('height'));

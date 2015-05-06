@@ -20,7 +20,7 @@
 	<div class="banner-wrapper">
 		<div class="banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
 		<p class="date">{{ post.published|date('jS F Y') }}</p>
-		{% block title %}<h1>{{ post.title }}<span>{{ post.excerpt }}</span></h1>{% endblock %}
+		{% block title %}<h1>{{ post.title }}<span>{{ post.subtitle }}</span></h1>{% endblock %}
 	</div>
 {% endblock %}
 
@@ -31,9 +31,9 @@
 		{{ share.shareGoogleplus(post.sharer('googleplus')) }}
 		{{ share.sharePinterest(post.sharer('pinterest')) }}
 		{{ share.shareTwitter(post.sharer('twitter')) }}
-		{{ share.shareFacebook(post.sharer('facebook')) }}		
+		{{ share.shareFacebook(post.sharer('facebook')) }}
 	</div>
-	<div class="article col-2" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
+	<div class="article col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
 		{% if post.content is not empty %}
 			{{ post.content|raw }}
 		{% endif %}
@@ -53,18 +53,16 @@
 		{% else %}
 			{% set authorised = true %}
 		{% endif %}
-		<div id="disqus_thread"></div>
 		{% if 'stems.blog.comments.enabled'|parameter %}
+            <script>
+                var idcomments_acct = '68806c77daa6d4bce5c5b1ef56c01258';
+                var idcomments_post_id;
+                var idcomments_post_url;
+            </script>
+            <span id="IDCommentsPostTitle" style="display:none"></span>
+            <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
 			<div class="add-comment-form">
-   			 	<script type="text/javascript">
-	        		var disqus_shortname = 'threadandmirror';
-			        (function() {
-			            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-			            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-			            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-			        })();
-    			</script>
-    			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 			</div>
 		{% endif %}
 	</div>

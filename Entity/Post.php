@@ -60,10 +60,15 @@ class Post
      */
     protected $author;
 
+	/**
+	 * @ORM\Column(type="integer")
+	 */
+	protected $span = 2;
+
     /** 
      * @ORM\Column(type="integer")
      */
-    protected $height = 800;
+    protected $height = 300;
 
     /**
      * @ORM\Column(type="string") 
@@ -135,7 +140,6 @@ class Post
     public function __construct()
     {
         $this->title = 'New Post';
-        $this->slug = 'new-post-'.uniqid();
         $this->created = new \DateTime;
         $this->updated = new \DateTime;
     }
@@ -367,6 +371,29 @@ class Post
     {
         return $this->height;
     }
+
+	/**
+	 * Set span
+	 *
+	 * @param integer $span
+	 * @return Post
+	 */
+	public function setSpan($span)
+	{
+		$this->span = $span;
+
+		return $this;
+	}
+
+	/**
+	 * Get span
+	 *
+	 * @return integer
+	 */
+	public function getSpan()
+	{
+		return $this->span;
+	}
 
     /**
      * Set author

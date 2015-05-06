@@ -12,8 +12,9 @@
 	<table>
 		<thead>
 			<tr>
-				<th><a>Title &amp; Excerpt</a></th>
+				<th><a>Title &amp; Subtitle</a></th>
 				<th><a>Author</a></th>
+                <th><a>Category</a></th>
 				<th><a>Status</a></th>
 				<th><a>Updated</a></th>
 				<th width="100px">Actions</th>
@@ -22,8 +23,9 @@
 		<tbody>
 			{% for post in posts %}
 				<tr>
-					<td><h4>{{ post.title }}</h4><p class="subtext">{{ post.excerpt }}</p></td>
+					<td><h4>{{ post.title }}</h4><p class="subtext">{{ post.subtitle }}</p></td>
 					<td>{{ post.author|username }}</td>
+                    <td>{{ post.category.name }}</td>
 					<td>{{ post.status }}</td>
 					<td><p>{{ post.updated|date('d/m/Y') }}</p></td>
 					<td>
@@ -47,6 +49,7 @@
 			<tr>
 				<th><a>Title &amp; Excerpt</a></th>
 				<th><a>Author</a></th>
+                <th><a>Category</a></th>
 				<th><a>Status</a></th>
 				<th><a>Updated</a></th>
 				<th width="100px">Actions</th>

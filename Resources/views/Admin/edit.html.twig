@@ -3,7 +3,7 @@
 {% block title %}Edit Post &middot; {{ post.title }}{% endblock %}
 
 {% block content %}
-	<h1 class="pages">Edit Post: <span>{{ post.title }}</span></h1>
+	<h1 class="pages">Edit Post: <span>{{ post.title }}{% if post.subtitle is not empty %} - {{ post.subtitle }}{% endif %}</span></h1>
 	{{ form_errors(form) }}
 	<form method="post">
 		<div class="admin-editor admin-blog-editor">
@@ -66,7 +66,7 @@
 					Tags go here
 				</div>
 				<div class="edit-panel" id="edit-post-content" style="height:0px">
-					<div id="packery-editor" class="layout-editor col-2" style="height:{{ form.vars.value.height }}px">
+					<div id="packery-editor" class="layout-editor col-{{ post.span }}" style="height:{{ form.vars.value.height }}px">
 						{% for sectionForm in sectionForms %}
 							{{ sectionForm|raw }}
 						{% endfor %}

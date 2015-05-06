@@ -2,6 +2,7 @@
 
 namespace Stems\BlogBundle\Controller;
 
+use Stems\BlogBundle\Entity\Post;
 use Stems\CoreBundle\Controller\BaseFrontController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,10 +20,10 @@ class FrontController extends BaseFrontController
 	{
 		$chunk = $this->container->getParameter('stems.blog.index.chunk_size');
 
-		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
+		// Get posts for the view
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', $chunk);
 
-			// Get all of the blog posts for the view
-			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findLatest($chunk);
+		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
 
 			// Gather render sections for each of the posts
 			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderCollection($posts);
@@ -35,13 +36,10 @@ class FrontController extends BaseFrontController
 
 		} else {
 
-			// Get all of the blog posts for the view
-			$posts = $this->em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('published' => 'DESC'));
-
 			// Paginate the result
 			$data = $this->get('stems.core.pagination')->paginate($posts, $request, array('maxPerPage' => $chunk));
 
-			$this->render('StemsBlogBundle:Front:list.html.twig', array(
+			return $this->render('StemsBlogBundle:Front:list.html.twig', array(
 				'posts' 		=> $data,
 				'page'			=> $this->page,
 			));
@@ -53,16 +51,20 @@ class FrontController extends BaseFrontController
 	 *
 	 * @param  $slug 	string 		The slug of the requested blog post
 	 */
-	public function postAction($slug)
+	public function postAction(Post $post)
 	{
-		// Get the requested post
-		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
+		// Redirect to the index if the collection isn't published
+		if ($post->getStatus() !== 'Published' || $post->getCategory()->getSlug() !== 'articles') {
+			$this->redirect($this->generateUrl('thread_editorspicks_front_list'));
+		}
 
 		// Set the dynamic page values
-		$this->page->setTitle($post->getTitle());
-		$this->page->setWindowTitle($post->getTitle().' - '.$post->getExcerpt());
-		$this->page->setMetaKeywords($post->getMetaKeywords());
-		$this->page->setMetaDescription($post->getMetaDescription());
+		$this->loadPage('magazine/{slug}', array(
+			'title' 			=> $post,
+			'windowTitle' 		=> $post->getMetaTitle(),
+			'metaKeywords' 		=> $post->getMetaKeywords(),
+			'metaDescription' 	=> $post->getMetaDescription(),
+		));
 
 		// Prerender the sections, as referencing twig within itself causes a circular reference
 		$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSections($post);
@@ -87,11 +89,11 @@ class FrontController extends BaseFrontController
 	{
 		// Redirect if the user isn't at least an admin
 		if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-			return $this->redirect('/blog');
+			return $this->redirect('/');
 		}
 
 		// Get the requested post
-		$post = $this->em->getRepository('StemsBlogBundle:Post')->findOneBySlug($slug);
+		$post = $this->em->getRepository('StemsBlogBundle:Post')->findPublishedPost($slug);
 
 		// Set the dynamic page values
 		$this->page->setTitle($post->getTitle());
@@ -160,7 +162,7 @@ class FrontController extends BaseFrontController
          	$xml .= '<category>fashion</category>';
          	$xml .= '<pubDate>'.$post->getPublished()->format('r').'</pubDate>';
          	$xml .= '<description><![CDATA['.$post->getMetaDescription().']]></description>';
-         	$xml .= '<media:thumbnail url="http://www.threadandmirror.com/'.$post->getImage().'" />';
+         	$xml .= '<media:thumbnail url="'.$this->container->getParameter('stems.site.url').'/'.$post->getImage().'" />';
 
 			$xml .= '</item>';
 		}
