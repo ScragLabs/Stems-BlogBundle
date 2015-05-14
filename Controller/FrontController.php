@@ -161,7 +161,7 @@ class FrontController extends BaseFrontController
          	$xml .= '<guid>'.$this->container->getParameter('stems.site.url').'/blog/'.$post->getSlug().'</guid>';
          	$xml .= '<category>fashion</category>';
          	$xml .= '<pubDate>'.$post->getPublished()->format('r').'</pubDate>';
-         	$xml .= '<description><![CDATA['.$post->getMetaDescription().']]></description>';
+         	$xml .= '<description><![CDATA['.$post->getExcerpt().']]></description>';
          	$xml .= '<media:thumbnail url="'.$this->container->getParameter('stems.site.url').'/'.$post->getImage().'" />';
 
 			$xml .= '</item>';
