@@ -10,4 +10,17 @@ $(document).ready(function() {
 		}
 	});
 
+    /**
+     * Blog listing masonry
+     */
+    //if ($('.article-list').length) {
+    //    var container = document.querySelector('.article-list');
+    //    window.packery = new Packery( container, {
+    //        itemSelector: '.article-snippet',
+    //        layoutMode: 'masonry',
+    //        columnWidth: '.article-snippet',
+    //        gutter: 30
+    //    });
+    //}
+
 });

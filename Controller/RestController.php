@@ -16,28 +16,24 @@ class RestController extends BaseRestController
 	/**
 	 * Returns form html for the requested section type
 	 *
-	 * @param  integer 	$offset 	The amount of posts already loaded, and therefore the query offset
-	 * @param  integer 	$chunk 		The maximum amount of posts to get
+	 * @param  integer 	    $offset 	The amount of posts already loaded
+	 * @param  integer 	    $chunk 		The maximum amount of posts to get
+	 * @param  string       $category   The category of posts
 	 * @return JsonResponse
 	 */
-	public function getMorePostsAction($offset, $chunk=3)
+	public function getMorePostsAction($category, $offset, $chunk=6)
 	{
 		// Get more of the blog posts for the view
 		$em    = $this->getDoctrine()->getManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findLatest($chunk, $offset);
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory($category, $chunk, $offset);
 
 		// Render the html for the posts
 		$html = '';
 
 		foreach ($posts as $post) {
-
-			// Prerender the sections, as referencing twig within itself causes a circular reference
-			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderSections($post);
-
-			$html .= $this->renderView('StemsBlogBundle:Rest:post.html.twig', array(
-				'post' 		=> $post,
-				'sections' 	=> $sections,
-			));
+			$html .= $this->renderView('StemsBlogBundle:Rest:post.html.twig', [
+				'post' 	=> $post
+			]);
 		}
 		
 		// Let the ajax response know when there's no more additional posts to load

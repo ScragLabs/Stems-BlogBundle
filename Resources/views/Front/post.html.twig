@@ -3,7 +3,7 @@
 {% import 'StemsCoreBundle:Macro:core.html.twig' as macros %}
 {% import 'StemsSocialBundle:Macro:share.html.twig' as share %}
 
-{% block breadcrumbs %}<a href="{{ path('stems_front_blog_list') }}">Blog</a> › <a href="{{ path('stems_front_blog_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
+{% block breadcrumbs %}<a href="{{ path('stems_blog_front_list') }}">Blog</a> › <a href="{{ path('stems_blog_front_post', { 'slug' : post.slug }) }}">{{ post.title }}</a>{% endblock %}
 
 {% block twitterCard %}
 	<meta name="twitter:card" content="photo">

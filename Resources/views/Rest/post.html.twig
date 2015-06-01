@@ -1,10 +1,14 @@
-<div class="article" itemscope itemtype="http://schema.org/Article">
-	{% if post.content is not empty %}
-		{{ post.content|raw }}
-	{% endif %}
-	{% for section in sections %}
-		<div class="section" itemprop="articleBody">
-			{{ section|raw }}
-		</div>
-	{% endfor %}
-</div>
+<a href="{{ path('stems_blog_front_post', { slug: post.slug }) }}" class="article-snippet">
+    <div class="background" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}')"></div>
+    <div class="wrapper">
+        <div class="image" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('blog_homepage_circle') }}')"></div>
+        <div class="excerpt">
+            <div class="middle">
+                <h4>{{ post.published|date('jS F Y') }}</h4>
+                <h2>{{ post.title }}<span><span></span>{{ post.subtitle }}<span></span></span></h2>
+                <p>{{ post.excerpt }}</p>
+                <button>Read More</button>
+            </div>
+        </div>
+    </div>
+</a>

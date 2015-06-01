@@ -25,12 +25,8 @@ class FrontController extends BaseFrontController
 
 		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
 
-			// Gather render sections for each of the posts
-			$sections = $this->get('stems.core.sections.manager')->setBundle('blog')->renderCollection($posts);
-			
 			return $this->render('StemsBlogBundle:Front:sequential.html.twig', array(
 				'posts' 		=> $posts,
-				'sections' 		=> $sections,
 				'page'			=> $this->page,
 			));
 

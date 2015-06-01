@@ -2,7 +2,7 @@
 	<div>
 		<div class="background" style="background:url('{{ getMediaImage(posts[0].image).src|imagine_filter('blog_homepage_main') }}') center center; background-size:cover;"></div>
 		<div class="feature-article wrap" >
-			<a href="{{ path('stems_front_blog_post', { slug:posts[0].slug }) }}">
+			<a href="{{ path('stems_blog_front_post', { slug:posts[0].slug }) }}">
 				<div class="title">
 					<p>Latest Feature</p>
 					<h2>{{ posts[0].title }}</h2>
@@ -18,7 +18,7 @@
 	</div>
 	<div class="other-articles wrap">
 		<figure>
-			<a href="{{ path('stems_front_blog_post', { slug:posts[1].slug }) }}">
+			<a href="{{ path('stems_blog_front_post', { slug:posts[1].slug }) }}">
 				<div class="title">
 					<h2>{{ posts[1].title }}</h2>
 					<hr>
@@ -29,7 +29,7 @@
 			</a>
 		</figure>
 		<figure>
-			<a href="{{ path('stems_front_blog_post', { slug:posts[2].slug }) }}">
+			<a href="{{ path('stems_blog_front_post', { slug:posts[2].slug }) }}">
 				<div class="title">
 					<h2>{{ posts[2].title }}</h2>
 					<hr>
@@ -40,7 +40,7 @@
 			</a>
 		</figure>
 		<figure>
-			<a href="{{ path('stems_front_blog_post', { slug:posts[3].slug }) }}">
+			<a href="{{ path('stems_blog_front_post', { slug:posts[3].slug }) }}">
 				<div class="title">
 					<h2>{{ posts[3].title }}</h2>
 					<hr>

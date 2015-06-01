@@ -34,45 +34,45 @@ stems_admin_blog_delete_comment:
 
 # Front-end routes
 
-stems_front_blog_list:
+stems_blog_front_list:
     pattern:  /magazine
     defaults: { _controller: StemsBlogBundle:Front:list }
 
-stems_front_blog_rss:
+stems_blog_front_rss:
     pattern:  /blog/rss
     defaults: { _controller: StemsBlogBundle:Front:rss }
 
-stems_front_blog_rss_xml:
+stems_blog_front_rss_xml:
     pattern:  /blog/rss.xml
     defaults: { _controller: StemsBlogBundle:Front:rss }
 
-stems_front_blog_preview:
+stems_blog_front_preview:
     pattern:  /blog/preview/{slug}
     defaults: { _controller: StemsBlogBundle:Front:preview }
 
-stems_front_blog_post:
+stems_blog_front_post:
     pattern:  /magazine/{slug}
     defaults: { _controller: StemsBlogBundle:Front:post }
 
 # REST routes
 
-stems_rest_blog_get_more_posts:
-    pattern:  /rest/blog/get-more-posts/{offset}
+stems_blog_rest_get_more_posts:
+    pattern:  /rest/blog/get-more-posts/{category}/{offset}
     defaults: { _controller: StemsBlogBundle:Rest:getMorePosts }
 
-stems_rest_blog_add_section_type:
+stems_blog_rest_add_section_type:
     pattern:  /admin/blog/rest/add-section-type/{type}
     defaults: { _controller: StemsBlogBundle:Rest:addSectionType }
 
-stems_rest_blog_remove_section:
+stems_blog_rest_remove_section:
     pattern:  /admin/blog/rest/remove-section/{id}
     defaults: { _controller: StemsBlogBundle:Rest:removeSection }
 
-stems_rest_blog_set_featureimage:
+stems_blog_rest_set_featureimage:
     pattern:  /admin/blog/rest/set-feature-image/{id}
     defaults: { _controller: StemsBlogBundle:Rest:setFeatureImage }
 
-stems_rest_blog_add_comment:
+stems_blog_rest_add_comment:
     pattern:  /rest/blog/add-comment/{post}
     defaults: { _controller: StemsBlogBundle:Rest:addComment }
 
