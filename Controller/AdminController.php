@@ -38,12 +38,11 @@ class AdminController extends BaseAdminController
 	public function sitemapAction()
 	{
 		// The slug used for the blog (eg. news, blog or magazine)
-		// @todo: properly integrate this site-wide via config
-		$slug = 'blog';
+		$slug = 'magazine';
 
 		// Get the posts
 		$em    = $this->getDoctrine()->getEntityManager();
-		$posts = $em->getRepository('StemsBlogBundle:Post')->findBy(array('deleted' => false, 'status' => 'Published'), array('created' => 'DESC'));
+		$posts = $em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', 9999);
 
 		return $this->render('StemsBlogBundle:Admin:sitemap.html.twig', array(
 			'slug' 		=> $slug,
