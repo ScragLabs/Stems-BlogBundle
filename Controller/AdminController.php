@@ -76,6 +76,9 @@ class AdminController extends BaseAdminController
 		// Create a new post for persisting, so we already have an id for adding sections etc.
 		$post = new Post();
 		$post->setAuthor($this->getUser()->getId());
+		$category = $em->getRepository('StemsBlogBundle:Category')->find(1);
+		$post->setCategory($category);
+
 		$em->persist($post);
 		
 		// If a title was posted then use it
