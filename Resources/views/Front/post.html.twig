@@ -19,7 +19,7 @@
 {% block banner %}
 	<div class="banner-wrapper">
 		<div class="banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
-		<p class="date">{{ post.published|date('jS F Y') }}</p>
+		<p class="date title-faded-sans">{{ post.published|date('jS F Y') }}</p>
 		{% block title %}<h1>{{ post.title }}<span>{{ post.subtitle }}</span></h1>{% endblock %}
 	</div>
 {% endblock %}
