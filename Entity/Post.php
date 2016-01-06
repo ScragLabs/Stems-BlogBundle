@@ -63,7 +63,7 @@ class Post
 	/**
 	 * @ORM\Column(type="integer")
 	 */
-	protected $span = 2;
+	protected $span = 4;
 
     /** 
      * @ORM\Column(type="integer")
