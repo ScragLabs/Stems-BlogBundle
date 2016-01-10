@@ -36,12 +36,13 @@
 	</div>
 	<article class="article">
 	    <div class="article col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
-		{% if post.content is not empty %}
-        {{ post.content|raw }}
-    {% endif %}
+            {% if post.content is not empty %}
+                {{ post.content|raw }}
+            {% endif %}
             {% for section in sections %}
-        {{ section|raw }}
-    {% endfor %}
+                {{ section|raw }}
+            {% endfor %}
+            <br class="clear">
         </div>
     </article>
 	<div class="comments">
