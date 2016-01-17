@@ -21,7 +21,7 @@ class FrontController extends BaseFrontController
 		$chunk = $this->container->getParameter('stems.blog.index.chunk_size');
 
 		// Get posts for the view
-		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findPublishedPostsByCategory('articles', $chunk);
+		$posts = $this->em->getRepository('StemsBlogBundle:Post')->findLatest($chunk);
 
 		if ($this->container->getParameter('stems.blog.index.list_style') == 'sequential') {
 
