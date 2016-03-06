@@ -45,32 +45,32 @@
             <br class="clear">
         </div>
     </article>
-	<div class="comments">
-        <div class="background"></div>
-        <div class="wrapper">
-            {# Comment configuration parameters #}
-            {% if 'stems.blog.comments.moderated'|parameter %}
-                {% set comments = post.moderatedComments %}
-            {% else %}
-                {% set comments = post.undeletedComments %}
-            {% endif %}
-            {% if 'stems.blog.comments.require_login'|parameter and app.user is empty %}
-                {% set authorised = false %}
-            {% else %}
-                {% set authorised = true %}
-            {% endif %}
-            {% if 'stems.blog.comments.enabled'|parameter %}
-                <script>
-                    var idcomments_acct = '68806c77daa6d4bce5c5b1ef56c01258';
-                    var idcomments_post_id;
-                    var idcomments_post_url;
-                </script>
-                <span id="IDCommentsPostTitle" style="display:none"></span>
-                <script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>
-                <div class="add-comment-form">
+	{#<div class="comments">#}
+        {#<div class="background"></div>#}
+        {#<div class="wrapper">#}
+            {#&#123;&#35; Comment configuration parameters &#35;&#125;#}
+            {#{% if 'stems.blog.comments.moderated'|parameter %}#}
+                {#{% set comments = post.moderatedComments %}#}
+            {#{% else %}#}
+                {#{% set comments = post.undeletedComments %}#}
+            {#{% endif %}#}
+            {#{% if 'stems.blog.comments.require_login'|parameter and app.user is empty %}#}
+                {#{% set authorised = false %}#}
+            {#{% else %}#}
+                {#{% set authorised = true %}#}
+            {#{% endif %}#}
+            {#{% if 'stems.blog.comments.enabled'|parameter %}#}
+                {#<script>#}
+                    {#var idcomments_acct = '68806c77daa6d4bce5c5b1ef56c01258';#}
+                    {#var idcomments_post_id;#}
+                    {#var idcomments_post_url;#}
+                {#</script>#}
+                {#<span id="IDCommentsPostTitle" style="display:none"></span>#}
+                {#<script type='text/javascript' src='http://www.intensedebate.com/js/genericCommentWrapperV2.js'></script>#}
+                {#<div class="add-comment-form">#}
 
-                </div>
-            {% endif %}
-        </div>
-	</div>
+                {#</div>#}
+            {#{% endif %}#}
+        {#</div>#}
+	{#</div>#}
 {% endblock %}
