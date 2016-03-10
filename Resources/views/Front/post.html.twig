@@ -17,25 +17,28 @@
 {% endblock %}
 
 {% block banner %}
-	<div class="banner-wrapper">
-		<div class="banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
-		<p class="date title-faded-sans">{{ post.published|date('jS F Y') }}</p>
-		{% block title %}<h1>{{ post.title }}<span>{{ post.subtitle }}</span></h1>{% endblock %}
-        <p class="accreditation">{{ getMediaImage(post.image).accreditation }}</p>
+	<div class="magazine-layout-banner__banner-wrapper">
+		<div class="magazine-layout-banner__banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
+        <div class="magazine-layout-banner__title-block">
+            <p class="magazine-layout-banner__date title-faded-sans">{{ post.published|date('jS F Y') }}</p>
+            <h1 class="magazine-layout-banner__title">
+                {{ post.title }}<span class="magazine-layout-banner__subtitle">{{ post.subtitle }}</span>
+            </h1>
+        </div>
+        <p class="magazine-layout-banner__accreditation">{{ getMediaImage(post.image).accreditation }}</p>
 	</div>
 {% endblock %}
 
 {% block dynamic %}
-	<div class="feature-image" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('blog_header') }}');background-size:cover;"></div>
-	<div class="social">
+	<div class="magazine-layout-banner__social">
 		<a href="http://www.bloglovin.com/blog/12328721/?claim=vyv5723q8t6" target="_blank" rel="nofollow" title="Follow this blog on Bloglovin"><i class="fa fa-heart-o"></i></a>
 		{{ share.shareGoogleplus(post.sharer('googleplus')) }}
 		{{ share.sharePinterest(post.sharer('pinterest')) }}
 		{{ share.shareTwitter(post.sharer('twitter')) }}
 		{{ share.shareFacebook(post.sharer('facebook')) }}
 	</div>
-	<article class="article">
-	    <div class="article col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
+	<article class="article magazine-layout-banner__article">
+	    <div class="article magazine-layout-banner__article-wrapper col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
             {% if post.content is not empty %}
                 {{ post.content|raw }}
             {% endif %}
