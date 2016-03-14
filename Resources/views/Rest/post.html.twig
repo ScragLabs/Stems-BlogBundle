@@ -1,13 +1,22 @@
-<a href="{{ path('stems_blog_front_post', { slug: post.slug }) }}" class="article-snippet">
-    <div class="background" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}')"></div>
-    <div class="wrapper">
-        <div class="image" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('blog_homepage_circle') }}')"></div>
-        <div class="excerpt">
-            <div class="middle">
-                <h4>{{ post.published|date('jS F Y') }}</h4>
-                <h2>{{ post.title }}<span><span></span>{{ post.subtitle }}<span></span></span></h2>
-                <p>{{ post.excerpt }}</p>
-                <button>Read More</button>
+<a href="{{ path('stems_blog_front_post', { slug: post.slug }) }}" class="article-list__item">
+    <div class="article-list__item-background" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}')"></div>
+    <div class="container">
+        <div class="col-sm-4 article-list__item-image-wapper">
+            <div class="article-list__item-image" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('blog_homepage_circle') }}')"></div>
+        </div>
+        <div class="col-sm-8 article-list__item-snippet-wapper">
+            <div class="article-list__item-title-block text-center">
+                <div class="article-list__item-middle">
+                    <p class="article-list__item-date">{{ post.published|date('jS F Y') }}</p>
+                    <h2 class="article-list__item-title">{{ post.title }}</h2>
+                    <h4 class="article-list__item-subtitle">
+                        <span class="article-list__item-dash"></span>
+                        {{ post.subtitle }}
+                        <span  class="article-list__item-dash"></span>
+                    </h4>
+                    <p class="article-list__item-excerpt">{{ post.excerpt }}</p>
+                    <button  class="article-list__item-read-more">Read More</button>
+                </div>
             </div>
         </div>
     </div>

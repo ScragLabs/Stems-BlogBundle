@@ -19,11 +19,13 @@
 {% block banner %}
 	<div class="magazine-layout-banner__banner-wrapper">
 		<div class="magazine-layout-banner__banner" style="background-image:url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}');background-size: cover;"></div>
-        <div class="magazine-layout-banner__title-block">
-            <p class="magazine-layout-banner__date title-faded-sans">{{ post.published|date('jS F Y') }}</p>
-            <h1 class="magazine-layout-banner__title">
-                {{ post.title }}<span class="magazine-layout-banner__subtitle">{{ post.subtitle }}</span>
-            </h1>
+        <div class="magazine-layout-banner__title-alignment">
+            <div class="magazine-layout-banner__title-block">
+                <p class="magazine-layout-banner__date title-faded-sans">{{ post.published|date('jS F Y') }}</p>
+                <h1 class="magazine-layout-banner__title">
+                    {{ post.title }}<span class="magazine-layout-banner__subtitle">{{ post.subtitle }}</span>
+                </h1>
+            </div>
         </div>
         <p class="magazine-layout-banner__accreditation">{{ getMediaImage(post.image).accreditation }}</p>
 	</div>
@@ -37,8 +39,8 @@
 		{{ share.shareTwitter(post.sharer('twitter')) }}
 		{{ share.shareFacebook(post.sharer('facebook')) }}
 	</div>
-	<article class="article magazine-layout-banner__article">
-	    <div class="article magazine-layout-banner__article-wrapper col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
+	<article class="container magazine-layout-banner__article">
+	    <div class="magazine-layout-banner__article-wrapper col-{{ post.span }}" itemscope itemtype="http://schema.org/Article" style="height:{{ post.height }}px">
             {% if post.content is not empty %}
                 {{ post.content|raw }}
             {% endif %}
