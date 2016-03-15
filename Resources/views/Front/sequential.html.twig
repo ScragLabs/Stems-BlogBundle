@@ -7,9 +7,6 @@
 {% block title %}{% endblock %}
 
 {% block dynamic %}
-    <h1>Magazine</h1>
-    <br>
-    <br>
     <div class="article-list">
         {% for post in posts %}
             {% include 'StemsBlogBundle:Rest:post.html.twig' %}
