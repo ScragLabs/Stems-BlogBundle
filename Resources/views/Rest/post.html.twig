@@ -1,5 +1,4 @@
 <a href="{{ path('stems_blog_front_post', { slug: post.slug }) }}" class="article-list__item">
-    <div class="article-list__item-background" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('page_banner') }}')"></div>
     <div class="container">
         <div class="col-sm-8 col-xs-12 article-list__item-snippet-wapper">
             <div class="article-list__item-title-block text-center">
@@ -17,7 +16,9 @@
             </div>
         </div>
         <div class="col-sm-4 col-xs-12 article-list__item-image-wapper">
-            <div class="article-list__item-image" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('blog_homepage_circle') }}')"></div>
+            <div class="article-list__item-middle">
+                <div class="article-list__item-image" style="background-image: url('{{ getMediaImage(post.image).src|imagine_filter('blog_homepage_circle') }}')"></div>
+            </div>
         </div>
     </div>
 </a>
